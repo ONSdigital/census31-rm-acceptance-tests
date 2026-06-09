@@ -1,0 +1,8 @@
+[tool.vulture]
+ignore_decorators = ["@step"]
+ignore_names = ["before_all", "after_all", "before_scenario", "after_scenario"]
+make_whitelist = true
+# 10 is very low, might need to adjust depending on circumstances
+min_confidence = 10
+paths = ["."]
+sort_by_size = true

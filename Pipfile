@@ -1,0 +1,25 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+behave = "*"
+structlog = "*"
+requests = "*"
+psycopg2-binary = "*"
+paramiko = "*"
+pgpy = "*"
+google-cloud-pubsub = "*"
+requests-toolbelt = "*"
+tenacity = "*"
+google-cloud-storage = "*"
+splinter = {extras = ["selenium"], version = "*"}
+jwcrypto = "*"
+
+[dev-packages]
+"flake8" = "*"
+"vulture" = "*"
+
+[requires]
+python_version = "3.12"

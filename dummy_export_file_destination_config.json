@@ -1,0 +1,10 @@
+{
+  "test_supplier": {
+    "exportDirectory": "test_supplier/print_services",
+    "encryptionKeyFilename": "dummy-key-supplier-a-public.asc"
+  },
+  "internal_reprographics": {
+    "exportDirectory": "internal_reprographics/print_services",
+    "encryptionKeyFilename": "dummy-key-supplier-b-public.asc"
+  }
+}
