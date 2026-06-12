@@ -1,6 +1,5 @@
 _.scenario_name  # unused attribute (acceptance_tests/features/environment.py:58)
 get_random_alpha_numerics  # unused function (acceptance_tests/utilities/audit_trail_helper.py:19)
-set_survey_id_context_from_url  # unused function (acceptance_tests/utilities/survey_helper.py:54)
 set_eq_flush_action_rule  # unused function (acceptance_tests/utilities/action_rule_helper.py:39)
 setup_deactivate_uac_action_rule  # unused function (acceptance_tests/utilities/action_rule_helper.py:24)
 get_emitted_survey_update_by_id  # unused function (acceptance_tests/utilities/event_helper.py:109)

@@ -2,15 +2,12 @@ import json
 import logging
 import time
 from datetime import datetime, timezone
-from acceptance_tests.common.strtobool import strtobool
 
 import requests
 from behave import register_type
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
-from splinter import Browser
 from structlog import wrap_logger
 
+from acceptance_tests.common.strtobool import strtobool
 from acceptance_tests.utilities import iap_requests
 from acceptance_tests.utilities.audit_trail_helper import log_out_user_context_values, parse_markdown_context_table
 from acceptance_tests.utilities.exception_manager_helper import get_bad_messages, \
@@ -64,12 +61,6 @@ def before_scenario(context, scenario):
             logger.warning(
                 'WARNING: Attempting to reset EQ stub on a scenario not tagged as "cloud_only", will likely fail')
 
-    if 'UI' in context.tags:
-        service = Service()
-        options = Options()
-        options.add_argument("--verbose")
-        context.browser = Browser('chrome', headless=Config.HEADLESS, service=service, options=options)
-
 
 def after_all(_context):
     move_fulfilment_triggers_harmlessly_massively_into_the_future()
@@ -83,9 +74,6 @@ def after_scenario(context, scenario):
 
     if unexpected_bad_messages:
         _record_and_remove_any_unexpected_bad_messages(unexpected_bad_messages)
-
-    if 'UI' in context.tags:
-        context.browser.quit()
 
     leftover_messages = purge_outbound_topics()
     if leftover_messages:

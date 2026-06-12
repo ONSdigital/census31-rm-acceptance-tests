@@ -49,9 +49,3 @@ def _survey_name_message_matcher(message: Mapping, expected_survey_name=None) ->
         return True, ''
     return False, f'Actual survey name "{message["payload"]["surveyUpdate"]["name"]}" ' \
                   f'does not match expected "{expected_survey_name}"'
-
-
-def set_survey_id_context_from_url(context):
-    url = context.browser.url
-    survey_id = url.split('/')[-1]
-    context.survey_id = survey_id
