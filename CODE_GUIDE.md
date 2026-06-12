@@ -68,8 +68,6 @@ logging upon failure in the [audit_trail_helper](/acceptance_tests/utilities/aud
 | expected_collection_instrument_url | Stores the collection instrument URL expected on emitted `UAC_UPDATE` events        | str      |
 | fulfilment_personalisation         | Stores the personalisation values from a received fulfilment request event          | Dict     |
 | sample                             | Stores the parsed sample file rows, split into `sample` and `sensitive`             | List     |
-| email_templates                    | Stores the list of email templates setup prior to the tests                         | Mapping  |
-| email_packcodes                    | Stores the list of email packcodes setup prior to the tests                         | Mapping  |
 | export_file_templates              | Stores the list of export file templates setup prior to the tests                   | Mapping  |
 | export_file_packcodes              | Stores the list of export packcodes setup prior to the tests                        | Mapping  |
 | sms_templates                      | Stores the list of sms templates setup prior to the tests                           | Mapping  |

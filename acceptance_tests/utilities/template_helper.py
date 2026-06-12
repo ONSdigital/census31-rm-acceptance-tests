@@ -3,10 +3,11 @@ import random
 import string
 import uuid
 
-from acceptance_tests.utilities import iap_requests
 from requests.exceptions import HTTPError
-from config import Config
 from structlog import wrap_logger
+
+from acceptance_tests.utilities import iap_requests
+from config import Config
 
 logger = wrap_logger(logging.getLogger(__name__))
 
@@ -44,18 +45,6 @@ def create_sms_template(template):
     pack_code = generate_pack_code('SMS_')
     notify_template_id = str(uuid.uuid4())
     url = f'{Config.SUPPORT_TOOL_API_URL}/smsTemplates'
-    create_template(url, pack_code, template, notify_template_id=notify_template_id)
-    return pack_code, notify_template_id
-
-
-def create_email_template(template, template_name=None):
-    if template_name == 'his_survey_test':
-        # HIS email templates must have a specific pack_code
-        pack_code = 'MNE_EN_HMS'
-    else:
-        pack_code = generate_pack_code('EMAIL_')
-    notify_template_id = str(uuid.uuid4())
-    url = f'{Config.SUPPORT_TOOL_API_URL}/emailTemplates'
     create_template(url, pack_code, template, notify_template_id=notify_template_id)
     return pack_code, notify_template_id
 

@@ -15,7 +15,7 @@ from acceptance_tests.utilities.exception_manager_helper import get_bad_messages
 from acceptance_tests.utilities.notify_helper import reset_notify_stub
 from acceptance_tests.utilities.parameter_parsers import parse_array_to_list, parse_json_object
 from acceptance_tests.utilities.pubsub_helper import purge_outbound_topics_with_retry, purge_outbound_topics
-from acceptance_tests.utilities.template_helper import create_email_template, create_export_file_template, \
+from acceptance_tests.utilities.template_helper import create_export_file_template, \
     create_sms_template
 from acceptance_tests.utilities.test_case_helper import test_helper
 from config import Config
@@ -112,15 +112,6 @@ def _clear_queues_for_bad_messages_and_reset_exception_manager(list_of_bad_messa
 
 
 def _setup_templates(context):
-    email_templates_path = TEMPLATE_FILES_PATH.joinpath("email_templates.json")
-    email_templates = json.loads(email_templates_path.read_text())
-    context.email_templates = {template['templateName']: template for template in email_templates}
-    context.email_packcodes = {}
-    for template_name, template in context.email_templates.items():
-        pack_code, notify_template_id = create_email_template(template['template'], template_name)
-        context.email_packcodes[template['templateName']] = {"pack_code": pack_code,
-                                                             "notify_template_id": notify_template_id}
-
     export_file_templates_path = TEMPLATE_FILES_PATH.joinpath("export_file_templates.json")
     export_file_templates = json.loads(export_file_templates_path.read_text())
     context.export_file_templates = {template['templateName']: template for template in export_file_templates}
