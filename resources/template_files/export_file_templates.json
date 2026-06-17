@@ -1,0 +1,26 @@
+[
+  {
+    "templateName": "uac",
+    "template": ["__uac__"]
+  },
+  {
+    "templateName": "uac__qid",
+    "template": ["__uac__","__qid__"]
+  },
+  {
+    "templateName": "empty",
+    "template": []
+  },
+  {
+    "templateName": "address_line1__address_line2__postcode__uac",
+    "template": ["ADDRESS_LINE1","ADDRESS_LINE2","POSTCODE","__uac__"]
+  },
+  {
+    "templateName": "address_line1__postcode__uac",
+    "template": ["ADDRESS_LINE1","POSTCODE","__uac__"]
+  },
+  {
+    "templateName": "request_name__address_line1__postcode__uac",
+    "template": ["__request__.name","ADDRESS_LINE1","POSTCODE","__uac__"]
+  }
+]
