@@ -1,7 +1,6 @@
 import logging
 import random
 import string
-import uuid
 
 from requests.exceptions import HTTPError
 from structlog import wrap_logger
@@ -39,14 +38,6 @@ def create_export_file_template(template, export_file_destination=Config.SUPPLIE
     url = f'{Config.SUPPORT_TOOL_API_URL}/exportFileTemplates'
     create_template(url, pack_code, template, export_file_destination=export_file_destination)
     return pack_code
-
-
-def create_sms_template(template):
-    pack_code = generate_pack_code('SMS_')
-    notify_template_id = str(uuid.uuid4())
-    url = f'{Config.SUPPORT_TOOL_API_URL}/smsTemplates'
-    create_template(url, pack_code, template, notify_template_id=notify_template_id)
-    return pack_code, notify_template_id
 
 
 def generate_pack_code(pack_code_prefix):

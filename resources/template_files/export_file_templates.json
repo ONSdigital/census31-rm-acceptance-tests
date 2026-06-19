@@ -1,26 +1,14 @@
 [
   {
-    "templateName": "uac",
-    "template": ["__uac__"]
+    "templateName": "ICL1",
+    "template": ["__uac__", "__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE"]
   },
   {
-    "templateName": "uac__qid",
-    "template": ["__uac__","__qid__"]
+    "templateName": "1RL1",
+    "template": ["__uac__", "__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE"]
   },
-  {
-    "templateName": "empty",
-    "template": []
-  },
-  {
-    "templateName": "address_line1__address_line2__postcode__uac",
-    "template": ["ADDRESS_LINE1","ADDRESS_LINE2","POSTCODE","__uac__"]
-  },
-  {
-    "templateName": "address_line1__postcode__uac",
-    "template": ["ADDRESS_LINE1","POSTCODE","__uac__"]
-  },
-  {
-    "templateName": "request_name__address_line1__postcode__uac",
-    "template": ["__request__.name","ADDRESS_LINE1","POSTCODE","__uac__"]
+    {
+    "templateName": "1RL2",
+    "template": ["__uac__", "__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE"]
   }
 ]
