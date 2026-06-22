@@ -53,6 +53,10 @@ def check_uac_update_msgs_emitted_with_qid_active(context, active):
 
     _check_new_uacs_are_as_expected(emitted_uacs=context.emitted_uacs, active=active)
 
+    # for emitted_uac in context.emitted_uacs:
+    #     test_helper.assertEqual(emitted_uac['qid'][:2], context.expected_questionnaire_type)
+    #
+
 
 @step('the correct number of UAC_UPDATE messages are emitted with active set to {active:boolean}')
 def check_uac_updated_messages_by_number_with_qid_active(context, active):

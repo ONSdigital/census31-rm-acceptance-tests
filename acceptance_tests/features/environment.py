@@ -123,4 +123,5 @@ def _setup_templates(context):
     context.sms_packcodes = {}
     for _, template in context.sms_templates.items():
         context.sms_packcodes[template['templateName']] = {"pack_code": template['templateName'],
-                                                           "notify_template_id": template['notifyTemplateId']}
+                                                           "notify_template_id": template['notifyTemplateId'],
+                                                           "questionnaire_type": template['questionnaireType']}

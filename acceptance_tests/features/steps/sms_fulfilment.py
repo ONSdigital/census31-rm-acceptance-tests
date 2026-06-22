@@ -16,6 +16,7 @@ def authorise_sms_pack_code(context, template_name):
     context.template = context.sms_templates[template_name]['template']
     context.pack_code = context.sms_packcodes[template_name]['pack_code']
     context.notify_template_id = context.sms_packcodes[template_name]['notify_template_id']
+    context.expected_questionnaire_type = context.sms_packcodes[template_name]['questionnaire_type']
 
     url = f'{Config.SUPPORT_TOOL_API_URL}/fulfilmentSurveySmsTemplates'
     body = {
@@ -72,7 +73,7 @@ def request_replacement_uac_by_sms(context, phone_number, personalisation=None):
     check_sms_fulfilment_response(context.fulfilment_response_json, context.template)
 
 
-@step("the UAC_UPDATE message matches the SMS fulfilment UAC")
+@step('the UAC_UPDATE message matches the SMS fulfilment UAC')
 def check_uac_message_matches_sms_uac(context):
     test_helper.assertEqual(context.emitted_uacs[0]['uacHash'], context.fulfilment_response_json['uacHash'],
                             f"Failed to 1st match uacHash, "
@@ -83,10 +84,4 @@ def check_uac_message_matches_sms_uac(context):
                             f"Failed to 1st match qid, "
                             f"context.emitted_uacs: {context.emitted_uacs} "
                             f"context.fulfilment_response_json {context.fulfilment_response_json}")
-
-
-@step('an sms template has been created with template "{template_name}"')
-def create_sms_template(context, template_name):
-    context.template = context.sms_templates[template_name]['template']
-    context.pack_code = context.sms_packcodes[template_name]['pack_code']
-    context.notify_template_id = context.sms_packcodes[template_name]['notify_template_id']
+    test_helper.assertEqual(context.emitted_uacs[0]['qid'][:2], context.expected_questionnaire_type)
