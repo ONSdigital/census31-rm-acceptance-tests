@@ -117,11 +117,10 @@ def _setup_templates(context):
     for _, template in context.export_file_templates.items():
         context.export_file_packcodes[template['templateName']] = {"pack_code": template['templateName']}
 
-    # sms_templates_path = TEMPLATE_FILES_PATH.joinpath("sms_templates.json")
-    # sms_templates = json.loads(sms_templates_path.read_text())
-    # context.sms_templates = {template['templateName']: template for template in sms_templates}
-    # context.sms_packcodes = {}
-    # for _, template in context.sms_templates.items():
-    #     pack_code, notify_template_id = create_sms_template(template['template'])
-    #     context.sms_packcodes[template['templateName']] = {"pack_code": pack_code,
-    #                                                        "notify_template_id": notify_template_id}
+    sms_templates_path = TEMPLATE_FILES_PATH.joinpath("sms_templates.json")
+    sms_templates = json.loads(sms_templates_path.read_text())
+    context.sms_templates = {template['templateName']: template for template in sms_templates}
+    context.sms_packcodes = {}
+    for _, template in context.sms_templates.items():
+        context.sms_packcodes[template['templateName']] = {"pack_code": template['templateName'],
+                                                           "notify_template_id": template['notifyTemplateId']}
