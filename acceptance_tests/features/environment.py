@@ -115,7 +115,8 @@ def _setup_templates(context):
     context.export_file_templates = {template['templateName']: template for template in export_file_templates}
     context.export_file_packcodes = {}
     for _, template in context.export_file_templates.items():
-        context.export_file_packcodes[template['templateName']] = {"pack_code": template['templateName']}
+        context.export_file_packcodes[template['templateName']] = {"pack_code": template['templateName'],
+                                                                   "questionnaire_type": template['questionnaireType']}
 
     sms_templates_path = TEMPLATE_FILES_PATH.joinpath("sms_templates.json")
     sms_templates = json.loads(sms_templates_path.read_text())

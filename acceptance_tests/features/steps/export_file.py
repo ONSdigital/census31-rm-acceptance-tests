@@ -47,8 +47,8 @@ def check_export_file(context):
 def create_export_file_template(context, template_name):
     context.template = context.export_file_templates[template_name]['template']
     context.pack_code = context.export_file_packcodes[template_name]['pack_code']
-    # context.expected_questionnaire_type = context.pack_code = context.export_file_packcodes[template_name][
-    #     'questionnaire_type']
+    context.expected_questionnaire_type = context.export_file_packcodes[template_name][
+        'questionnaire_type']
 
 
 @step('an export file template has been created for the internal reprographics supplier with template {template:array}')
