@@ -61,7 +61,7 @@ def create_export_file_template_internal_reprographics(context, template: List):
 
 
 def _get_context_export_supplier_or_default(context) -> str:
-    return context.export_supplier if hasattr(context, 'export_supplier') else Config.SUPPLIER_INTERNAL_REPROGRAPHICS
+    return context.export_supplier if hasattr(context, 'export_supplier') else Config.SUPPLIER_DEFAULT_TEST
 
 
 def _get_uac_matching_case_id(uac_update_events, case_id):

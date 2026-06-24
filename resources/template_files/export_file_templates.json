@@ -13,5 +13,10 @@
     "templateName": "1RL2",
     "template": ["__uac__", "__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE"],
       "questionnaireType": "03"
+  },
+      {
+    "templateName": "PC",
+    "template": ["ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE"],
+      "questionnaireType": null
   }
 ]
