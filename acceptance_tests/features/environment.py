@@ -15,8 +15,6 @@ from acceptance_tests.utilities.exception_manager_helper import get_bad_messages
 from acceptance_tests.utilities.notify_helper import reset_notify_stub
 from acceptance_tests.utilities.parameter_parsers import parse_array_to_list, parse_json_object
 from acceptance_tests.utilities.pubsub_helper import purge_outbound_topics_with_retry, purge_outbound_topics
-from acceptance_tests.utilities.template_helper import create_export_file_template, \
-    create_sms_template
 from acceptance_tests.utilities.test_case_helper import test_helper
 from config import Config
 
@@ -117,14 +115,14 @@ def _setup_templates(context):
     context.export_file_templates = {template['templateName']: template for template in export_file_templates}
     context.export_file_packcodes = {}
     for _, template in context.export_file_templates.items():
-        pack_code = create_export_file_template(template['template'])
-        context.export_file_packcodes[template['templateName']] = {"pack_code": pack_code}
+        context.export_file_packcodes[template['templateName']] = {"pack_code": template['templateName'],
+                                                                   "questionnaire_type": template['questionnaireType']}
 
     sms_templates_path = TEMPLATE_FILES_PATH.joinpath("sms_templates.json")
     sms_templates = json.loads(sms_templates_path.read_text())
     context.sms_templates = {template['templateName']: template for template in sms_templates}
     context.sms_packcodes = {}
     for _, template in context.sms_templates.items():
-        pack_code, notify_template_id = create_sms_template(template['template'])
-        context.sms_packcodes[template['templateName']] = {"pack_code": pack_code,
-                                                           "notify_template_id": notify_template_id}
+        context.sms_packcodes[template['templateName']] = {"pack_code": template['templateName'],
+                                                           "notify_template_id": template['notifyTemplateId'],
+                                                           "questionnaire_type": template['questionnaireType']}

@@ -1,18 +1,14 @@
 [
   {
-    "templateName": "uac",
-    "template": ["__uac__"]
+    "templateName": "UACHHT1",
+    "template": ["__uac__"],
+    "notifyTemplateId": "883cee97-7a41-4fdb-8a09-0972c86b9375",
+    "questionnaireType": "01"
   },
-  {
-    "templateName": "uac__qid",
-    "template": ["__uac__", "__qid__"]
-  },
-  {
-    "templateName": "empty",
-    "template": []
-  },
-  {
-    "templateName": "request_name",
-    "template": ["__request__.name"]
+    {
+    "templateName": "UACHHT2",
+    "template": ["__uac__"],
+      "notifyTemplateId": "883cee97-7a41-4fdb-8a09-0972c86b9375",
+      "questionnaireType": "02"
   }
 ]

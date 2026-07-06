@@ -14,5 +14,7 @@ def sample_field_mapper(sample_field: str):
             return "addressLine3"
         case "POSTCODE":
             return "postcode"
+        case "TOWN_NAME":
+            return "townName"
         case _:
             return sample_field

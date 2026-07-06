@@ -47,6 +47,8 @@ def check_export_file(context):
 def create_export_file_template(context, template_name):
     context.template = context.export_file_templates[template_name]['template']
     context.pack_code = context.export_file_packcodes[template_name]['pack_code']
+    context.expected_questionnaire_type = context.export_file_packcodes[template_name][
+        'questionnaire_type']
 
 
 @step('an export file template has been created for the internal reprographics supplier with template {template:array}')
@@ -108,10 +110,10 @@ def generate_expected_export_file_rows(template: List, cases: List, uac_update_e
             elif field == '__qid__':
                 qid = get_qid_by_case_id(uac_update_events, case['caseId'])
                 export_row_components.append(qid)
-            elif field.startswith('__request__.'):
+            elif field.startswith('__request__'):
                 export_row_components.append(fulfilment_personalisation[field.split('.')[1]])
-            elif field.startswith('__sensitive__.'):
-                export_row_components.append(case["sample_sensitive_values"][field.split('.')[1]])
+            elif field.startswith('__caseref__'):
+                export_row_components.append(case['caseRef'])
             else:
 
                 export_row_components.append(

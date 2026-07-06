@@ -40,44 +40,45 @@ logging upon failure in the [audit_trail_helper](/acceptance_tests/utilities/aud
 
 <div id="context-index-table">
 
-| Attribute                          | Description                                                                         | Type     |
-|------------------------------------|-------------------------------------------------------------------------------------|----------|
-| test_start_utc_datetime            | Stores the UTC time at the beginning of each scenario in an environment hook        | datetime |
-| survey_id                          | Stores the ID of the survey generated and or used by the scenario                   | UUID     |
-| collex_id                          | Stores the ID of the collection exercise generated and or used by the scenario      | UUID     |
-| collex_end_date                    | Stores the UTC time for a collection exercise end date                              | datetime |
-| emitted_cases                      | Stores the caseUpdate DTO objects emitted on `CASE_UPDATE` events                   | List     |
-| emitted_uacs                       | Stores the UAC DTO objects from the emitted `UAC_UPDATE` events                     | List     |
-| pack_code                          | Stores the pack code used for fulfilments or action rules                           | str      |
-| template                           | Stores the column template used for fulfilments or action rules                     | Template |
-| export_supplier                    | Stores the export file supplier name the pack_code fo the current test is linked to | str      |
-| notify_template_id                 | Stores the ID of the sms template used for the notify service                       | UUID     |
-| fulfilment_response_json           | Stores the response JSON from a `POST` to the Notify API                            | Dict     |
-| phone_number                       | Stores the phone number needed to check the notify api                              | str      |
-| email                              | Stores the email address needed to check the notify api                             | str      |
-| message_hashes                     | Stores the hash of sent messages, for testing exception management                  | List     |
-| correlation_id                     | Stores the ID which connects all related events together                            | UUID     |
-| originating_user                   | Stores the email of the ONS employee who originally initiated a business event      | str      |
-| sent_messages                      | Stores every scenario sent message for debugging errors                             | List     |
-| scenario_name                      | Stores the scenario name and uses it for unique originating users in messages       | str      |
-| case_id                            | Stores the case_id of a case used in the scenario                                   | UUID     |
-| bulk_refusals                      | Stores created bulk refusal cases we expect to see messages for                     | List     |
-| bulk_invalids                      | Stores the create bulk invalid cases we expect to see messages for                  | List     |
-| bulk_sample_update                 | Stores the create bulk sample update cases we expect to see messages for            | List     |
-| bulk_sensitive_update              | Stores the bulk sensitive update cases we expect to see messages for                | List     |
-| expected_collection_instrument_url | Stores the collection instrument URL expected on emitted `UAC_UPDATE` events        | str      |
-| fulfilment_personalisation         | Stores the personalisation values from a received fulfilment request event          | Dict     |
-| sample                             | Stores the parsed sample file rows, split into `sample` and `sensitive`             | List     |
-| export_file_templates              | Stores the list of export file templates setup prior to the tests                   | Mapping  |
-| export_file_packcodes              | Stores the list of export packcodes setup prior to the tests                        | Mapping  |
-| sms_templates                      | Stores the list of sms templates setup prior to the tests                           | Mapping  |
-| sms_packcodes                      | Stores the list of sms packcodes setup prior to the tests                           | Mapping  |
-| survey_name                        | Stores the survey name to be used in the scenario                                   | str      |
-| edited_survey_name                 | Stores the edited survey name to be used in the scenario                            | str      |
-| collection_exercise_name           | Stores the collection exercise name to be used in the scenario                      | str      |
-| edited_collection_exercise__name   | Stores the edited collection exericise name to be used in the scenario              | str      |
-| cohort                             | Stores the cohort number to be used in action scenarios                             | int      |
-| sample_file                        | Stores the sample file name to be used in the scenario                              | str      |
+| Attribute                                                            | Description                                                                         | Type     |
+|----------------------------------------------------------------------|-------------------------------------------------------------------------------------|----------|
+| test_start_utc_datetime                                              | Stores the UTC time at the beginning of each scenario in an environment hook        | datetime |
+| survey_id                                                            | Stores the ID of the survey generated and or used by the scenario                   | UUID     |
+| collex_id                                                            | Stores the ID of the collection exercise generated and or used by the scenario      | UUID     |
+| collex_end_date                                                      | Stores the UTC time for a collection exercise end date                              | datetime |
+| emitted_cases                                                        | Stores the caseUpdate DTO objects emitted on `CASE_UPDATE` events                   | List     |
+| emitted_uacs                                                         | Stores the UAC DTO objects from the emitted `UAC_UPDATE` events                     | List     |
+| pack_code                                                            | Stores the pack code used for fulfilments or action rules                           | str      |
+| template                                                             | Stores the column template used for fulfilments or action rules                     | Template |
+| export_supplier                                                      | Stores the export file supplier name the pack_code fo the current test is linked to | str      |
+| notify_template_id                                                   | Stores the ID of the sms template used for the notify service                       | UUID     |
+| fulfilment_response_json                                             | Stores the response JSON from a `POST` to the Notify API                            | Dict     |
+| phone_number                                                         | Stores the phone number needed to check the notify api                              | str      |
+| email                                                                | Stores the email address needed to check the notify api                             | str      |
+| message_hashes                                                       | Stores the hash of sent messages, for testing exception management                  | List     |
+| correlation_id                                                       | Stores the ID which connects all related events together                            | UUID     |
+| originating_user                                                     | Stores the email of the ONS employee who originally initiated a business event      | str      |
+| sent_messages                                                        | Stores every scenario sent message for debugging errors                             | List     |
+| scenario_name                                                        | Stores the scenario name and uses it for unique originating users in messages       | str      |
+| case_id                                                              | Stores the case_id of a case used in the scenario                                   | UUID     |
+| bulk_refusals                                                        | Stores created bulk refusal cases we expect to see messages for                     | List     |
+| bulk_invalids                                                        | Stores the create bulk invalid cases we expect to see messages for                  | List     |
+| bulk_sample_update                                                   | Stores the create bulk sample update cases we expect to see messages for            | List     |
+| bulk_sensitive_update                                                | Stores the bulk sensitive update cases we expect to see messages for                | List     |
+| expected_collection_instrument_url                                   | Stores the collection instrument URL expected on emitted `UAC_UPDATE` events        | str      |
+| fulfilment_personalisation                                           | Stores the personalisation values from a received fulfilment request event          | Dict     |
+| sample                                                               | Stores the parsed sample file rows, split into `sample` and `sensitive`             | List     |
+| export_file_templates                                                | Stores the list of export file templates setup prior to the tests                   | Mapping  |
+| export_file_packcodes                                                | Stores the list of export packcodes setup prior to the tests                        | Mapping  |
+| sms_templates                                                        | Stores the list of sms templates setup prior to the tests                           | Mapping  |
+| sms_packcodes                                                        | Stores the list of sms packcodes setup prior to the tests                           | Mapping  |
+| survey_name                                                          | Stores the survey name to be used in the scenario                                   | str      |
+| edited_survey_name                                                   | Stores the edited survey name to be used in the scenario                            | str      |
+| collection_exercise_name                                             | Stores the collection exercise name to be used in the scenario                      | str      |
+| edited_collection_exercise__name                                     | Stores the edited collection exericise name to be used in the scenario              | str      |
+| cohort                                                               | Stores the cohort number to be used in action scenarios                             | int      |
+| sample_file                                                          | Stores the sample file name to be used in the scenario                              | str      |
+| expected_questionnaire_type                                          | Stores the expected questionnaire type for the template to be used in the scenario  | str      |
 
 </div>
 
