@@ -2,13 +2,61 @@
   {
     "templateName": "UACHHT1",
     "template": ["__uac__"],
-    "notifyTemplateId": "883cee97-7a41-4fdb-8a09-0972c86b9375",
+    "notifyTemplateId": "ad7d6426-3590-444e-8d2a-973d7b2cc868",
     "questionnaireType": "01"
   },
     {
     "templateName": "UACHHT2",
     "template": ["__uac__"],
-      "notifyTemplateId": "883cee97-7a41-4fdb-8a09-0972c86b9375",
+      "notifyTemplateId": "bb5f68b4-61f3-48d9-83a9-4b172bbbb1ca",
       "questionnaireType": "02"
+  },
+    {
+    "templateName": "UACHHT2W",
+    "template": ["__uac__"],
+      "notifyTemplateId": "8166cd89-2168-4250-a82e-cb2eec361071",
+      "questionnaireType": "03"
+  },
+    {
+    "templateName": "UACHHT3",
+    "template": ["__uac__"],
+      "notifyTemplateId": "57895976-a422-4ac5-ad60-a87ca48f0c3d",
+      "questionnaireType": "04"
+  },
+    {
+    "templateName": "UACHHT4",
+    "template": ["__uac__"],
+      "notifyTemplateId": "e61857b7-665a-4534-bd9d-6f9377c30a5c",
+      "questionnaireType": "05"
+  },
+    {
+    "templateName": "UACIT1",
+    "template": ["__uac__"],
+      "notifyTemplateId": "7b5f309e-ff9a-4bed-933f-5b94969a2e1b",
+      "questionnaireType": "01"
+  },
+    {
+    "templateName": "UACIT2",
+    "template": ["__uac__"],
+      "notifyTemplateId": "3281eb15-4e51-4f9a-aa42-9703c797a00b",
+      "questionnaireType": "02"
+  },
+    {
+    "templateName": "UACIT2W",
+    "template": ["__uac__"],
+      "notifyTemplateId": "d9c43618-79e1-4333-8d78-dc874ce1d2dc",
+      "questionnaireType": "03"
+  },
+    {
+    "templateName": "UACIT3",
+    "template": ["__uac__"],
+      "notifyTemplateId": "889b3421-d067-455f-8392-592ed638e2dd",
+      "questionnaireType": "04"
+  },
+    {
+    "templateName": "UACIT4",
+    "template": ["__uac__"],
+      "notifyTemplateId": "2a3d59fb-d957-415f-b6c9-93496efccdbe",
+      "questionnaireType": "05"
   }
 ]

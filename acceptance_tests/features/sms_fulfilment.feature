@@ -18,3 +18,12 @@ Feature: Sms fulfilment
     Examples:
       | sample file                            | template |
       | sample_1_input_england_census_spec.csv | UACHHT2  |
+      | sample_1_input_england_census_spec.csv | UACHHT2W |
+      | sample_1_input_england_census_spec.csv | UACHHT3  |
+      | sample_1_input_england_census_spec.csv | UACHHT4  |
+      | sample_1_input_england_census_spec.csv | UACIT1   |
+      | sample_1_input_england_census_spec.csv | UACIT2   |
+      | sample_1_input_england_census_spec.csv | UACIT2W  |
+      | sample_1_input_england_census_spec.csv | UACIT3   |
+      | sample_1_input_england_census_spec.csv | UACIT4   |
+
