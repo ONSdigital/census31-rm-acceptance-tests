@@ -17,7 +17,7 @@
     {
     "templateName": "PC",
     "template": ["ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE"],
-      "questionnaireType": null
+    "questionnaireType": null
   },
     {
     "templateName": "ICL1-W",
@@ -35,12 +35,12 @@
     "templateName": "1RL2-W",
     "template": ["__welsh_uac__", "__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE"],
     "questionnaireType": "03",
-      "welshQuestionnaireType": "03"
+    "welshQuestionnaireType": "03"
   },
     {
     "templateName": "PC-W",
     "template": ["ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE"],
     "questionnaireType": null,
-      "welshQuestionnaireType": null
+    "welshQuestionnaireType": null
   }
 ]
