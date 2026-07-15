@@ -56,6 +56,12 @@ def check_uac_update_msgs_emitted_with_qid_active(context, active):
     for emitted_uac in context.emitted_uacs:
         test_helper.assertEqual(emitted_uac['qid'][:2], context.expected_questionnaire_type)
 
+    # Validate Welsh questionnaire type if present in context
+    if hasattr(context, 'expected_welsh_questionnaire_type') and context.expected_welsh_questionnaire_type:
+        for emitted_uac in context.emitted_uacs:
+            if 'welsh_qid' in emitted_uac and emitted_uac['welsh_qid']:
+                test_helper.assertEqual(emitted_uac['welsh_qid'][:2], context.expected_welsh_questionnaire_type)
+
 
 @step('the correct number of UAC_UPDATE messages are emitted with active set to {active:boolean}')
 def check_uac_updated_messages_by_number_with_qid_active(context, active):
