@@ -50,7 +50,8 @@ def request_replacement_uac_by_sms(context, phone_number, personalisation=None):
             "source": "CC",
             "channel": "CC",
             "correlationId": context.correlation_id,
-            "originatingUser": context.originating_user
+            "originatingUser": context.originating_user,
+            "messageType": "SMS_FULFILMENT"
         },
         "payload": {
             "smsFulfilment": {
