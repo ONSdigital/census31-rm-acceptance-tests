@@ -18,6 +18,7 @@ from config import Config
 @step("an export file is created with correct rows")
 def check_export_file(context):
     template = context.template
+    pack_code = context.pack_code
     emitted_uacs = context.emitted_uacs if hasattr(context, 'emitted_uacs') else None
     fulfilment_personalisation = context.fulfilment_personalisation if hasattr(context,
                                                                                'fulfilment_personalisation') else None
@@ -38,7 +39,8 @@ def check_export_file(context):
     expected_export_file_rows = generate_expected_export_file_rows(template,
                                                                    context.emitted_cases,
                                                                    emitted_uacs, uacs_from_actual_export_file,
-                                                                   fulfilment_personalisation)
+                                                                   fulfilment_personalisation,
+                                                                   pack_code)
 
     check_export_file_matches_expected(actual_export_file_rows, expected_export_file_rows)
 
@@ -94,7 +96,7 @@ def _get_unhashed_uacs_from_actual_export_file(actual_export_file_rows, template
 
 
 def generate_expected_export_file_rows(template: List, cases: List, uac_update_events: List, expected_uacs: List,
-                                       fulfilment_personalisation: Dict):
+                                       fulfilment_personalisation: Dict, pack_code: str):
     hashed_uac_to_uac = {
         hashlib.sha256(uac.encode('utf-8')).hexdigest(): uac
         for uac in expected_uacs
@@ -114,6 +116,8 @@ def generate_expected_export_file_rows(template: List, cases: List, uac_update_e
                 export_row_components.append(fulfilment_personalisation[field.split('.')[1]])
             elif field.startswith('__caseref__'):
                 export_row_components.append(case['caseRef'])
+            elif field.startswith('__pack_code__'):
+                export_row_components.append(pack_code)
             else:
 
                 export_row_components.append(
