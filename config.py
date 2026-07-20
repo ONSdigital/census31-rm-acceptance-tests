@@ -60,9 +60,8 @@ class Config:
     NOTIFY_STUB_SERVICE = f'http://{NOTIFY_STUB_HOST}:{NOTIFY_STUB_PORT}'
 
     EXPORT_FILE_DESTINATION_CONFIG_JSON_PATH = Path(
-        os.getenv('EXPORT_FILE_DESTINATION_CONFIG_JSON_PATH') or Path(__file__).parents[1].joinpath(
-            'census31-rm-docker-dev',
-            'dummy_destination_config.json'))
+        os.getenv('EXPORT_FILE_DESTINATION_CONFIG_JSON_PATH') or Path(__file__).parent.joinpath(
+            'dummy_export_file_destination_config.json'))
     EXPORT_FILE_DESTINATIONS_CONFIG = json.loads(
         EXPORT_FILE_DESTINATION_CONFIG_JSON_PATH.read_text()) \
         if EXPORT_FILE_DESTINATION_CONFIG_JSON_PATH and EXPORT_FILE_DESTINATION_CONFIG_JSON_PATH.exists() else None
