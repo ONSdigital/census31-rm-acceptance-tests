@@ -6,7 +6,6 @@ from datetime import datetime, timezone
 from behave import step
 
 from acceptance_tests.utilities.audit_trail_helper import add_random_suffix_to_email
-# from acceptance_tests.utilities.audit_trail_helper import add_random_suffix_to_email
 from acceptance_tests.utilities.pubsub_helper import publish_to_pubsub
 from config import Config
 
