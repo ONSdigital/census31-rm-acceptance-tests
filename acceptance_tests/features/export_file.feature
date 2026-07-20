@@ -21,7 +21,7 @@ Feature: Export files can be created with the correct data
       | sample_input_england_census_spec.csv | 1RL2     |
       | sample_input_england_census_spec.csv | 1RL2-W   |
 
-  Scenario Outline: A case is loaded, action rule triggered and export file created with a template with no UAC
+  Scenario Outline: A case is loaded, action rule triggered and export file created with a template with no UAC in it
     Given sample file "<sample file>" is loaded successfully
     And an export file template has been created with template "<template>"
     When an export file action rule has been created for packcode "<template>"
