@@ -74,7 +74,7 @@ class Config:
                                                'dummy-key-census-rm-test-private.asc'))
     )
     OUR_EXPORT_FILE_DECRYPTION_KEY_PASSPHRASE = os.getenv('OUR_EXPORT_FILE_DECRYPTION_KEY_PASSPHRASE',
-                                                          'dummy-census-rm-test')
+                                                          'test')
 
     API_USER_EMAIL = os.getenv('API_USER_EMAIL', 'dummy@fake-email.com')
 

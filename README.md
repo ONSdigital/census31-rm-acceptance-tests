@@ -118,3 +118,11 @@ such a long wait for messages.
 ### Exception test naming
 All feature files have been named with all lower case titles. The one exception is the `Exception_manager.feature` test file. This is because we want this test to run at the beginning of the test run, and behave will execure feature files that are capitalised before files named with lower case titles.
 The reason we want this test to run first is to help warmup a cold pubsub in the CI environment. This test uses all the pubsub topics and services. It also utilises some waits, so it should work as a good test to run to ensure pubsub is fully warmed up when the rest of the tests run.
+
+### Test Keys
+
+For development environments, the services is configured to use the dummy test keys
+from [census31-rm-docker-dev](https://github.com/ONSdigital/census31-rm-docker-dev) by default, assuming the repository
+is in the same parent directory.
+
+See [census31-rm-docker-dev Test keys](https://github.com/ONSdigital/census31-rm-docker-dev#test-keys) for details.
