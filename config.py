@@ -60,8 +60,9 @@ class Config:
     NOTIFY_STUB_SERVICE = f'http://{NOTIFY_STUB_HOST}:{NOTIFY_STUB_PORT}'
 
     EXPORT_FILE_DESTINATION_CONFIG_JSON_PATH = Path(
-        os.getenv('EXPORT_FILE_DESTINATION_CONFIG_JSON_PATH') or Path(__file__).parent.joinpath(
-            'dummy_export_file_destination_config.json'))
+        os.getenv('EXPORT_FILE_DESTINATION_CONFIG_JSON_PATH') or Path(__file__).parents[1].joinpath(
+            'census31-rm-docker-dev',
+            'dummy_destination_config.json'))
     EXPORT_FILE_DESTINATIONS_CONFIG = json.loads(
         EXPORT_FILE_DESTINATION_CONFIG_JSON_PATH.read_text()) \
         if EXPORT_FILE_DESTINATION_CONFIG_JSON_PATH and EXPORT_FILE_DESTINATION_CONFIG_JSON_PATH.exists() else None
@@ -69,10 +70,11 @@ class Config:
     FILE_UPLOAD_MODE = os.getenv('FILE_UPLOAD_MODE', 'LOCAL')
     OUR_EXPORT_FILE_DECRYPTION_KEY = os.getenv(
         'OUR_EXPORT_FILE_DECRYPTION_KEY',
-        str(RESOURCE_FILE_PATH.joinpath('dummy_keys',
-                                        'dummy-key-census-rm-private.asc'))
+        str(Path(__file__).parents[1].joinpath('census31-rm-docker-dev', 'dummy_keys',
+                                               'dummy-key-census-rm-test-private.asc'))
     )
-    OUR_EXPORT_FILE_DECRYPTION_KEY_PASSPHRASE = os.getenv('OUR_EXPORT_FILE_DECRYPTION_KEY_PASSPHRASE', 'test')
+    OUR_EXPORT_FILE_DECRYPTION_KEY_PASSPHRASE = os.getenv('OUR_EXPORT_FILE_DECRYPTION_KEY_PASSPHRASE',
+                                                          'dummy-census-rm-test')
 
     API_USER_EMAIL = os.getenv('API_USER_EMAIL', 'dummy@fake-email.com')
 
