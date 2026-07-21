@@ -21,19 +21,19 @@
   },
     {
     "templateName": "ICL1-W",
-    "template": ["__welsh_uac__", "__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE"],
+    "template": ["__uac__", "__welsh_uac__", "__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE"],
     "questionnaireType": "02",
     "welshQuestionnaireType": "03"
   },
    {
     "templateName": "1RL1-W",
-    "template": ["__welsh_uac__", "__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE"],
+    "template": ["__uac__", "__welsh_uac__", "__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE"],
     "questionnaireType": "02",
     "welshQuestionnaireType": "03"
   },
     {
     "templateName": "1RL2-W",
-    "template": ["__welsh_uac__", "__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE"],
+    "template": ["__uac__", "__welsh_uac__", "__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE"],
     "questionnaireType": "02",
     "welshQuestionnaireType": "03"
   },
