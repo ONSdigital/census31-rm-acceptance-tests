@@ -27,6 +27,10 @@ def log_out_user_context_values(context, context_attributes: List[Dict]):
     logger.error(context_output)
 
 
+def add_random_suffix_to_email(email_address):
+    return f'{email_address}@{get_random_alpha_numerics(4)}'
+
+
 def build_context_audit_log(context, context_attributes: List[Dict]) -> str:
     context_output = "\n"
 

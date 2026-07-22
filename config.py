@@ -15,8 +15,8 @@ class Config:
     PUBSUB_INVALID_CASE_TOPIC = os.getenv('PUBSUB_INVALID_CASE_TOPIC',
                                           'event_invalid-case')
     PUBSUB_PRINT_FULFILMENT_TOPIC = os.getenv('PUBSUB_PRINT_FULFILMENT_TOPIC', 'event_print-fulfilment')
-    PUBSUB_EQ_LAUNCH_TOPIC = os.getenv('PUBSUB_EQ_LAUNCH_TOPIC',  # noqa: F841
-                                       'event_eq-launch')  # noqa: F841
+    PUBSUB_SURVEY_LAUNCHED_TOPIC = os.getenv('PUBSUB_SURVEY_LAUNCHED_TOPIC',  # noqa: F841
+                                             'event_survey-launched')  # noqa: F841
     PUBSUB_DEACTIVATE_UAC_TOPIC = os.getenv('PUBSUB_DEACTIVATE_UAC_TOPIC', 'event_deactivate-uac')
     PUBSUB_OUTBOUND_UAC_SUBSCRIPTION = os.getenv('PUBSUB_OUTBOUND_UAC_SUBSCRIPTION', 'event_uac-update_rh_at')
     PUBSUB_OUTBOUND_CASE_SUBSCRIPTION = os.getenv('PUBSUB_OUTBOUND_CASE_SUBSCRIPTION', 'event_case-update_rh_at')
