@@ -39,14 +39,13 @@ def check_export_file(context):
     actual_export_file_rows = get_export_file_rows(context.test_start_utc_datetime, context.pack_code,
                                                    supplier=supplier)
 
-    uacs_from_actual_export_file = [_get_unhashed_uacs_from_actual_export_file(
-        actual_export_file_rows, template, "__uac__"
-    ) if '__uac__' in template else [], _get_unhashed_uacs_from_actual_export_file(
-        actual_export_file_rows, template, "__welsh_uac__"
-    ) if '__welsh_uac__' in template else []]
-
-    uacs_from_actual_export_file = [item for tuple in uacs_from_actual_export_file for item in tuple]
-    if '__uac__' in template:
+    uacs_from_actual_export_file = (
+        (_get_unhashed_uacs_from_actual_export_file(actual_export_file_rows, template, "__uac__")
+         if "__uac__" in template else ())
+        + (_get_unhashed_uacs_from_actual_export_file(actual_export_file_rows, template, "__welsh_uac__")
+           if "__welsh_uac__" in template else ())
+    )
+    if '__uac__' in template or '__welsh_uac__' in template:
         expected_export_file_rows = generate_expected_export_file_rows(
             template, context.emitted_cases, emitted_uacs, uacs_from_actual_export_file,
             fulfilment_personalisation, pack_code, context.expected_questionnaire_type,
@@ -107,9 +106,9 @@ def _get_unhashed_uacs_from_actual_export_file(actual_export_file_rows, template
     return tuple(export_file_row[uac_field] for export_file_row in export_file_reader)
 
 
-def generate_expected_export_file_rows(template: List, cases: List, uac_update_events: List, expected_uacs: List,
-                                       fulfilment_personalisation: Dict, pack_code: str, questionnaire_type,
-                                       welsh_questionnaire_type):
+def generate_expected_export_file_rows(
+        template: List, cases: List, uac_update_events: List, expected_uacs: Iterable[str],
+        fulfilment_personalisation: Dict, pack_code: str, questionnaire_type, welsh_questionnaire_type):
     hashed_uac_to_uac = {
         hashlib.sha256(uac.encode('utf-8')).hexdigest(): uac
         for uac in expected_uacs
