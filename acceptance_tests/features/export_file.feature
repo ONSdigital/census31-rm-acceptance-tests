@@ -11,12 +11,15 @@ Feature: Export files can be created with the correct data
     Examples:
       | sample file                          | template |
       | sample_input_england_census_spec.csv | ICL1     |
+      | sample_input_england_census_spec.csv | ICL1-W   |
 
     @regression
     Examples:
       | sample file                          | template |
       | sample_input_england_census_spec.csv | 1RL1     |
+      | sample_input_england_census_spec.csv | 1RL1-W   |
       | sample_input_england_census_spec.csv | 1RL2     |
+      | sample_input_england_census_spec.csv | 1RL2-W   |
 
   Scenario Outline: A case is loaded, action rule triggered and export file created with a template with no UAC
     Given sample file "<sample file>" is loaded successfully
@@ -28,3 +31,4 @@ Feature: Export files can be created with the correct data
     Examples:
       | sample file                          | template |
       | sample_input_england_census_spec.csv | PC       |
+      | sample_input_england_census_spec.csv | PC-W     |

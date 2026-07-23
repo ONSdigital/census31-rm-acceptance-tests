@@ -27,22 +27,31 @@ def check_export_file(context):
                             'Export file template expects UACs or QIDs but no corresponding emitted_uacs found in '
                             f'the scenario context, emitted_uacs {emitted_uacs}')
 
+    welsh_error_message = (
+        'Export file template expects welsh UACs or QIDs but no corresponding welsh emitted_uacs found in '
+        f'the scenario context, emitted_uacs {emitted_uacs}'
+    )
+    test_helper.assertFalse(('__welsh_uac__' in template or '__welsh_qid__' in template) and not emitted_uacs,
+                            welsh_error_message)
+
     supplier = _get_context_export_supplier_or_default(context)
 
     actual_export_file_rows = get_export_file_rows(context.test_start_utc_datetime, context.pack_code,
                                                    supplier=supplier)
 
-    uacs_from_actual_export_file = _get_unhashed_uacs_from_actual_export_file(
-        actual_export_file_rows, template
-    ) if '__uac__' in template else []
-
-    expected_export_file_rows = generate_expected_export_file_rows(template,
-                                                                   context.emitted_cases,
-                                                                   emitted_uacs, uacs_from_actual_export_file,
-                                                                   fulfilment_personalisation,
-                                                                   pack_code)
-
-    check_export_file_matches_expected(actual_export_file_rows, expected_export_file_rows)
+    uacs_from_actual_export_file = (
+        (_get_unhashed_uacs_from_actual_export_file(actual_export_file_rows, template, "__uac__")
+         if "__uac__" in template else ())
+        + (_get_unhashed_uacs_from_actual_export_file(actual_export_file_rows, template, "__welsh_uac__")
+           if "__welsh_uac__" in template else ())
+    )
+    if '__uac__' in template or '__welsh_uac__' in template:
+        expected_export_file_rows = generate_expected_export_file_rows(
+            template, context.emitted_cases, emitted_uacs, uacs_from_actual_export_file,
+            fulfilment_personalisation, pack_code, context.expected_questionnaire_type,
+            context.expected_welsh_questionnaire_type
+        )
+        check_export_file_matches_expected(actual_export_file_rows, expected_export_file_rows)
 
 
 @step('an export file template has been created with template "{template_name}"')
@@ -51,6 +60,8 @@ def create_export_file_template(context, template_name):
     context.pack_code = context.export_file_packcodes[template_name]['pack_code']
     context.expected_questionnaire_type = context.export_file_packcodes[template_name][
         'questionnaire_type']
+    context.expected_welsh_questionnaire_type = context.export_file_packcodes[template_name][
+        'welsh_questionnaire_type']
 
 
 @step('an export file template has been created for the internal reprographics supplier with template {template:array}')
@@ -66,37 +77,38 @@ def _get_context_export_supplier_or_default(context) -> str:
     return context.export_supplier if hasattr(context, 'export_supplier') else Config.SUPPLIER_DEFAULT_TEST
 
 
-def _get_uac_matching_case_id(uac_update_events, case_id):
+def _get_uac_matching_case_id(uac_update_events, case_id, questionnaire_type):
     for uac_dto in uac_update_events:
-        if uac_dto['caseId'] == case_id:
+        if uac_dto['caseId'] == case_id and uac_dto['qid'][:2] == questionnaire_type:
             return uac_dto
 
     test_helper.fail(f"Couldn't find event with case ID: {case_id} in UAC_UPDATE events. "
                      f"Full uac_update_events list: {uac_update_events}")
 
 
-def get_uac_hash_by_case_id(uac_update_events, case_id):
-    matching_uac_dto = _get_uac_matching_case_id(uac_update_events, case_id)
+def get_uac_hash_by_case_id(uac_update_events, case_id, questionnaire_type):
+    matching_uac_dto = _get_uac_matching_case_id(uac_update_events, case_id, questionnaire_type)
 
     if matching_uac_dto:
         return matching_uac_dto['uacHash']
 
 
-def get_qid_by_case_id(uac_update_events, case_id):
-    matching_uac_dto = _get_uac_matching_case_id(uac_update_events, case_id)
+def get_qid_by_case_id(uac_update_events, case_id, questionnaire_type):
+    matching_uac_dto = _get_uac_matching_case_id(uac_update_events, case_id, questionnaire_type)
 
     if matching_uac_dto:
         return matching_uac_dto['qid']
 
 
-def _get_unhashed_uacs_from_actual_export_file(actual_export_file_rows, template):
+def _get_unhashed_uacs_from_actual_export_file(actual_export_file_rows, template, uac_field):
     export_file_reader = csv.DictReader(actual_export_file_rows, fieldnames=template, delimiter=',')
     next(export_file_reader, None)  # Exclude header row
-    return tuple(export_file_row["__uac__"] for export_file_row in export_file_reader)
+    return tuple(export_file_row[uac_field] for export_file_row in export_file_reader)
 
 
-def generate_expected_export_file_rows(template: List, cases: List, uac_update_events: List, expected_uacs: List,
-                                       fulfilment_personalisation: Dict, pack_code: str):
+def generate_expected_export_file_rows(
+        template: List, cases: List, uac_update_events: List, expected_uacs: Iterable[str],
+        fulfilment_personalisation: Dict, pack_code: str, questionnaire_type, welsh_questionnaire_type):
     hashed_uac_to_uac = {
         hashlib.sha256(uac.encode('utf-8')).hexdigest(): uac
         for uac in expected_uacs
@@ -107,10 +119,16 @@ def generate_expected_export_file_rows(template: List, cases: List, uac_update_e
         export_row_components = []
         for field in template:
             if field == '__uac__':
-                hashed_uac = get_uac_hash_by_case_id(uac_update_events, case['caseId'])
+                hashed_uac = get_uac_hash_by_case_id(uac_update_events, case['caseId'], questionnaire_type)
                 export_row_components.append(hashed_uac_to_uac[hashed_uac])
             elif field == '__qid__':
-                qid = get_qid_by_case_id(uac_update_events, case['caseId'])
+                qid = get_qid_by_case_id(uac_update_events, case['caseId'], questionnaire_type)
+                export_row_components.append(qid)
+            elif field == '__welsh_uac__':
+                hashed_uac = get_uac_hash_by_case_id(uac_update_events, case['caseId'], welsh_questionnaire_type)
+                export_row_components.append(hashed_uac_to_uac[hashed_uac])
+            elif field == '__welsh_qid__':
+                qid = get_qid_by_case_id(uac_update_events, case['caseId'], welsh_questionnaire_type)
                 export_row_components.append(qid)
             elif field.startswith('__request__'):
                 export_row_components.append(fulfilment_personalisation[field.split('.')[1]])

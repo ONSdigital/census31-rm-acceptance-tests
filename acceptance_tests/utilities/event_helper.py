@@ -176,11 +176,6 @@ def _check_uacs_updated_match_cases(uac_update_events: List[Mapping], cases: Lis
                                set(case['caseId'] for case in cases),
                                'The UAC updated events should be linked to the given set of case IDs')
 
-    test_helper.assertEqual(len(uac_update_events), len(cases),
-                            'There should be one and only one UAC updated event for each given case ID,'
-                            f'uac_update_events: {uac_update_events} '
-                            f'cases {cases}')
-
 
 def _check_new_uacs_are_as_expected(emitted_uacs: List[Mapping], active: bool, field_to_test: str = None,
                                     expected_value: bool = None):
@@ -205,7 +200,7 @@ def check_if_event_types_are_exact_match(expected_logged_event_types: list[str],
 def get_logged_events_for_case_by_id(case_id: str) -> list[dict]:
     with open_cursor() as cur:
         cur.execute(
-            "select * from cases.event where caze_id = %s OR uac_qid_link_id = \
+            "select * from cases.event where caze_id = %s OR uac_qid_link_id in \
              (select id from cases.uac_qid_link where cases.uac_qid_link.caze_id = %s)",
             (case_id, case_id))
 

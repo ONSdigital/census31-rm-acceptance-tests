@@ -47,14 +47,25 @@ def case_update_msg_sent_with_multiple_values(context, new_values):
 
 @step("UAC_UPDATE messages are emitted with active set to {active:boolean}")
 def check_uac_update_msgs_emitted_with_qid_active(context, active):
-    context.emitted_uacs = get_uac_update_events(len(context.emitted_cases), context.correlation_id,
-                                                 context.originating_user, context.test_start_utc_datetime)
+    if hasattr(context, 'expected_welsh_questionnaire_type') and context.expected_welsh_questionnaire_type:
+        context.emitted_uacs = get_uac_update_events(len(context.emitted_cases) * 2, context.correlation_id,
+                                                     context.originating_user, context.test_start_utc_datetime)
+    else:
+        context.emitted_uacs = get_uac_update_events(len(context.emitted_cases), context.correlation_id,
+                                                     context.originating_user, context.test_start_utc_datetime)
+
     _check_uacs_updated_match_cases(context.emitted_uacs, context.emitted_cases)
 
     _check_new_uacs_are_as_expected(emitted_uacs=context.emitted_uacs, active=active)
 
-    for emitted_uac in context.emitted_uacs:
-        test_helper.assertEqual(emitted_uac['qid'][:2], context.expected_questionnaire_type)
+    if hasattr(context, 'expected_welsh_questionnaire_type') and context.expected_welsh_questionnaire_type:
+        for emitted_uac in context.emitted_uacs:
+            test_helper.assertIn(
+                emitted_uac['qid'][:2], (context.expected_questionnaire_type, context.expected_welsh_questionnaire_type)
+            )
+    else:
+        for emitted_uac in context.emitted_uacs:
+            test_helper.assertEqual(emitted_uac['qid'][:2], context.expected_questionnaire_type)
 
 
 @step('the correct number of UAC_UPDATE messages are emitted with active set to {active:boolean}')

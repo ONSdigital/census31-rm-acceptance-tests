@@ -86,3 +86,8 @@ def check_uac_message_matches_sms_uac(context):
                             f"context.emitted_uacs: {context.emitted_uacs} "
                             f"context.fulfilment_response_json {context.fulfilment_response_json}")
     test_helper.assertEqual(context.emitted_uacs[0]['qid'][:2], context.expected_questionnaire_type)
+
+    # Validate Welsh questionnaire type if present in context
+    if hasattr(context, 'expected_welsh_questionnaire_type') and context.expected_welsh_questionnaire_type:
+        if 'welsh_qid' in context.emitted_uacs[0] and context.emitted_uacs[0]['welsh_qid']:
+            test_helper.assertEqual(context.emitted_uacs[0]['welsh_qid'][:2], context.expected_welsh_questionnaire_type)
