@@ -69,10 +69,11 @@ class Config:
     FILE_UPLOAD_MODE = os.getenv('FILE_UPLOAD_MODE', 'LOCAL')
     OUR_EXPORT_FILE_DECRYPTION_KEY = os.getenv(
         'OUR_EXPORT_FILE_DECRYPTION_KEY',
-        str(RESOURCE_FILE_PATH.joinpath('dummy_keys',
-                                        'dummy-key-census-rm-private.asc'))
+        str(Path(__file__).parents[1].joinpath('census31-rm-docker-dev', 'dummy_keys',
+                                               'dummy-key-census-rm-test-private.asc'))
     )
-    OUR_EXPORT_FILE_DECRYPTION_KEY_PASSPHRASE = os.getenv('OUR_EXPORT_FILE_DECRYPTION_KEY_PASSPHRASE', 'test')
+    OUR_EXPORT_FILE_DECRYPTION_KEY_PASSPHRASE = os.getenv('OUR_EXPORT_FILE_DECRYPTION_KEY_PASSPHRASE',
+                                                          'test')
 
     API_USER_EMAIL = os.getenv('API_USER_EMAIL', 'dummy@fake-email.com')
 
