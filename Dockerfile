@@ -1,4 +1,4 @@
-FROM python:3.12.12-slim@sha256:dc9e92fcdc085ad86dda976f4cfc58856dba33a438a16db37ff00151b285c8ca
+FROM mirror.gcr.io/library/python:3.12.12-slim@sha256:dc9e92fcdc085ad86dda976f4cfc58856dba33a438a16db37ff00151b285c8ca
 
 # install google chrome, chromedriver and add acceptancetest user
 RUN apt-get -y update && apt-get install -y curl git wget gnupg jq unzip &&  \
