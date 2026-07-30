@@ -131,3 +131,5 @@ megalinter-reports/
 
 # Podman secrets
 podman-build-secret*
+run.py
+.run/Template Python.run.xml
