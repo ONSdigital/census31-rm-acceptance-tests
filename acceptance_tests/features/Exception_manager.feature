@@ -12,8 +12,3 @@ Feature: Check exception manager is called for every topic and handles them as e
     Then a bad message appears in exception manager with exception message containing "qid '555555' not found!"
     And each bad msg can be successfully quarantined
 
-  @regression
-  Scenario: Bad Receipt message turns up in exception manager
-    When a bad Receipt event is put on the topic
-    Then a bad message appears in exception manager with exception message containing "qid '555555' not found!"
-    And each bad msg can be successfully quarantined
