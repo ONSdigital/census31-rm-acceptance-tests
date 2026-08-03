@@ -41,9 +41,9 @@ Feature: Export files can be created with the correct data
 
     @regression
     Examples:
-    | sample file                             | template     |
-    | sample_1_input_england_census_spec.csv  | P_IC_PCPR2B  |
-    | sample_1_input_england_census_spec.csv  | P_IC_PCPR13  |
-    | sample_1_input_england_census_spec.csv  | P_IC_PCPR23  |
-    | sample_1_input_england_census_spec.csv  | P_IC_PCPR13A |
-    | sample_1_input_england_census_spec.csv  | P_IC_PCPR23A |
+      | sample file                             | template     |
+      | sample_1_input_england_census_spec.csv  | P_IC_PCPR2B  |
+      | sample_1_input_england_census_spec.csv  | P_IC_PCPR13  |
+      | sample_1_input_england_census_spec.csv  | P_IC_PCPR23  |
+      | sample_1_input_england_census_spec.csv  | P_IC_PCPR13A |
+      | sample_1_input_england_census_spec.csv  | P_IC_PCPR23A |
