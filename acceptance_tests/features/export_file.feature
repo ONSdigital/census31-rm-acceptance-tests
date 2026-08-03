@@ -30,4 +30,12 @@ Feature: Export files can be created with the correct data
     Examples:
       | sample file                          | template    |
       | sample_input_england_census_spec.csv | P_IC_PCPR1  |
-      | sample_input_england_census_spec.csv | P_IC_PCPR2B |
+
+    @regression
+    Examples:
+    | sample file                             | template     |
+    | sample_1_input_england_census_spec.csv  | P_IC_PCPR2B  |
+    | sample_1_input_england_census_spec.csv  | P_IC_PCPR13  |
+    | sample_1_input_england_census_spec.csv  | P_IC_PCPR23  |
+    | sample_1_input_england_census_spec.csv  | P_IC_PCPR13A |
+    | sample_1_input_england_census_spec.csv  | P_IC_PCPR23A |

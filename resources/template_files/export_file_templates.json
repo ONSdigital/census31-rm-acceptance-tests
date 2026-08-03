@@ -64,8 +64,8 @@
   {
     "templateName": "P_IC_PCPR13A",
     "template": ["__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE", "__pack_code__"],
-    "questionnaireType": "02",
-    "welshQuestionnaireType": "03"
+    "questionnaireType": null,
+    "welshQuestionnaireType": null
   },
   {
     "templateName": "P_IC_PCPR23A",

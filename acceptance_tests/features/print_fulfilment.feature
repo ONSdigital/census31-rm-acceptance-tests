@@ -1,6 +1,5 @@
 Feature: Print fulfilments can be requested for a case
 
-
   Scenario Outline: A print fulfilment is requested for a case
   Given sample file "<sample file>" is loaded successfully
   And fulfilments are authorised for the export file template "<template>"
@@ -17,8 +16,19 @@ Feature: Print fulfilments can be requested for a case
 
   @regression
   Examples:
-    | sample file                             | template |
-    | sample_1_input_england_census_spec.csv  | P_IC_H2 |
+    | sample file                             | template     |
+    | sample_1_input_england_census_spec.csv  | P_IC_H2      |
+    | sample_1_input_england_census_spec.csv  | P_OR_H2      |
+    | sample_1_input_england_census_spec.csv  | P_IC_ICL1    |
+    | sample_1_input_england_census_spec.csv  | P_IC_ICL2B   |
+    | sample_1_input_england_census_spec.csv  | P_IC_ICL3    |
+    | sample_1_input_england_census_spec.csv  | P_IC_ICL3A   |
+    | sample_1_input_england_census_spec.csv  | P_RL_1IRL1   |
+    | sample_1_input_england_census_spec.csv  | P_RL_1IRL2B  |
+    | sample_1_input_england_census_spec.csv  | P_RL_1IRL3   |
+    | sample_1_input_england_census_spec.csv  | P_RL_2IRL1   |
+    | sample_1_input_england_census_spec.csv  | P_RL_2IRL2B  |
+    | sample_1_input_england_census_spec.csv  | P_RL_2IRL3   |
 
 
 
@@ -35,10 +45,23 @@ Feature: Print fulfilments can be requested for a case
   Examples:
     | sample file                             | template |
     | sample_1_input_england_census_spec.csv  | P_OR_I1  |
-    | sample_1_input_england_census_spec.csv  | P_OR_I2  |
+
 
   @regression
   Examples:
-    | sample file                             | template |
-    | sample_1_input_england_census_spec.csv  | P_OR_I2  |
-    | sample_1_input_england_census_spec.csv  | P_OR_I2W  |
+    | sample file                             | template   |
+    | sample_1_input_england_census_spec.csv  | P_OR_H1    |
+    | sample_1_input_england_census_spec.csv  | P_OR_I2    |
+    | sample_1_input_england_census_spec.csv  | P_OR_I2W   |
+    | sample_1_input_england_census_spec.csv  | P_OR_I2    |
+    | sample_1_input_england_census_spec.csv  | P_OR_I2W   |
+    | sample_1_input_england_census_spec.csv  | P_OR_IACR3 |
+
+
+
+
+
+
+
+
+
