@@ -1,4 +1,4 @@
-Feature: Mark case as receipted when EQ response received from RH
+Feature: Mark the case as receipted when receipt received message event is received
 
   Scenario: EQ response received events are logged and the case flag is updated
     Given sample file "sample_1_input_england_census_spec.csv" is loaded successfully
