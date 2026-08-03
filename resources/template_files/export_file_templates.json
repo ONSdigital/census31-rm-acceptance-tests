@@ -1,46 +1,141 @@
 [
   {
-    "templateName": "ICL1",
-    "template": ["__uac__", "__caseref__", "__pack_code__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE"],
+    "templateName": "P_IC_H1",
+    "template": ["__uac__", "__qid__", "__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE", "__pack_code__"],
     "questionnaireType": "01"
   },
-    {
-    "templateName": "1RL1",
-    "template": ["__uac__", "__caseref__", "__pack_code__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE"],
-    "questionnaireType": "02"
-  },
-    {
-    "templateName": "1RL2",
-    "template": ["__uac__", "__caseref__", "__pack_code__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE"],
-      "questionnaireType": "03"
-  },
-    {
-    "templateName": "PC",
-    "template": ["ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE"],
-    "questionnaireType": null
-  },
-    {
-    "templateName": "ICL1-W",
-    "template": ["__uac__", "__welsh_uac__", "__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE"],
+  {
+    "templateName": "P_IC_H2",
+    "template": ["__uac__", "__qid__", "__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE", "__pack_code__", "__welsh_uac__", "__welsh_qid__"],
     "questionnaireType": "02",
     "welshQuestionnaireType": "03"
   },
-   {
-    "templateName": "1RL1-W",
-    "template": ["__uac__", "__welsh_uac__", "__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE"],
+  {
+    "templateName": "P_OR_H1",
+    "template": ["__uac__", "__qid__", "__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE", "__pack_code__", "__request__.title", "__request__.forename", "__request__.surname"],
+    "questionnaireType": "01"
+  },
+  {
+    "templateName": "P_OR_H2",
+    "template": ["__uac__", "__qid__", "__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE", "__pack_code__", "__welsh_uac__", "__welsh_qid__"],
     "questionnaireType": "02",
     "welshQuestionnaireType": "03"
   },
-    {
-    "templateName": "1RL2-W",
-    "template": ["__uac__", "__welsh_uac__", "__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE"],
-    "questionnaireType": "02",
-    "welshQuestionnaireType": "03"
+  {
+    "templateName": "P_OR_I1",
+    "template": ["__uac__", "__qid__", "__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE", "__pack_code__", "__request__.title", "__request__.forename", "__request__.surname"],
+    "questionnaireType": "21"
   },
-    {
-    "templateName": "PC-W",
-    "template": ["ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE"],
+  {
+    "templateName": "P_OR_I2",
+    "template": ["__uac__", "__qid__", "__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE", "__pack_code__", "__request__.title", "__request__.forename", "__request__.surname"],
+    "questionnaireType": "22"
+  },
+  {
+    "templateName": "P_OR_I2W",
+    "template": ["__uac__", "__qid__", "__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE", "__pack_code__", "__request__.title", "__request__.forename", "__request__.surname"],
+    "questionnaireType": "23",
+    "welshQuestionnaireType": null
+  },
+  {
+    "templateName": "P_IC_PCPR1",
+    "template": ["__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE", "__pack_code__"],
+    "questionnaireType":  null,
+    "welshQuestionnaireType": null
+  },
+  {
+    "templateName": "P_IC_PCPR2B",
+    "template": ["__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE", "__pack_code__"],
+    "questionnaireType":  null,
+    "welshQuestionnaireType": null
+  },
+  {
+    "templateName": "P_IC_PCPR13",
+    "template": ["__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE", "__pack_code__"],
+    "questionnaireType": null,
+    "welshQuestionnaireType":  null
+  },
+  {
+    "templateName": "P_IC_PCPR23",
+    "template": ["__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE", "__pack_code__"],
     "questionnaireType": null,
     "welshQuestionnaireType": null
+  },
+  {
+    "templateName": "P_IC_PCPR13A",
+    "template": ["__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE", "__pack_code__"],
+    "questionnaireType": "02",
+    "welshQuestionnaireType": "03"
+  },
+  {
+    "templateName": "P_IC_PCPR23A",
+    "template": ["__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE", "__pack_code__"],
+    "questionnaireType": null,
+    "welshQuestionnaireType": null
+  },
+  {
+    "templateName": "P_IC_ICL1",
+    "template": ["__uac__","__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE", "__pack_code__"],
+    "questionnaireType": "01",
+    "welshQuestionnaireType": null
+  },
+  {
+    "templateName": "P_IC_ICL2B",
+    "template": ["__uac__","__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE", "__pack_code__"],
+    "questionnaireType": "02",
+    "welshQuestionnaireType": null
+  },
+  {
+    "templateName": "P_IC_ICL3",
+    "template": ["__uac__","__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE", "__pack_code__"],
+    "questionnaireType": "04",
+    "welshQuestionnaireType": null
+  },
+  {
+    "templateName": "P_IC_ICL3A",
+    "template": ["__uac__","__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE", "__pack_code__"],
+    "questionnaireType": "35",
+    "welshQuestionnaireType": null
+  },{
+    "templateName": "P_RL_1IRL1",
+    "template": ["__uac__","__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE", "__pack_code__"],
+    "questionnaireType": "01",
+    "welshQuestionnaireType": null
+  },{
+    "templateName": "P_RL_1IRL2B",
+    "template": ["__uac__","__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE", "__pack_code__"],
+    "questionnaireType": "02",
+    "welshQuestionnaireType": null
+  },
+  {
+    "templateName": "P_RL_1IRL3",
+    "template": ["__uac__","__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE", "__pack_code__"],
+    "questionnaireType": "04",
+    "welshQuestionnaireType": null
+  },
+  {
+    "templateName": "P_RL_2IRL1",
+    "template": ["__uac__","__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE", "__pack_code__"],
+    "questionnaireType": "01",
+    "welshQuestionnaireType": null
+  },
+  {
+    "templateName": "P_RL_2IRL2B",
+    "template": ["__uac__","__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE", "__pack_code__"],
+    "questionnaireType": "02",
+    "welshQuestionnaireType": null
+  },
+  {
+    "templateName": "P_RL_2IRL3",
+    "template": ["__uac__","__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE", "__pack_code__"],
+    "questionnaireType": "04",
+    "welshQuestionnaireType": null
+  },
+  {
+    "templateName": "P_OR_IACR3",
+    "template": ["__uac__","__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE", "__pack_code__", "__request__.title", "__request__.forename", "__request__.surname"],
+    "questionnaireType": "24",
+    "welshQuestionnaireType": null
   }
+
 ]
