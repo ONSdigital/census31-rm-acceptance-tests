@@ -9,7 +9,7 @@ from config import Config
 
 
 def add_survey(test_start_time,
-               sample_has_header_row=True, sample_file_separator=','):
+               sample_has_header_row=True, sample_file_separator='|'):
     survey_name = 'test survey ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
 
     url = f'{Config.SUPPORT_TOOL_API_URL}/surveys'
