@@ -10,31 +10,34 @@ from acceptance_tests.utilities.pubsub_helper import publish_to_pubsub
 from config import Config
 
 
-@step('a Receipt event is received')
-def send_receipt_received(context):
+@step('a Receipt event is received with source "{source_name}" and channel "{channel_name}"')
+def send_receipt_received(context, source_name, channel_name):
+    if channel_name == "EMPTY":
+        channel_name = ""
     context.correlation_id = str(uuid.uuid4())
     context.originating_user = "test@test.com"
     message = _send_receipt_received_msg(context.correlation_id, context.originating_user,
-                                         context.emitted_uacs[0]['qid'])
+                                         context.emitted_uacs[0]['qid'], channel_name, source_name)
     context.sent_messages.append(message)
 
 
-@step('a bad Receipt event is put on the topic')
-def bad_receipt_received_put_on_topic(context):
+@step('a bad Receipt event is put on the topic with source "{source_name}" and channel "{channel_name}"')
+def bad_receipt_received_put_on_topic(context, source_name, channel_name):
     context.originating_user = add_random_suffix_to_email(context.scenario_name)
-    message = _send_receipt_received_msg(str(uuid.uuid4()), context.originating_user, "555555")
+    message = _send_receipt_received_msg(str(uuid.uuid4()), context.originating_user, "555555",
+                                         channel_name, source_name)
     context.message_hashes = [hashlib.sha256(message.encode('utf-8')).hexdigest()]
     context.sent_messages.append(message)
 
 
-def _send_receipt_received_msg(correlation_id, originating_user, qid):
+def _send_receipt_received_msg(correlation_id, originating_user, qid, channel_name, source_name):
     message = json.dumps(
         {
             "header": {
                 "version": Config.EVENT_SCHEMA_VERSION,
                 "topic": Config.PUBSUB_RECEIPT_TOPIC,
-                "source": "RH",
-                "channel": "RH",
+                "source": source_name,
+                "channel": channel_name,
                 "dateTime": f'{datetime.now(timezone.utc).replace(tzinfo=None).isoformat()}Z',
                 "messageId": str(uuid.uuid4()),
                 "correlationId": correlation_id,
