@@ -9,6 +9,8 @@ Feature: Print fulfilments can be requested for a case
   Then UAC_UPDATE messages are emitted with active set to true
   And an export file is created with correct rows
   And the events logged against the case are ["NEW_CASE", "EXPORT_FILE", "PRINT_FULFILMENT"]
+  And CREATE fieldwork action instruction messages are emitted for all non-N region cases
+  And the emitted CREATE fieldwork action instruction messages contain expected case and address fields
 
 
 
@@ -21,6 +23,8 @@ Feature: Print fulfilments can be requested for a case
   Then UAC_UPDATE messages are emitted with active set to true
   And an export file is created with correct rows
   And the events logged against the case are ["NEW_CASE", "EXPORT_FILE", "PRINT_FULFILMENT"]
+  And CREATE fieldwork action instruction messages are emitted for all non-N region cases
+  And the emitted CREATE fieldwork action instruction messages contain expected case and address fields
 
   Examples:
     | sample file                             | template |

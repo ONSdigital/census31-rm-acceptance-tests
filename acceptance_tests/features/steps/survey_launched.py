@@ -12,11 +12,24 @@ from config import Config
 
 @step('an SURVEY_LAUNCHED event is received')
 def send_survey_launched(context):
-    context.correlation_id = str(uuid.uuid4())
-    context.originating_user = "test@test.com"
+    _set_survey_launched_message_context(context)
     message = _send_survey_launched_msg(context.correlation_id, context.originating_user,
                                         context.emitted_uacs[0]['qid'])
     context.sent_messages.append(message)
+
+
+@step('SURVEY_LAUNCHED events are received for all emitted UACs')
+def send_survey_launched_for_all_emitted_uacs(context):
+    _set_survey_launched_message_context(context)
+
+    for emitted_uac in context.emitted_uacs:
+        message = _send_survey_launched_msg(context.correlation_id, context.originating_user, emitted_uac['qid'])
+        context.sent_messages.append(message)
+
+
+def _set_survey_launched_message_context(context):
+    context.correlation_id = str(uuid.uuid4())
+    context.originating_user = "test@test.com"
 
 
 @step('a bad Survey Launched event is put on the topic')

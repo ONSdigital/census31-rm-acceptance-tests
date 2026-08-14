@@ -7,6 +7,8 @@ Feature: Export files can be created with the correct data
     Then UAC_UPDATE messages are emitted with active set to true
     And an export file is created with correct rows
     And the events logged against the cases are ["NEW_CASE","EXPORT_FILE"]
+    And CREATE fieldwork action instruction messages are emitted for all non-N region cases
+    And the emitted CREATE fieldwork action instruction messages contain expected case and address fields
 
     Examples:
       | sample file                          | template |
@@ -34,6 +36,8 @@ Feature: Export files can be created with the correct data
     When an export file action rule has been created for packcode "<template>"
     Then an export file is created with correct rows
     And the events logged against the cases are ["NEW_CASE","EXPORT_FILE"]
+    And CREATE fieldwork action instruction messages are emitted for all non-N region cases
+    And the emitted CREATE fieldwork action instruction messages contain expected case and address fields
 
     Examples:
       | sample file                          | template    |

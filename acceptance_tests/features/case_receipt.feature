@@ -9,3 +9,5 @@ Feature: Mark the case as receipted when receipt received message event is recei
     Then UAC_UPDATE message is emitted with active set to false and "receiptReceived" is true
     And a CASE_UPDATE message is emitted where "receiptReceived" is "True"
     And the events logged against the case are ["NEW_CASE","EXPORT_FILE","RECEIPT"]
+    And CREATE fieldwork action instruction messages are emitted for all non-N region cases
+    And the emitted CREATE fieldwork action instruction messages contain expected case and address fields
