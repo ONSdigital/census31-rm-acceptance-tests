@@ -14,7 +14,6 @@ class Config:
     PUBSUB_REFUSAL_TOPIC = os.getenv('PUBSUB_REFUSAL_TOPIC', 'event_refusal')
     PUBSUB_INVALID_CASE_TOPIC = os.getenv('PUBSUB_INVALID_CASE_TOPIC',
                                           'event_invalid-case')
-    PUBSUB_PRINT_FULFILMENT_TOPIC = os.getenv('PUBSUB_PRINT_FULFILMENT_TOPIC', 'event_print-fulfilment')
     PUBSUB_SURVEY_LAUNCHED_TOPIC = os.getenv('PUBSUB_SURVEY_LAUNCHED_TOPIC',  # noqa: F841
                                              'event_survey-launched')  # noqa: F841
     PUBSUB_DEACTIVATE_UAC_TOPIC = os.getenv('PUBSUB_DEACTIVATE_UAC_TOPIC', 'event_deactivate-uac')
@@ -27,6 +26,7 @@ class Config:
     PUBSUB_CLOUD_TASK_QUEUE_AT_SUBSCRIPTION = os.getenv('PUBSUB_CLOUD_TASK_QUEUE_AT_SUBSCRIPTION',
                                                         'cloud_task_queue_at')
     PUBSUB_DEFAULT_PULL_TIMEOUT = int(os.getenv('PUBSUB_DEFAULT_PULL_TIMEOUT', 120))
+    PUBSUB_FULFILMENT_REQUEST_TOPIC = os.getenv('PUBSUB_FULFILMENT_REQUEST_TOPIC', 'event_fulfilment-request')
 
     DB_USERNAME = os.getenv('DB_USERNAME', 'appuser')
     DB_PASSWORD = os.getenv('DB_PASSWORD', 'postgres')
