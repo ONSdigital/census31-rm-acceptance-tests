@@ -1,3 +1,4 @@
+@debug
 Feature: Survey Launched from RH
 
   Scenario: Survey launched events are logged and the case flag is updated
@@ -8,4 +9,5 @@ Feature: Survey Launched from RH
     When an SURVEY_LAUNCHED event is received
     Then UAC_UPDATE message is emitted with active set to true and "surveyLaunched" is true
     And a CASE_UPDATE message is emitted where "surveyLaunched" is "True"
+    And CREATE fieldwork action instruction messages are emitted for all non-N region cases
     And the events logged against the case are ["NEW_CASE","EXPORT_FILE","SURVEY_LAUNCHED"]

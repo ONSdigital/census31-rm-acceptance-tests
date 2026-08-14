@@ -1,23 +1,52 @@
 from behave import step
 
-from acceptance_tests.utilities.event_helper import (
-    get_fieldwork_action_instructions,
-    get_fieldwork_action_instructions_for_case_ids,
-)
+from acceptance_tests.utilities.event_helper import get_fieldwork_action_instructions_for_case_ids
 from acceptance_tests.utilities.test_case_helper import test_helper
+
+
+def _is_n_region(region: str) -> bool:
+    return bool(region) and region.upper().startswith('N')
+
+
+def _case_ids(emitted_cases):
+    return {case['caseId'] for case in emitted_cases if case.get('address')}
 
 
 def _non_n_case_ids(emitted_cases):
     return {
         case['caseId']
         for case in emitted_cases
-        if case.get('address') and case['address'].get('region') != 'N'
+        if case.get('address') and not _is_n_region(case['address'].get('region'))
+    }
+
+
+def _n_case_ids(emitted_cases):
+    return {
+        case['caseId']
+        for case in emitted_cases
+        if case.get('address') and _is_n_region(case['address'].get('region'))
     }
 
 
 @step('CREATE fieldwork action instruction messages are emitted for all non-N region cases')
 def check_create_action_instruction_messages_emitted(context):
     expected_case_ids = _non_n_case_ids(context.emitted_cases)
+
+    context.emitted_fieldwork_action_instructions = get_fieldwork_action_instructions_for_case_ids(
+        expected_case_ids,
+        context.test_start_utc_datetime)
+
+    for action_instruction in context.emitted_fieldwork_action_instructions:
+        test_helper.assertEqual(action_instruction['actionInstruction'], 'CREATE')
+
+
+@step('CREATE fieldwork action instruction messages are emitted for all N region cases')
+def check_create_action_instruction_messages_emitted_for_n_region(context):
+    expected_case_ids = _n_case_ids(context.emitted_cases)
+    test_helper.assertNotEqual(
+        len(expected_case_ids),
+        0,
+        msg='This scenario expects emitted cases in the N region from sample loading')
 
     context.emitted_fieldwork_action_instructions = get_fieldwork_action_instructions_for_case_ids(
         expected_case_ids,
@@ -44,13 +73,13 @@ def check_create_action_instruction_fields(context):
         test_helper.assertEqual(action_instruction['postcode'], expected_address['postcode'])
 
 
-@step('no fieldwork action instruction messages are emitted for N region cases')
-def check_no_action_instruction_for_nisra_cases(context):
-    non_n_case_count = len(_non_n_case_ids(context.emitted_cases))
-    test_helper.assertEqual(
-        non_n_case_count,
-        0,
-        msg='This scenario expects only N-region emitted cases from sample loading')
+@step('CREATE fieldwork action instruction messages are emitted for all loaded cases')
+def check_create_action_instruction_messages_emitted_for_loaded_cases(context):
+    expected_case_ids = _case_ids(context.emitted_cases)
 
-    get_fieldwork_action_instructions(0, context.test_start_utc_datetime)
+    context.emitted_fieldwork_action_instructions = get_fieldwork_action_instructions_for_case_ids(
+        expected_case_ids,
+        context.test_start_utc_datetime)
 
+    for action_instruction in context.emitted_fieldwork_action_instructions:
+        test_helper.assertEqual(action_instruction['actionInstruction'], 'CREATE')
