@@ -36,8 +36,7 @@ def request_print_fulfilment_step(context, personalisation=None):
                 "contact": {
                     "title": "Mr.",
                     "forename": "Joe",
-                    "surname": "Bloggs",
-                    "telNo": "07788991100"
+                    "surname": "Bloggs"
                 }
             }
         }
