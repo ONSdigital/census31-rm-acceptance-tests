@@ -110,9 +110,7 @@ def authorise_sms_pack_code(context, template_name):
 
 
 @step('a request has been made for a UAC by SMS from phone number "{phone_number}"')
-@step('a request has been made for a replacement UAC by SMS from phone number "{phone_number}"'
-      ' with personalisation {personalisation:json}')
-def request_replacement_uac_by_sms(context, phone_number, personalisation=None):
+def request_uac_by_sms_fulfilment(context, phone_number):
     context.phone_number = phone_number
     context.correlation_id = str(uuid.uuid4())
     context.originating_user = get_unique_user_email()
@@ -139,10 +137,6 @@ def request_replacement_uac_by_sms(context, phone_number, personalisation=None):
             }
         }
     }
-
-    if personalisation:
-        context.fulfilment_personalisation = personalisation
-        message_dict['payload']['fulfilmentRequest']['personalisation'] = context.fulfilment_personalisation
 
     message = json.dumps(message_dict)
     publish_to_pubsub(message, project=Config.PUBSUB_PROJECT, topic=Config.PUBSUB_FULFILMENT_REQUEST_TOPIC)
