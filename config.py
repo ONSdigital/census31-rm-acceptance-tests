@@ -24,7 +24,7 @@ class Config:
                                                           'event_fieldwork_action-instruction')  # noqa: F841
     PUBSUB_FIELDWORK_ACTION_INSTRUCTION_SUBSCRIPTION = os.getenv(
         'PUBSUB_FIELDWORK_ACTION_INSTRUCTION_SUBSCRIPTION',
-        'event_fieldwork_action-instruction_rh_at')
+        'event_fieldwork_action-instruction_fwmtg_at')
     PUBSUB_OUTBOUND_SURVEY_SUBSCRIPTION = os.getenv('PUBSUB_OUTBOUND_SURVEY_SUBSCRIPTION', 'event_survey-update_rh_at')
     PUBSUB_OUTBOUND_COLLECTION_EXERCISE_SUBSCRIPTION = os.getenv('PUBSUB_OUTBOUND_COLLECTION_EXERCISE_SUBSCRIPTION',
                                                                  'event_collection-exercise-update_rh_at')
