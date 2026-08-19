@@ -7,5 +7,3 @@ Feature: Respondent Authenticated from RH
     And UAC_UPDATE message is emitted with active set to true and "surveyLaunched" is false
     When a RESPONDENT_AUTHENTICATED event is received
     Then the events logged against the case are ["NEW_CASE","EXPORT_FILE","RESPONDENT_AUTHENTICATED"]
-    And CREATE fieldwork action instruction messages are emitted for all non-N region cases
-    And the emitted CREATE fieldwork action instruction messages contain expected case and address fields

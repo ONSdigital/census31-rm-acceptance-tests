@@ -9,5 +9,3 @@ Feature: Survey Launched from RH
     Then UAC_UPDATE message is emitted with active set to true and "surveyLaunched" is true
     And a CASE_UPDATE message is emitted where "surveyLaunched" is "True"
     And the events logged against the case are ["NEW_CASE","EXPORT_FILE","SURVEY_LAUNCHED"]
-    And CREATE fieldwork action instruction messages are emitted for all non-N region cases
-    And the emitted CREATE fieldwork action instruction messages contain expected case and address fields

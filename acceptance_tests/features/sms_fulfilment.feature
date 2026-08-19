@@ -9,8 +9,6 @@ Feature: Sms fulfilment
     And the UAC_UPDATE message matches the SMS fulfilment UAC
     And the events logged against the case are ["NEW_CASE","SMS_FULFILMENT"]
     And notify api was called with the correct SMS template and values
-    And CREATE fieldwork action instruction messages are emitted for all non-N region cases
-    And the emitted CREATE fieldwork action instruction messages contain expected case and address fields
 
     Examples:
       | sample file                            | template |

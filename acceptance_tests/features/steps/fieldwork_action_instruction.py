@@ -42,9 +42,15 @@ def check_create_action_instruction_messages_emitted(context):
         0,
         msg='This scenario expects emitted cases outside the N region from sample loading')
 
-    context.emitted_fieldwork_action_instructions = get_fieldwork_action_instructions_for_case_ids(
-        expected_case_ids,
-        context.test_start_utc_datetime)
+    context.emitted_fieldwork_action_instructions = getattr(context, 'emitted_fieldwork_action_instructions', None)
+    if context.emitted_fieldwork_action_instructions is None:
+        context.emitted_fieldwork_action_instructions = get_fieldwork_action_instructions_for_case_ids(
+            expected_case_ids,
+            context.test_start_utc_datetime)
+
+    actual_case_ids = {message['caseId'] for message in context.emitted_fieldwork_action_instructions}
+    test_helper.assertSetEqual(expected_case_ids, actual_case_ids,
+                               msg=f'Expected action-instruction case IDs {expected_case_ids}, got {actual_case_ids}')
 
     for action_instruction in context.emitted_fieldwork_action_instructions:
         test_helper.assertEqual(action_instruction['actionInstruction'], 'CREATE')
