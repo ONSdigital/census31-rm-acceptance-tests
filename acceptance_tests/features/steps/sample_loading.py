@@ -2,6 +2,7 @@ from datetime import datetime, timezone, timedelta
 
 from behave import step
 
+from acceptance_tests.features.steps.fieldwork_action_instruction import non_n_case_ids
 from acceptance_tests.utilities.collex_helper import add_collex
 from acceptance_tests.utilities.event_helper import get_emitted_cases, get_fieldwork_action_instructions_for_case_ids
 from acceptance_tests.utilities.file_to_process_upload_helper import upload_and_process_file_by_api
@@ -33,16 +34,6 @@ def get_emitted_cases_and_check_against_sample(sample_rows, test_start_time):
     return emitted_cases
 
 
-def _non_n_case_ids(emitted_cases):
-    return {
-        case['caseId']
-        for case in emitted_cases
-        if case.get('address')
-        and case['address'].get('region')
-        and not case['address']['region'].upper().startswith('N')
-    }
-
-
 @step('sample file "{sample_file_name}" is loaded successfully')
 def load_sample(context, sample_file_name):
     sample_file_path = Config.SAMPLE_FILES_PATH.joinpath(sample_file_name)
@@ -59,11 +50,11 @@ def load_sample(context, sample_file_name):
     upload_and_process_file_by_api(context.collex_id, sample_file_path, 'SAMPLE')
 
     context.emitted_cases = get_emitted_cases_and_check_against_sample(sample_rows, context.test_start_utc_datetime)
-    context.non_n_emitted_case_ids = _non_n_case_ids(context.emitted_cases)
+    non_n_emitted_case_ids = non_n_case_ids(context.emitted_cases)
 
-    if context.non_n_emitted_case_ids:
+    if non_n_emitted_case_ids:
         context.emitted_fieldwork_action_instructions = get_fieldwork_action_instructions_for_case_ids(
-            context.non_n_emitted_case_ids,
+            non_n_emitted_case_ids,
             context.test_start_utc_datetime)
 
         for action_instruction in context.emitted_fieldwork_action_instructions:

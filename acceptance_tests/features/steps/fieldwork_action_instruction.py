@@ -1,4 +1,5 @@
 from behave import step
+from typing import Optional
 
 from acceptance_tests.utilities.event_helper import get_emitted_cases, get_fieldwork_action_instructions_for_case_ids
 from acceptance_tests.utilities.pubsub_helper import get_exact_number_of_pubsub_messages
@@ -6,37 +7,37 @@ from acceptance_tests.utilities.test_case_helper import test_helper
 from config import Config
 
 
-def _is_n_region(region: str) -> bool:
+def is_n_region(region: Optional[str]) -> bool:
     return bool(region) and region.upper().startswith('N')
 
 
-def _is_ignored_region(region: str) -> bool:
-    return not region or _is_n_region(region)
+def is_ignored_region(region: Optional[str]) -> bool:
+    return not region or is_n_region(region)
 
 
-def _case_ids(emitted_cases):
+def case_ids_with_address(emitted_cases):
     return {case['caseId'] for case in emitted_cases if case.get('address')}
 
 
-def _non_n_case_ids(emitted_cases):
+def non_n_case_ids(emitted_cases):
     return {
         case['caseId']
         for case in emitted_cases
-        if case.get('address') and not _is_ignored_region(case['address'].get('region'))
+        if case.get('address') and not is_ignored_region(case['address'].get('region'))
     }
 
 
-def _ignored_case_ids(emitted_cases):
+def ignored_case_ids(emitted_cases):
     return {
         case['caseId']
         for case in emitted_cases
-        if case.get('address') and _is_ignored_region(case['address'].get('region'))
+        if case.get('address') and is_ignored_region(case['address'].get('region'))
     }
 
 
 @step('CREATE fieldwork action instruction messages are emitted for all non-N region cases')
 def check_create_action_instruction_messages_emitted(context):
-    expected_case_ids = _non_n_case_ids(context.emitted_cases)
+    expected_case_ids = non_n_case_ids(context.emitted_cases)
     test_helper.assertNotEqual(
         len(expected_case_ids),
         0,
@@ -58,7 +59,7 @@ def check_create_action_instruction_messages_emitted(context):
 
 @step('no fieldwork action instruction messages are sent for N region cases')
 def check_no_create_action_instruction_messages_emitted_for_ignored_regions(context):
-    expected_case_ids = _ignored_case_ids(context.emitted_cases)
+    expected_case_ids = ignored_case_ids(context.emitted_cases)
     test_helper.assertNotEqual(
         len(expected_case_ids),
         0,
@@ -92,7 +93,7 @@ def check_create_action_instruction_fields(context):
 
 @step('CASE_UPDATE messages are emitted where "{case_field}" is "{expected_field_value}" for all loaded cases')
 def check_case_update_messages_for_loaded_cases(context, case_field, expected_field_value):
-    expected_case_ids = _case_ids(context.emitted_cases)
+    expected_case_ids = case_ids_with_address(context.emitted_cases)
 
     emitted_case_updates = get_emitted_cases(
         expected_msg_count=len(expected_case_ids),
