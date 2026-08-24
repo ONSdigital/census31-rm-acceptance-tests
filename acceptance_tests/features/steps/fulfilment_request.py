@@ -13,7 +13,6 @@ from config import Config
 
 
 @step('a print fulfilment has been requested')
-@step('a print fulfilment with personalisation {personalisation:json} has been requested')
 def request_print_fulfilment_step(context):
     context.correlation_id = str(uuid.uuid4())
     context.originating_user = add_random_suffix_to_email(context.scenario_name)
@@ -41,6 +40,8 @@ def request_print_fulfilment_step(context):
             }
         }
     }
+
+    context.contact = message_dict['payload']['fulfilmentRequest']['contact']
     message = json.dumps(message_dict)
     publish_to_pubsub(message, project=Config.PUBSUB_PROJECT, topic=Config.PUBSUB_FULFILMENT_REQUEST_TOPIC)
     context.sent_messages.append(message)

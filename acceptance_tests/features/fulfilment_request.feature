@@ -4,7 +4,7 @@ Feature: Print fulfilments can be requested for a case
   Scenario Outline: A print fulfilment including personalisation is requested for a case
   Given sample file "<sample file>" is loaded successfully
   And fulfilments are authorised for the export file template "<template>"
-  And a print fulfilment with personalisation {"title":"Mr.", "forename":"Joe", "surname":"Bloggs"} has been requested
+  And a print fulfilment has been requested
   And the events logged against the case are ["NEW_CASE", "PRINT_FULFILMENT"]
   When export file fulfilments are triggered to be exported
   Then UAC_UPDATE messages are emitted with active set to true

@@ -20,8 +20,7 @@ def check_export_file(context):
     template = context.template
     pack_code = context.pack_code
     emitted_uacs = context.emitted_uacs if hasattr(context, 'emitted_uacs') else None
-    fulfilment_personalisation = context.fulfilment_personalisation if hasattr(context,
-                                                                               'fulfilment_personalisation') else None
+    contact = context.contact if hasattr(context, 'contact') else None
 
     test_helper.assertFalse(('__uac__' in template or '__qid__' in template) and not emitted_uacs,
                             'Export file template expects UACs or QIDs but no corresponding emitted_uacs found in '
@@ -48,7 +47,7 @@ def check_export_file(context):
     if '__uac__' in template or '__welsh_uac__' in template:
         expected_export_file_rows = generate_expected_export_file_rows(
             template, context.emitted_cases, emitted_uacs, uacs_from_actual_export_file,
-            fulfilment_personalisation, pack_code, context.expected_questionnaire_type,
+            contact, pack_code, context.expected_questionnaire_type,
             context.expected_welsh_questionnaire_type
         )
         check_export_file_matches_expected(actual_export_file_rows, expected_export_file_rows)
@@ -108,7 +107,7 @@ def _get_unhashed_uacs_from_actual_export_file(actual_export_file_rows, template
 
 def generate_expected_export_file_rows(
         template: List, cases: List, uac_update_events: List, expected_uacs: Iterable[str],
-        fulfilment_personalisation: Dict, pack_code: str, questionnaire_type, welsh_questionnaire_type):
+        contact: Dict, pack_code: str, questionnaire_type, welsh_questionnaire_type):
     hashed_uac_to_uac = {
         hashlib.sha256(uac.encode('utf-8')).hexdigest(): uac
         for uac in expected_uacs
@@ -131,7 +130,7 @@ def generate_expected_export_file_rows(
                 qid = get_qid_by_case_id(uac_update_events, case['caseId'], welsh_questionnaire_type)
                 export_row_components.append(qid)
             elif field.startswith('__request__'):
-                export_row_components.append(fulfilment_personalisation[field.split('.')[1]])
+                export_row_components.append(contact[field.split('.')[1]])
             elif field.startswith('__caseref__'):
                 export_row_components.append(case['caseRef'])
             elif field.startswith('__pack_code__'):
