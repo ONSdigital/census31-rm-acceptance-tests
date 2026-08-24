@@ -40,6 +40,34 @@ def get_fieldwork_action_instructions_for_case_ids(case_ids: set[str], test_star
     return messages
 
 
+def is_n_region(region: Optional[str]) -> bool:
+    return bool(region) and region.upper().startswith('N')
+
+
+def is_ignored_region(region: Optional[str]) -> bool:
+    return not region or is_n_region(region)
+
+
+def case_ids_with_address(emitted_cases: List[Mapping]) -> set[str]:
+    return {case['caseId'] for case in emitted_cases if case.get('address')}
+
+
+def non_n_case_ids(emitted_cases: List[Mapping]) -> set[str]:
+    return {
+        case['caseId']
+        for case in emitted_cases
+        if case.get('address') and not is_ignored_region(case['address'].get('region'))
+    }
+
+
+def ignored_case_ids(emitted_cases: List[Mapping]) -> set[str]:
+    return {
+        case['caseId']
+        for case in emitted_cases
+        if case.get('address') and is_ignored_region(case['address'].get('region'))
+    }
+
+
 def _match_message_by_correlation_id(message: Mapping, correlation_id: str = None) -> (bool, Optional[str]):
     if (message_cid := message['header']['correlationId']) != correlation_id:
         return False, f'Message correlation ID "{message_cid}" does not match expected "{correlation_id}"'

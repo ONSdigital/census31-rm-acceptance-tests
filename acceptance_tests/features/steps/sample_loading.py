@@ -2,9 +2,9 @@ from datetime import datetime, timezone, timedelta
 
 from behave import step
 
-from acceptance_tests.features.steps.fieldwork_action_instruction import non_n_case_ids
 from acceptance_tests.utilities.collex_helper import add_collex
-from acceptance_tests.utilities.event_helper import get_emitted_cases, get_fieldwork_action_instructions_for_case_ids
+from acceptance_tests.utilities.event_helper import get_emitted_cases, get_fieldwork_action_instructions_for_case_ids, \
+    non_n_case_ids
 from acceptance_tests.utilities.file_to_process_upload_helper import upload_and_process_file_by_api
 from acceptance_tests.utilities.survey_helper import add_survey
 from acceptance_tests.utilities.test_case_helper import test_helper

@@ -1,38 +1,10 @@
 from behave import step
-from typing import Optional
 
-from acceptance_tests.utilities.event_helper import get_emitted_cases, get_fieldwork_action_instructions_for_case_ids
+from acceptance_tests.utilities.event_helper import case_ids_with_address, get_emitted_cases, \
+    get_fieldwork_action_instructions_for_case_ids, ignored_case_ids, non_n_case_ids
 from acceptance_tests.utilities.pubsub_helper import get_exact_number_of_pubsub_messages
 from acceptance_tests.utilities.test_case_helper import test_helper
 from config import Config
-
-
-def is_n_region(region: Optional[str]) -> bool:
-    return bool(region) and region.upper().startswith('N')
-
-
-def is_ignored_region(region: Optional[str]) -> bool:
-    return not region or is_n_region(region)
-
-
-def case_ids_with_address(emitted_cases):
-    return {case['caseId'] for case in emitted_cases if case.get('address')}
-
-
-def non_n_case_ids(emitted_cases):
-    return {
-        case['caseId']
-        for case in emitted_cases
-        if case.get('address') and not is_ignored_region(case['address'].get('region'))
-    }
-
-
-def ignored_case_ids(emitted_cases):
-    return {
-        case['caseId']
-        for case in emitted_cases
-        if case.get('address') and is_ignored_region(case['address'].get('region'))
-    }
 
 
 @step('CREATE fieldwork action instruction messages are emitted for all non-N region cases')
