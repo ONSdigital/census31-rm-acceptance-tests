@@ -207,3 +207,14 @@ def get_logged_events_for_case_by_id(case_id: str) -> list[dict]:
         columns = [col[0] for col in cur.description]
         results = [dict(zip(columns, row)) for row in cur.fetchall()]
         return results
+
+def check_individual_child_case_is_emitted(context, parent_case_id, individual_case_id):
+    context.messages_received = []
+    logged_events = get_logged_events_for_case_by_id(individual_case_id)
+
+    child_case_uprn = context.messages_received[0]['payload']['collectionCase']['address']['estabUprn']
+    parent_case_uprn = _get_parent_case_estab_uprn(parent_case_id)
+    test_helper.assertEqual(child_case_uprn, parent_case_uprn, "Parent and child UPRNs must match to link cases")
+    context.case_created_events = context.messages_received.copy()
+    test_helper.assertEqual(context.case_created_events[0]['payload']['collectionCase']['id'],
+                            individual_case_id)
