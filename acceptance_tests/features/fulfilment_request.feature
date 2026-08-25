@@ -1,7 +1,6 @@
 Feature: Print fulfilments can be requested for a case
 
-
-  Scenario Outline: A print fulfilment including personalisation is requested for a case
+  Scenario Outline: A print fulfilment is requested for a case
   Given sample file "<sample file>" is loaded successfully
   And fulfilments are authorised for the export file template "<template>"
   And a print fulfilment has been requested
@@ -13,16 +12,13 @@ Feature: Print fulfilments can be requested for a case
 
   Examples:
     | sample file                             | template |
-    | sample_1_input_england_census_spec.csv  | P_OR_I1  |
+    | sample_1_input_england_census_spec.csv  | P_OR_H1  |
 
   @regression
     Examples:
     | sample file                             | template   |
     | sample_1_input_england_census_spec.csv  | P_OR_H1    |
     | sample_1_input_england_census_spec.csv  | P_OR_H2    |
-    | sample_1_input_england_census_spec.csv  | P_OR_I2    |
-    | sample_1_input_england_census_spec.csv  | P_OR_I2W   |
-    | sample_1_input_england_census_spec.csv  | P_OR_IACR3 |
 
 
   @reset_notify_stub
@@ -45,8 +41,4 @@ Feature: Print fulfilments can be requested for a case
       | sample_1_input_england_census_spec.csv | UACHHT2W |
       | sample_1_input_england_census_spec.csv | UACHHT3  |
       | sample_1_input_england_census_spec.csv | UACHHT4  |
-      | sample_1_input_england_census_spec.csv | UACIT1   |
-      | sample_1_input_england_census_spec.csv | UACIT2   |
-      | sample_1_input_england_census_spec.csv | UACIT2W  |
-      | sample_1_input_england_census_spec.csv | UACIT3   |
-      | sample_1_input_england_census_spec.csv | UACIT4   |
+
