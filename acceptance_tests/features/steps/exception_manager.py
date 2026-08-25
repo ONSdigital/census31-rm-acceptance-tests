@@ -11,7 +11,7 @@ from acceptance_tests.utilities.test_case_helper import test_helper
 from config import Config
 
 ALL_INCOMING_TOPICS = [Config.PUBSUB_RECEIPT_TOPIC, Config.PUBSUB_REFUSAL_TOPIC, Config.PUBSUB_INVALID_CASE_TOPIC,
-                       Config.PUBSUB_DEACTIVATE_UAC_TOPIC, Config.PUBSUB_PRINT_FULFILMENT_TOPIC]
+                       Config.PUBSUB_DEACTIVATE_UAC_TOPIC, Config.PUBSUB_FULFILMENT_REQUEST_TOPIC]
 
 
 @step("a bad json msg is sent to every topic consumed by RM")
