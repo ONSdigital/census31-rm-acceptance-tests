@@ -1,7 +1,7 @@
 Feature: Print fulfilments can be requested for a case
 
 
-  Scenario Outline: A print fulfilment including personalisation is requested for a case
+  Scenario Outline: A print fulfilment is requested for a case
   Given sample file "<sample file>" is loaded successfully
   And fulfilments are authorised for the export file template "<template>"
   And a print fulfilment has been requested
