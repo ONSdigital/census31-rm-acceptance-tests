@@ -212,6 +212,7 @@ def check_case_updated_emitted_for_new_case_individual(context):
 
     # check_individual_child_case_is_emitted(context, context.case_id, emitted_case['caseId'])
     context.case_id = emitted_case['caseId']
+    context.emitted_cases = [emitted_case]
 
 
 @step("UAC_UPDATE messages are emitted for child case with active set to {active:boolean}")
