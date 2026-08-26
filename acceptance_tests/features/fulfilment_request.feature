@@ -17,28 +17,48 @@ Feature: Print fulfilments can be requested for a case
   @regression
     Examples:
     | sample file                             | template   |
-    | sample_1_input_england_census_spec.csv  | P_OR_H1    |
     | sample_1_input_england_census_spec.csv  | P_OR_H2    |
-
 
   @reset_notify_stub
   Scenario Outline: A SMS fulfilment is requested for a case
-    Given sample file "<sample file>" is loaded successfully
-    And fulfilments are authorised for sms template "<template>"
-    When a request has been made for a UAC by SMS from phone number "07123456780"
-    Then UAC_UPDATE messages are emitted with active set to true
-    And the events logged against the case are ["NEW_CASE","SMS_FULFILMENT"]
-    And notify api was called with the correct SMS template and values
+  Given sample file "<sample file>" is loaded successfully
+  And fulfilments are authorised for sms template "<template>"
+  When a request has been made for a UAC by SMS from phone number "07123456780"
+  Then UAC_UPDATE messages are emitted with active set to true
+  And the events logged against the case are ["NEW_CASE","SMS_FULFILMENT"]
+  And notify api was called with the correct SMS template and values
 
-    Examples:
-      | sample file                            | template |
-      | sample_1_input_england_census_spec.csv | UACHHT1  |
+  Examples:
+    | sample file                            | template |
+    | sample_1_input_england_census_spec.csv | UACHHT1  |
 
-    @regression
-    Examples:
-      | sample file                            | template |
-      | sample_1_input_england_census_spec.csv | UACHHT2  |
-      | sample_1_input_england_census_spec.csv | UACHHT2W |
-      | sample_1_input_england_census_spec.csv | UACHHT3  |
-      | sample_1_input_england_census_spec.csv | UACHHT4  |
+  @regression
+  Examples:
+    | sample file                            | template |
+    | sample_1_input_england_census_spec.csv | UACHHT2  |
+    | sample_1_input_england_census_spec.csv | UACHHT2W |
+    | sample_1_input_england_census_spec.csv | UACHHT3  |
+    | sample_1_input_england_census_spec.csv | UACHHT4  |
+
+  @reset_notify_stub
+  Scenario Outline: A SMS fulfilment is requested for an Individual case
+  Given sample file "<sample file>" is loaded successfully
+  And fulfilments are authorised for sms template "<template>"
+  When a request has been made for a UAC by SMS from phone number "07123456780"
+  Then a CASE_UPDATED message is emitted for the individual
+  Then UAC_UPDATE messages are emitted for child case with active set to true
+  And the events logged against the case are ["NEW_CASE","SMS_FULFILMENT"]
+  And notify api was called with the correct SMS template and values
+
+  Examples:
+    | sample file                            | template |
+    | sample_1_input_england_census_spec.csv | UACIT1   |
+  @regression
+  Examples:
+    | sample file                            | template |
+    | sample_1_input_england_census_spec.csv | UACIT2   |
+    | sample_1_input_england_census_spec.csv | UACIT2W  |
+    | sample_1_input_england_census_spec.csv | UACIT3   |
+    | sample_1_input_england_census_spec.csv | UACIT4   |
+
 
