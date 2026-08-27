@@ -53,13 +53,26 @@ def check_create_action_instruction_fields(context):
     for action_instruction in context.emitted_fieldwork_action_instructions:
         expected_case = cases_by_id[action_instruction['caseId']]
         expected_address = expected_case['address']
+        expected_address_type = expected_address['addressType']
+        expected_address_level = expected_address['addressLevel']
 
-        test_helper.assertEqual(action_instruction['surveyName'], 'CENSUS')
+        test_helper.assertEqual(action_instruction['surveyName'], 'Census')
         test_helper.assertEqual(action_instruction['caseRef'], expected_case['caseRef'])
-        test_helper.assertEqual(action_instruction['addressType'], expected_address['addressType'])
-        test_helper.assertEqual(action_instruction['addressLevel'], expected_address['addressLevel'])
-        test_helper.assertEqual(action_instruction['uprn'], expected_address['uprn'])
-        test_helper.assertEqual(action_instruction['estabUprn'], expected_address['estabUprn'])
+        test_helper.assertEqual(action_instruction['addressType'], expected_address_type)
+
+        if expected_address_type == 'CE':
+            test_helper.assertEqual(action_instruction['addressLevel'], expected_address_level)
+            test_helper.assertEqual(action_instruction['uprn'], expected_address['uprn'])
+
+            if expected_address_level == 'U':
+                test_helper.assertEqual(action_instruction['estabUprn'], expected_address['estabUprn'])
+            else:
+                test_helper.assertNotIn('estabUprn', action_instruction)
+        else:
+            test_helper.assertNotIn('addressLevel', action_instruction)
+            test_helper.assertNotIn('uprn', action_instruction)
+            test_helper.assertNotIn('estabUprn', action_instruction)
+
         test_helper.assertEqual(action_instruction['postcode'], expected_address['postcode'])
 
 
