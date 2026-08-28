@@ -7,6 +7,7 @@ from tenacity import retry, wait_fixed, stop_after_delay
 from acceptance_tests.utilities.database_helper import open_cursor
 from acceptance_tests.utilities.pubsub_helper import get_exact_number_of_pubsub_messages, \
     get_matching_pubsub_message_acking_others, get_matching_pubsub_messages_acking_others
+from acceptance_tests.utilities.qid_form_type_helper import map_qid_to_form_type
 from acceptance_tests.utilities.test_case_helper import test_helper
 from config import Config
 
@@ -185,6 +186,11 @@ def _check_new_uacs_are_as_expected(emitted_uacs: List[Mapping], active: bool, f
         if field_to_test:
             test_helper.assertEqual(uac[field_to_test], expected_value,
                                     f"UAC {uac} field {field_to_test} doesn't equal expected {expected_value}")
+
+        expected_form_type = map_qid_to_form_type(uac.get('qid'))
+        test_helper.assertEqual(uac.get('formType'), expected_form_type,
+                                f"UAC {uac} formType '{uac.get('formType')}' doesn't match "
+                                f"expected '{expected_form_type}' derived from QID '{uac.get('qid')}'")
 
 
 @retry(wait=wait_fixed(1), stop=stop_after_delay(30))

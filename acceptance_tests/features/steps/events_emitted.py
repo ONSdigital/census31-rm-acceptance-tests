@@ -6,6 +6,7 @@ from acceptance_tests.utilities.event_helper import \
     get_uac_update_events, _check_uacs_updated_match_cases, _check_new_uacs_are_as_expected, \
     check_uac_update_msgs_emitted_with_qid_active_and_field_equals_value, get_number_of_uac_update_events, \
     check_uac_update_msgs_emitted_for_cases_with_qid_active_and_field_equals_value
+from acceptance_tests.utilities.qid_form_type_helper import map_qid_to_form_type
 from acceptance_tests.utilities.test_case_helper import test_helper
 
 
@@ -17,6 +18,11 @@ def uac_update_msg_emitted(context):
                             f'The UAC_UPDATE message case ID must match the first case ID, emitted_uac {emitted_uac}')
     test_helper.assertFalse(emitted_uac['active'], 'The UAC_UPDATE message should active flag "false", '
                                                    f'emitted_uac {emitted_uac}')
+
+    expected_form_type = map_qid_to_form_type(emitted_uac.get('qid'))
+    test_helper.assertEqual(emitted_uac.get('formType'), expected_form_type,
+                            f"UAC_UPDATE formType '{emitted_uac.get('formType')}' doesn't match "
+                            f"expected '{expected_form_type}' derived from QID '{emitted_uac.get('qid')}'")
 
 
 @step('a CASE_UPDATE message is emitted where "{case_field}" is "{expected_field_value}"')
