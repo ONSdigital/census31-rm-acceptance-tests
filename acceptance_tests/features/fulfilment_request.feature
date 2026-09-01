@@ -45,8 +45,8 @@ Feature: Print fulfilments can be requested for a case
   Given sample file "<sample file>" is loaded successfully
   And fulfilments are authorised for sms template "<template>"
   When a request has been made for a UAC by SMS from phone number "07123456780"
-  Then a CASE_UPDATED message is emitted for the individual
-  Then UAC_UPDATE messages are emitted for child case with active set to true
+  Then a CASE_UPDATE message is emitted for the individual
+  And UAC_UPDATE messages are emitted for child case with active set to true
   And the events logged against the case are ["NEW_CASE","SMS_FULFILMENT"]
   And notify api was called with the correct SMS template and values
 
@@ -68,8 +68,8 @@ Feature: Print fulfilments can be requested for a case
   And a print fulfilment has been requested
   And the events logged against the case are ["NEW_CASE", "PRINT_FULFILMENT"]
   When export file fulfilments are triggered to be exported
-  Then a CASE_UPDATED message is emitted for the individual
-  Then UAC_UPDATE messages are emitted for child case with active set to true
+  Then a CASE_UPDATE message is emitted for the individual
+  And UAC_UPDATE messages are emitted for child case with active set to true
   And an export file is created with correct rows
   And the events logged against the case are ["NEW_CASE", "EXPORT_FILE", "PRINT_FULFILMENT"]
 

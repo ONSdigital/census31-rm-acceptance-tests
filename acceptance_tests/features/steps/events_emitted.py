@@ -205,12 +205,10 @@ def case_updated_emitted_with_correct_sensitive_data(context):
                             "Expected emitted_case['sampleSensitive']['PHONE_NUMBER'] to equal 'REDACTED'")
 
 
-@step("a CASE_UPDATED message is emitted for the individual")
+@step("a CASE_UPDATE message is emitted for the individual")
 def check_case_updated_emitted_for_new_case_individual(context):
     emitted_case = get_emitted_case_update_by_correlation_id(context.correlation_id, context.originating_user,
                                                              context.test_start_utc_datetime)
-
-    # check_individual_child_case_is_emitted(context, context.case_id, emitted_case['caseId'])
     context.case_id = emitted_case['caseId']
     context.emitted_cases = [emitted_case]
 
@@ -223,8 +221,6 @@ def check_uac_update_msgs_emitted_with_qid_active_for_individual(context, active
     else:
         context.emitted_uacs = get_uac_update_events(len(context.emitted_cases), context.correlation_id,
                                                      context.originating_user, context.test_start_utc_datetime)
-
-    # _check_uacs_updated_match_cases(context.emitted_uacs, context.emitted_cases)
 
     _check_new_uacs_are_as_expected(emitted_uacs=context.emitted_uacs, active=active)
 
