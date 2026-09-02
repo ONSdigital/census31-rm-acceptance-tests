@@ -19,6 +19,11 @@ class Config:
     PUBSUB_DEACTIVATE_UAC_TOPIC = os.getenv('PUBSUB_DEACTIVATE_UAC_TOPIC', 'event_deactivate-uac')
     PUBSUB_OUTBOUND_UAC_SUBSCRIPTION = os.getenv('PUBSUB_OUTBOUND_UAC_SUBSCRIPTION', 'event_uac-update_rh_at')
     PUBSUB_OUTBOUND_CASE_SUBSCRIPTION = os.getenv('PUBSUB_OUTBOUND_CASE_SUBSCRIPTION', 'event_case-update_rh_at')
+    PUBSUB_FIELDWORK_ACTION_INSTRUCTION_TOPIC = os.getenv('PUBSUB_FIELDWORK_ACTION_INSTRUCTION_TOPIC',  # noqa: F841
+                                                          'event_fieldwork_action-instruction')  # noqa: F841
+    PUBSUB_FIELDWORK_ACTION_INSTRUCTION_SUBSCRIPTION = os.getenv(
+        'PUBSUB_FIELDWORK_ACTION_INSTRUCTION_SUBSCRIPTION',
+        'event_fieldwork_action-instruction_fwmtg_at')
     PUBSUB_OUTBOUND_SURVEY_SUBSCRIPTION = os.getenv('PUBSUB_OUTBOUND_SURVEY_SUBSCRIPTION', 'event_survey-update_rh_at')
     PUBSUB_OUTBOUND_COLLECTION_EXERCISE_SUBSCRIPTION = os.getenv('PUBSUB_OUTBOUND_COLLECTION_EXERCISE_SUBSCRIPTION',
                                                                  'event_collection-exercise-update_rh_at')
