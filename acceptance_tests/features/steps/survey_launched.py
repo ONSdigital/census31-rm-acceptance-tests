@@ -30,6 +30,9 @@ def send_survey_launched_for_all_emitted_uacs(context):
 def _set_survey_launched_message_context(context):
     context.correlation_id = str(uuid.uuid4())
     context.originating_user = "test@test.com"
+    message = _send_survey_launched_msg(context.correlation_id, context.originating_user,
+                                        context.emitted_uacs[0]['questionnaireId'])
+    context.sent_messages.append(message)
 
 
 @step('a bad Survey Launched event is put on the topic')
