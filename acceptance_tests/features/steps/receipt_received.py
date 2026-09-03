@@ -15,7 +15,7 @@ def send_receipt_received(context):
     context.correlation_id = str(uuid.uuid4())
     context.originating_user = "test@test.com"
     message = _send_receipt_received_msg(context.correlation_id, context.originating_user,
-                                         context.emitted_uacs[0]['qid'])
+                                         context.emitted_uacs[0]['questionnaireId'])
     context.sent_messages.append(message)
 
 

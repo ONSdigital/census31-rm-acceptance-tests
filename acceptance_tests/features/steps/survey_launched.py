@@ -14,7 +14,7 @@ from config import Config
 def send_survey_launched(context):
     _set_survey_launched_message_context(context)
     message = _send_survey_launched_msg(context.correlation_id, context.originating_user,
-                                        context.emitted_uacs[0]['qid'])
+                                        context.emitted_uacs[0]['questionnaireId'])
     context.sent_messages.append(message)
 
 
