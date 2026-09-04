@@ -45,7 +45,7 @@ Feature: Print fulfilments can be requested for a case
   Given sample file "<sample file>" is loaded successfully
   And fulfilments are authorised for sms template "<template>"
   When a request has been made for a UAC by SMS from phone number "07123456780"
-  Then a CASE_UPDATE message is emitted for the individual
+  Then a CASE_UPDATE message is emitted for the individual with case type "HI"
   And UAC_UPDATE messages are emitted for child case with active set to true
   And the events logged against the case are ["NEW_CASE","SMS_FULFILMENT"]
   And notify api was called with the correct SMS template and values
@@ -68,7 +68,7 @@ Feature: Print fulfilments can be requested for a case
   And a print fulfilment has been requested
   And the events logged against the case are ["NEW_CASE", "PRINT_FULFILMENT"]
   When export file fulfilments are triggered to be exported
-  Then a CASE_UPDATE message is emitted for the individual
+  Then a CASE_UPDATE message is emitted for the individual with case type "HI"
   And UAC_UPDATE messages are emitted for child case with active set to true
   And an export file is created with correct rows
   And the events logged against the case are ["NEW_CASE", "EXPORT_FILE", "PRINT_FULFILMENT"]
@@ -83,4 +83,35 @@ Feature: Print fulfilments can be requested for a case
     | sample_1_input_england_census_spec.csv  | P_OR_I2    |
     | sample_1_input_england_census_spec.csv  | P_OR_I2W   |
     | sample_1_input_england_census_spec.csv  | P_OR_IACR3 |
+
+  @reset_notify_stub
+  Scenario Outline: A SMS fulfilment is requested for an Individual case with individual caseId given
+  Given sample file "<sample file>" is loaded successfully
+  And fulfilments are authorised for sms template "<template>"
+  When a request has been made for a UAC by SMS from phone number "07123456780" with individual case Id
+  Then a CASE_UPDATE message is emitted for the individual with case type "HI"
+  And UAC_UPDATE messages are emitted for child case with active set to true
+  And the events logged against the case are ["NEW_CASE","SMS_FULFILMENT"]
+  And notify api was called with the correct SMS template and values
+
+  Examples:
+    | sample file                            | template |
+    | sample_1_input_england_census_spec.csv | UACIT1   |
+
+
+  @reset_notify_stub
+  Scenario Outline: A print fulfilment is requested for an Individual case with individual caseId given
+  Given sample file "<sample file>" is loaded successfully
+  And fulfilments are authorised for the export file template "<template>"
+  And a print fulfilment has been requested with individualCaseId
+  And the events logged against the case are ["NEW_CASE", "PRINT_FULFILMENT"]
+  When export file fulfilments are triggered to be exported
+  Then a CASE_UPDATE message is emitted for the individual with case type "HI"
+  And UAC_UPDATE messages are emitted for child case with active set to true
+  And an export file is created with correct rows
+  And the events logged against the case are ["NEW_CASE", "EXPORT_FILE", "PRINT_FULFILMENT"]
+
+  Examples:
+    | sample file                             | template |
+    | sample_1_input_england_census_spec.csv  | P_OR_I1  |
 
