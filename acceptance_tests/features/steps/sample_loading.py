@@ -3,7 +3,8 @@ from datetime import datetime, timezone, timedelta
 from behave import step
 
 from acceptance_tests.utilities.collex_helper import add_collex
-from acceptance_tests.utilities.event_helper import get_emitted_cases
+from acceptance_tests.utilities.event_helper import get_emitted_cases, get_fieldwork_action_instructions_for_case_ids, \
+    non_n_case_ids
 from acceptance_tests.utilities.file_to_process_upload_helper import upload_and_process_file_by_api
 from acceptance_tests.utilities.survey_helper import add_survey
 from acceptance_tests.utilities.test_case_helper import test_helper
@@ -49,3 +50,14 @@ def load_sample(context, sample_file_name):
     upload_and_process_file_by_api(context.collex_id, sample_file_path, 'SAMPLE')
 
     context.emitted_cases = get_emitted_cases_and_check_against_sample(sample_rows, context.test_start_utc_datetime)
+    non_n_emitted_case_ids = non_n_case_ids(context.emitted_cases)
+
+    if non_n_emitted_case_ids:
+        context.emitted_fieldwork_action_instructions = get_fieldwork_action_instructions_for_case_ids(
+            non_n_emitted_case_ids,
+            context.test_start_utc_datetime)
+
+        for action_instruction in context.emitted_fieldwork_action_instructions:
+            test_helper.assertEqual(action_instruction['actionInstruction'], 'CREATE')
+    else:
+        context.emitted_fieldwork_action_instructions = []

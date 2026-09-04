@@ -25,6 +25,49 @@ def get_emitted_cases(expected_msg_count=1, test_start_time: datetime = None,
     return case_payloads
 
 
+def get_fieldwork_action_instructions(expected_msg_count: int, test_start_time: datetime = None) -> List[Mapping]:
+    return get_exact_number_of_pubsub_messages(
+        Config.PUBSUB_FIELDWORK_ACTION_INSTRUCTION_SUBSCRIPTION,
+        expected_msg_count,
+        test_start_time=test_start_time)
+
+
+def get_fieldwork_action_instructions_for_case_ids(case_ids: set[str], test_start_time: datetime) -> List[Mapping]:
+    messages = get_fieldwork_action_instructions(len(case_ids), test_start_time)
+    actual_case_ids = {message['caseId'] for message in messages}
+    test_helper.assertSetEqual(case_ids, actual_case_ids,
+                               msg=f'Expected action-instruction case IDs {case_ids}, got {actual_case_ids}')
+    return messages
+
+
+def is_n_region(region: Optional[str]) -> bool:
+    return bool(region) and region.upper().startswith('N')
+
+
+def is_ignored_region(region: Optional[str]) -> bool:
+    return not region or is_n_region(region)
+
+
+def case_ids_with_address(emitted_cases: List[Mapping]) -> set[str]:
+    return {case['caseId'] for case in emitted_cases if case.get('address')}
+
+
+def non_n_case_ids(emitted_cases: List[Mapping]) -> set[str]:
+    return {
+        case['caseId']
+        for case in emitted_cases
+        if case.get('address') and not is_ignored_region(case['address'].get('region'))
+    }
+
+
+def ignored_case_ids(emitted_cases: List[Mapping]) -> set[str]:
+    return {
+        case['caseId']
+        for case in emitted_cases
+        if case.get('address') and is_ignored_region(case['address'].get('region'))
+    }
+
+
 def _match_message_by_correlation_id(message: Mapping, correlation_id: str = None) -> (bool, Optional[str]):
     if (message_cid := message['header']['correlationId']) != correlation_id:
         return False, f'Message correlation ID "{message_cid}" does not match expected "{correlation_id}"'
