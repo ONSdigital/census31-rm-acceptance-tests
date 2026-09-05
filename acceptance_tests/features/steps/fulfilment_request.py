@@ -187,6 +187,7 @@ def request_print_fulfilment_step_with_individual_case_id(context):
             }
         }
     }
+    context.individualCaseId = message_dict['payload']['fulfilmentRequest']['individualCaseId']
     context.contact = message_dict['payload']['fulfilmentRequest']['contact']
     message = json.dumps(message_dict)
     publish_to_pubsub(message, project=Config.PUBSUB_PROJECT, topic=Config.PUBSUB_FULFILMENT_REQUEST_TOPIC)
@@ -222,7 +223,7 @@ def request_uac_by_sms_fulfilment_with_individual_case_id(context, phone_number)
             }
         }
     }
-
+    context.individualCaseId = message_dict['payload']['fulfilmentRequest']['individualCaseId']
     message = json.dumps(message_dict)
     publish_to_pubsub(message, project=Config.PUBSUB_PROJECT, topic=Config.PUBSUB_FULFILMENT_REQUEST_TOPIC)
     context.sent_messages.append(message)

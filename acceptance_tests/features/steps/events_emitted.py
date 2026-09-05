@@ -233,5 +233,17 @@ def check_case_updated_emitted_for_new_case_individual(context, caseType):
     context.case_id = emitted_case['caseId']
     context.emitted_cases = [emitted_case]
     context.emitted_caseType = '"' + emitted_case['caseType'] + '"'
-    test_helper.assertEqual(context.emitted_caseType, caseType, f'The emitted case type, {emitted_case['caseType']} '
+    test_helper.assertEqual(context.emitted_caseType, caseType, f'The emitted case type, {emitted_case['caseType']}'
                                                                 f'does not match the case type  {caseType}')
+
+
+@step("a CASE_UPDATE message is emitted for the individual with given individual caseId")
+def check_case_updated_emitted_for_new_case_with_individual_caseid(context):
+    emitted_case = get_emitted_case_update_by_correlation_id(context.correlation_id, context.originating_user,
+                                                             context.test_start_utc_datetime)
+    context.case_id = emitted_case['caseId']
+    context.emitted_cases = [emitted_case]
+    test_helper.assertEqual(context.individualCaseId,
+                            emitted_case['caseId'],
+                            f"The emitted case id, {emitted_case['caseId']} "
+                            " does not match the  individualCaseId {context.individualCaseId}")
