@@ -156,3 +156,74 @@ def check_uac_message_matches_sms_uac(context):
     if hasattr(context, 'expected_welsh_questionnaire_type') and context.expected_welsh_questionnaire_type:
         if 'welsh_qid' in context.emitted_uacs[0] and context.emitted_uacs[0]['welsh_qid']:
             test_helper.assertEqual(context.emitted_uacs[0]['welsh_qid'][:2], context.expected_welsh_questionnaire_type)
+
+
+@step('a print fulfilment has been requested with individualCaseId')
+def request_print_fulfilment_step_with_individual_case_id(context):
+    context.correlation_id = str(uuid.uuid4())
+    context.originating_user = add_random_suffix_to_email(context.scenario_name)
+    message_dict = {
+        "header": {
+            "version": Config.EVENT_SCHEMA_VERSION,
+            "topic": Config.PUBSUB_FULFILMENT_REQUEST_TOPIC,
+            "source": "RH",
+            "channel": "RH",
+            "dateTime": f'{datetime.now(timezone.utc).replace(tzinfo=None).isoformat()}Z',
+            "messageId": str(uuid.uuid4()),
+            "correlationId": context.correlation_id,
+            "originatingUser": context.originating_user,
+            "messageType": "FULFILMENT_REQUEST",
+        },
+        "payload": {
+            "fulfilmentRequest": {
+                "caseId": context.emitted_cases[0]['caseId'],
+                "fulfilmentCode": context.pack_code,
+                "individualCaseId": str(uuid.uuid4()),
+                "contact": {
+                    "title": "Mr.",
+                    "forename": "Joe",
+                    "surname": "Bloggs"
+                }
+            }
+        }
+    }
+    context.individualCaseId = message_dict['payload']['fulfilmentRequest']['individualCaseId']
+    context.contact = message_dict['payload']['fulfilmentRequest']['contact']
+    message = json.dumps(message_dict)
+    publish_to_pubsub(message, project=Config.PUBSUB_PROJECT, topic=Config.PUBSUB_FULFILMENT_REQUEST_TOPIC)
+    context.sent_messages.append(message)
+
+
+@step('a request has been made for a UAC by SMS from phone number "{phone_number}" with individual case Id')
+def request_uac_by_sms_fulfilment_with_individual_case_id(context, phone_number):
+    context.phone_number = phone_number
+    context.correlation_id = str(uuid.uuid4())
+    context.originating_user = get_unique_user_email()
+
+    message_dict = {
+        "header": {
+            "version": Config.EVENT_SCHEMA_VERSION,
+            "topic": Config.PUBSUB_FULFILMENT_REQUEST_TOPIC,
+            "source": "RH",
+            "channel": "RH",
+            "dateTime": f'{datetime.now(timezone.utc).replace(tzinfo=None).isoformat()}Z',
+            "messageId": str(uuid.uuid4()),
+            "correlationId": context.correlation_id,
+            "originatingUser": context.originating_user,
+            "messageType": "FULFILMENT_REQUEST",
+        },
+        "payload": {
+            "fulfilmentRequest": {
+                "caseId": context.emitted_cases[0]['caseId'],
+                "fulfilmentCode": context.pack_code,
+                "individualCaseId": str(uuid.uuid4()),
+                "contact": {
+                    "telNo": context.phone_number
+                }
+            }
+        }
+    }
+    context.individualCaseId = message_dict['payload']['fulfilmentRequest']['individualCaseId']
+    message = json.dumps(message_dict)
+    publish_to_pubsub(message, project=Config.PUBSUB_PROJECT, topic=Config.PUBSUB_FULFILMENT_REQUEST_TOPIC)
+    context.sent_messages.append(message)
