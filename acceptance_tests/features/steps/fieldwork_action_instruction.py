@@ -1,7 +1,7 @@
 from behave import step
 
 from acceptance_tests.utilities.event_helper import case_ids_with_address, get_emitted_cases, \
-    get_fieldwork_action_instructions_for_case_ids, ignored_case_ids, non_n_case_ids
+    get_fieldwork_action_instructions_for_case_ids, ignored_case_ids, non_n_case_ids, get_fieldwork_action_instructions
 from acceptance_tests.utilities.pubsub_helper import get_exact_number_of_pubsub_messages
 from acceptance_tests.utilities.test_case_helper import test_helper
 from config import Config
@@ -95,3 +95,12 @@ def check_case_update_messages_for_loaded_cases(context, case_field, expected_fi
         test_helper.assertEqual(str(case_update[case_field]), expected_field_value,
                                 msg=f'Expected field "{case_field}" to be "{expected_field_value}" in '
                                     f'case update {case_update}')
+
+
+@step('the CANCEL fieldwork action instruction message is emitted for the case')
+def check_cancel_action_instruction_message_emitted(context):
+    emitted_cancel_messages = get_fieldwork_action_instructions(1, context.test_start_utc_datetime)
+
+    for action_instruction in emitted_cancel_messages:
+        test_helper.assertEqual(action_instruction['actionInstruction'], 'CANCEL')
+        test_helper.assertEqual(action_instruction['caseId'], context.emitted_cases[0]['caseId'])

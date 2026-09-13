@@ -78,7 +78,7 @@ def _get_context_export_supplier_or_default(context) -> str:
 
 def _get_uac_matching_case_id(uac_update_events, case_id, questionnaire_type):
     for uac_dto in uac_update_events:
-        if uac_dto['caseId'] == case_id and uac_dto['qid'][:2] == questionnaire_type:
+        if uac_dto['caseId'] == case_id and uac_dto['questionnaireId'][:2] == questionnaire_type:
             return uac_dto
 
     test_helper.fail(f"Couldn't find event with case ID: {case_id} in UAC_UPDATE events. "
@@ -96,7 +96,7 @@ def get_qid_by_case_id(uac_update_events, case_id, questionnaire_type):
     matching_uac_dto = _get_uac_matching_case_id(uac_update_events, case_id, questionnaire_type)
 
     if matching_uac_dto:
-        return matching_uac_dto['qid']
+        return matching_uac_dto['questionnaireId']
 
 
 def _get_unhashed_uacs_from_actual_export_file(actual_export_file_rows, template, uac_field):

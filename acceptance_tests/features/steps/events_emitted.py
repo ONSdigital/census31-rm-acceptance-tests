@@ -4,7 +4,8 @@ from acceptance_tests.utilities.event_helper import \
     get_logged_case_events_by_type, get_emitted_case_update_by_correlation_id, \
     get_emitted_cases, get_emitted_uac_update, \
     get_uac_update_events, _check_uacs_updated_match_cases, _check_new_uacs_are_as_expected, \
-    check_uac_update_msgs_emitted_with_qid_active_and_field_equals_value, get_number_of_uac_update_events, \
+    get_number_of_uac_update_events, \
+    check_uac_update_msgs_emitted_with_qid_active_match, \
     check_uac_update_msgs_emitted_for_cases_with_qid_active_and_field_equals_value
 from acceptance_tests.utilities.test_case_helper import test_helper
 
@@ -61,11 +62,12 @@ def check_uac_update_msgs_emitted_with_qid_active(context, active):
     if hasattr(context, 'expected_welsh_questionnaire_type') and context.expected_welsh_questionnaire_type:
         for emitted_uac in context.emitted_uacs:
             test_helper.assertIn(
-                emitted_uac['qid'][:2], (context.expected_questionnaire_type, context.expected_welsh_questionnaire_type)
+                emitted_uac['questionnaireId'][:2],
+                (context.expected_questionnaire_type, context.expected_welsh_questionnaire_type)
             )
     else:
         for emitted_uac in context.emitted_uacs:
-            test_helper.assertEqual(emitted_uac['qid'][:2], context.expected_questionnaire_type)
+            test_helper.assertEqual(emitted_uac['questionnaireId'][:2], context.expected_questionnaire_type)
 
 
 @step('the correct number of UAC_UPDATE messages are emitted with active set to {active:boolean}')
@@ -74,18 +76,6 @@ def check_uac_updated_messages_by_number_with_qid_active(context, active):
     _check_uacs_updated_match_cases(context.emitted_uacs, context.emitted_cases)
 
     _check_new_uacs_are_as_expected(emitted_uacs=context.emitted_uacs, active=active)
-
-
-@step('UAC_UPDATE message is emitted with active set to {active:boolean} and "{field_to_test}" is'
-      ' {expected_value:boolean}')
-def check_uac_update_msgs_emitted_with_qid_active_and_field_equals_value_step(context, active, field_to_test,
-                                                                              expected_value):
-    context.emitted_uacs = check_uac_update_msgs_emitted_with_qid_active_and_field_equals_value(
-        context.emitted_cases,
-        context.correlation_id,
-        active, field_to_test,
-        expected_value,
-        context.test_start_utc_datetime)
 
 
 @step('UAC_UPDATE messages are emitted for the correct cases with active set to {active:boolean}'
@@ -219,11 +209,12 @@ def check_uac_update_msgs_emitted_with_qid_active_for_individual(context, active
     if hasattr(context, 'expected_welsh_questionnaire_type') and context.expected_welsh_questionnaire_type:
         for emitted_uac in context.emitted_uacs:
             test_helper.assertIn(
-                emitted_uac['qid'][:2], (context.expected_questionnaire_type, context.expected_welsh_questionnaire_type)
+                emitted_uac['questionnaireId'][:2], (context.expected_questionnaire_type,
+                                                     context.expected_welsh_questionnaire_type)
             )
     else:
         for emitted_uac in context.emitted_uacs:
-            test_helper.assertEqual(emitted_uac['qid'][:2], context.expected_questionnaire_type)
+            test_helper.assertEqual(emitted_uac['questionnaireId'][:2], context.expected_questionnaire_type)
 
 
 @step("a CASE_UPDATE message is emitted for the individual with case type HI")
@@ -246,3 +237,12 @@ def check_case_updated_emitted_for_new_case_with_individual_caseid(context):
                             emitted_case['caseId'],
                             f"The emitted case id, {emitted_case['caseId']} "
                             " does not match the  individualCaseId {context.individualCaseId}")
+
+
+@step('UAC_UPDATE message is emitted with active set to {active:boolean}')
+def check_uac_update_msgs_emitted_with_qid_active_step(context, active):
+    context.emitted_uacs = check_uac_update_msgs_emitted_with_qid_active_match(
+        context.emitted_cases,
+        context.correlation_id,
+        active,
+        context.test_start_utc_datetime)

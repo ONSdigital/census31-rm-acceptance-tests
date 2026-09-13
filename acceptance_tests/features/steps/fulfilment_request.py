@@ -5,7 +5,6 @@ from datetime import datetime, timezone
 from behave import step
 
 from acceptance_tests.utilities import iap_requests
-from acceptance_tests.utilities.audit_trail_helper import add_random_suffix_to_email, get_unique_user_email
 from acceptance_tests.utilities.event_helper import get_emitted_survey_update_by_id
 from acceptance_tests.utilities.pubsub_helper import publish_to_pubsub
 from acceptance_tests.utilities.test_case_helper import test_helper
@@ -15,7 +14,6 @@ from config import Config
 @step('a print fulfilment has been requested')
 def request_print_fulfilment_step(context):
     context.correlation_id = str(uuid.uuid4())
-    context.originating_user = add_random_suffix_to_email(context.scenario_name)
     message_dict = {
         "header": {
             "version": Config.EVENT_SCHEMA_VERSION,
@@ -25,7 +23,6 @@ def request_print_fulfilment_step(context):
             "dateTime": f'{datetime.now(timezone.utc).replace(tzinfo=None).isoformat()}Z',
             "messageId": str(uuid.uuid4()),
             "correlationId": context.correlation_id,
-            "originatingUser": context.originating_user,
             "messageType": "FULFILMENT_REQUEST",
         },
         "payload": {
@@ -109,7 +106,6 @@ def authorise_sms_pack_code(context, template_name):
 def request_uac_by_sms_fulfilment(context, phone_number):
     context.phone_number = phone_number
     context.correlation_id = str(uuid.uuid4())
-    context.originating_user = get_unique_user_email()
 
     message_dict = {
         "header": {
@@ -120,7 +116,6 @@ def request_uac_by_sms_fulfilment(context, phone_number):
             "dateTime": f'{datetime.now(timezone.utc).replace(tzinfo=None).isoformat()}Z',
             "messageId": str(uuid.uuid4()),
             "correlationId": context.correlation_id,
-            "originatingUser": context.originating_user,
             "messageType": "FULFILMENT_REQUEST",
         },
         "payload": {
@@ -161,7 +156,6 @@ def check_uac_message_matches_sms_uac(context):
 @step('a print fulfilment has been requested with individualCaseId')
 def request_print_fulfilment_step_with_individual_case_id(context):
     context.correlation_id = str(uuid.uuid4())
-    context.originating_user = add_random_suffix_to_email(context.scenario_name)
     message_dict = {
         "header": {
             "version": Config.EVENT_SCHEMA_VERSION,
@@ -171,7 +165,6 @@ def request_print_fulfilment_step_with_individual_case_id(context):
             "dateTime": f'{datetime.now(timezone.utc).replace(tzinfo=None).isoformat()}Z',
             "messageId": str(uuid.uuid4()),
             "correlationId": context.correlation_id,
-            "originatingUser": context.originating_user,
             "messageType": "FULFILMENT_REQUEST",
         },
         "payload": {
@@ -198,7 +191,6 @@ def request_print_fulfilment_step_with_individual_case_id(context):
 def request_uac_by_sms_fulfilment_with_individual_case_id(context, phone_number):
     context.phone_number = phone_number
     context.correlation_id = str(uuid.uuid4())
-    context.originating_user = get_unique_user_email()
 
     message_dict = {
         "header": {
@@ -209,7 +201,6 @@ def request_uac_by_sms_fulfilment_with_individual_case_id(context, phone_number)
             "dateTime": f'{datetime.now(timezone.utc).replace(tzinfo=None).isoformat()}Z',
             "messageId": str(uuid.uuid4()),
             "correlationId": context.correlation_id,
-            "originatingUser": context.originating_user,
             "messageType": "FULFILMENT_REQUEST",
         },
         "payload": {
