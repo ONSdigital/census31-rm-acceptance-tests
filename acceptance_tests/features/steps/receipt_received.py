@@ -35,11 +35,11 @@ def _send_receipt_received_msg(correlation_id, qid):
                 "dateTime": f'{datetime.now(timezone.utc).replace(tzinfo=None).isoformat()}Z',
                 "messageId": str(uuid.uuid4()),
                 "correlationId": correlation_id,
-                "messageType": "RECEIPT",
+                "messageType": "RESPONSE_RECEIVED",
             },
             "payload": {
-                "receipt": {
-                    "qid": qid
+                "response": {
+                    "questionnaireId": qid
                 }
             }
         }

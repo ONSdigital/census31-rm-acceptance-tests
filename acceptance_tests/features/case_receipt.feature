@@ -8,4 +8,4 @@ Feature: Mark the case as receipted when receipt received message event is recei
     When a Receipt event is received
     Then UAC_UPDATE message is emitted with active set to false
     And a CASE_UPDATE message is emitted where "receiptReceived" is "True"
-    And the events logged against the case are ["NEW_CASE","EXPORT_FILE","RECEIPT"]
+    And the events logged against the case are ["NEW_CASE","EXPORT_FILE","RESPONSE_RECEIVED"]
