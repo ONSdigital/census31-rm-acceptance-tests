@@ -44,8 +44,12 @@ def is_n_region(region: Optional[str]) -> bool:
     return bool(region) and region.upper().startswith('N')
 
 
+def is_s_region(region: Optional[str]) -> bool:
+    return bool(region) and region.upper().startswith('S')
+
+
 def is_ignored_region(region: Optional[str]) -> bool:
-    return not region or is_n_region(region)
+    return not region or is_n_region(region) or is_s_region(region)
 
 
 def case_ids_with_address(emitted_cases: List[Mapping]) -> set[str]:

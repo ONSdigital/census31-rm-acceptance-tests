@@ -1,83 +1,84 @@
+import json
+import uuid
+from datetime import datetime, timezone
+
 from behave import step
 
-from acceptance_tests.utilities.event_helper import ignored_case_ids
-from acceptance_tests.utilities.pubsub_helper import get_exact_number_of_pubsub_messages
+from acceptance_tests.utilities.pubsub_helper import get_exact_number_of_pubsub_messages, publish_to_pubsub
 from acceptance_tests.utilities.test_case_helper import test_helper
 from config import Config
 
 
-@step('case events are sent to the fieldwork adapter')
-def step_case_events_sent_to_adapter(context):
-    """
-    Validate that case events are ready to be sent to the fieldwork adapter.
+@step('field follow-up messages are checked for the following cases:')
+def check_expected_cases(context):
+    case_ids_with_create = {
+        str(message['caseId']) for message in context.emitted_fieldwork_action_instructions
+    }
+    case_ids_by_uprn = {
+        str(case['address']['uprn']): str(case['caseId']) for case in context.emitted_cases
+    }
 
-    This step verifies that the system is ready to process case events through
-    the fieldwork adapter by checking that cases have been loaded with proper attributes.
+    failures = []
+    for row in context.table:
+        uprn, outcome, reason = row['case_id'], row['outcome'].lower(), row['reason']
+        case_id = case_ids_by_uprn.get(uprn)
+        if case_id is None:
+            failures.append(f"UPRN {uprn} ('{reason}') was not found in the emitted cases.")
+            continue
 
-    The actual event processing happens in the adapter, and we verify the results
-    in the THEN steps via pub/sub subscription checks.
-    """
-    # Get the cases from context (set by previous Given/And steps)
-    cases = getattr(context, 'emitted_cases', None)
+        has_message = case_id in case_ids_with_create
 
-    # Verify that cases were loaded in previous steps
-    if cases is None:
-        # Cases might not be set if this runs before sample loading completes
-        # This is OK - the THEN steps will verify the final state
-        return
+        if outcome == 'passed' and not has_message:
+            failures.append(f"UPRN {uprn} should pass ('{reason}') but no message was found.")
+        elif outcome == 'filtered' and has_message:
+            failures.append(
+                f"UPRN {uprn} should be filtered ('{reason}') but received a CREATE instruction anyway."
+            )
 
-    # Basic validations if cases exist
-    if len(cases) > 0:
-        # Verify at least some cases have the expected structure
-        case_with_address = next((c for c in cases if c.get('address')), None)
-        if case_with_address:
-            test_helper.assertIn(
-                'region',
-                case_with_address['address'],
-                msg='Cases should have region in address')
+    test_helper.assertFalse(failures, "CN-80 filtering mismatches:\n" + "\n".join(failures))
 
 
-@step('a create message will not be generated for field')
-def step_create_message_not_generated(context):
-    """
-    Verify no CREATE fieldwork action instruction messages are sent for excluded cases.
+@step('a receipted CASE_UPDATE is published for UPRN "{uprn}"')
+def publish_receipted_case_update(context, uprn):
+    selected_case = next(
+        (case for case in context.emitted_cases if str(case.get('address', {}).get('uprn')) == uprn),
+        None,
+    )
+    test_helper.assertIsNotNone(selected_case, f"Could not find an emitted case for UPRN {uprn}.")
 
-    Checks the pub/sub subscription for fieldwork action instructions and asserts
-    that no messages exist for N region cases (which should be excluded by CN-80 rules).
-    """
-    excluded_case_ids = ignored_case_ids(context.emitted_cases)
-    test_helper.assertNotEqual(
-        len(excluded_case_ids),
-        0,
-        msg='This scenario expects excluded cases (N region) from sample loading')
+    context.emitted_cases = [selected_case]
+    context.correlation_id = str(uuid.uuid4())
+    context.originating_user = Config.API_USER_EMAIL
 
-    # Verify no fieldwork action instruction messages were sent for these excluded cases
+    receipted_case = {**selected_case, 'receiptReceived': True}
+    message = json.dumps(
+        {
+            'header': {
+                'version': Config.EVENT_SCHEMA_VERSION,
+                'topic': Config.PUBSUB_CASE_UPDATE_TOPIC,
+                'source': 'CASE_PROCESSOR',
+                'channel': 'RM',
+                'dateTime': f'{datetime.now(timezone.utc).replace(tzinfo=None).isoformat()}Z',
+                'messageId': str(uuid.uuid4()),
+                'correlationId': context.correlation_id,
+                'originatingUser': context.originating_user,
+                'messageType': 'CASE_UPDATE',
+                'fieldActionInstruction': 'UPDATE',
+            },
+            'payload': {'caseUpdate': receipted_case},
+        }
+    )
+
+    publish_to_pubsub(message, project=Config.PUBSUB_PROJECT, topic=Config.PUBSUB_CASE_UPDATE_TOPIC)
+    context.sent_messages.append(message)
+
+
+@step('no fieldwork action instruction is sent for the receipted case')
+def check_no_fieldwork_instruction_for_receipted_case(context):
     with test_helper.assertRaises(AssertionError):
         get_exact_number_of_pubsub_messages(
-            Config.PUBSUB_FIELDWORK_ACTION_INSTRUCTION_SUBSCRIPTION,
+            subscription=Config.PUBSUB_FIELDWORK_ACTION_INSTRUCTION_SUBSCRIPTION,
             expected_msg_count=1,
             timeout=3,
-            test_start_time=context.test_start_utc_datetime)
-
-
-@step('an update message will not be generated for field')
-def step_update_message_not_generated(context):
-    """
-    Verify no UPDATE fieldwork action instruction messages are sent for excluded cases.
-
-    Checks the pub/sub subscription for fieldwork action instructions and asserts
-    that no messages exist for N region cases (which should be excluded by CN-80 rules).
-    """
-    excluded_case_ids = ignored_case_ids(context.emitted_cases)
-    test_helper.assertNotEqual(
-        len(excluded_case_ids),
-        0,
-        msg='This scenario expects excluded cases (N region) from sample loading')
-
-    # Verify no fieldwork action instruction messages were sent for these excluded cases
-    with test_helper.assertRaises(AssertionError):
-        get_exact_number_of_pubsub_messages(
-            Config.PUBSUB_FIELDWORK_ACTION_INSTRUCTION_SUBSCRIPTION,
-            expected_msg_count=1,
-            timeout=3,
-            test_start_time=context.test_start_utc_datetime)
+            test_start_time=context.test_start_utc_datetime,
+        )
