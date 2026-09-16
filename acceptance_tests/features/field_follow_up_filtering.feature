@@ -14,15 +14,15 @@ Feature: Field follow-up filtering - Cases excluded from fieldwork
     Given sample file "sample_field_eligibility_cases.csv" is loaded successfully
     When field follow-up messages are checked for the following cases:
       | uprn        | outcome | reason                                    |
-      | 10008677190 | passed  | valid HH case with HH_PSCE treatment code |
-      | 10008677191 | passed  | valid HH case with HH_PSLE treatment code |
-      | 10008677192 | passed  | valid HH case with HH_PNCE treatment code |
-      | 10008677193 | passed  | valid HH case with HH_OSCE treatment code |
-      | 10008677194 | passed  | valid HH case with HH_ONCE treatment code |
-      | 10008677195 | passed  | valid HH case with HH_PSCW treatment code |
-      | 10008677196 | passed  | valid HH case with HH_PSLW treatment code |
-      | 10008677197 | passed  | valid HH case with HH_OSXS treatment code |
-      | 10008677206 | passed  | valid HH case with HH_PSCE treatment code |
+      | 10008677190 | passed  | valid HH case with HH_PFE treatment code |
+      | 10008677191 | passed  | valid HH case with HH_OFE treatment code |
+      | 10008677192 | passed  | valid HH case with HH_OANN treatment code |
+      | 10008677193 | passed  | valid HH case with HH_PFW treatment code |
+      | 10008677194 | passed  | valid HH case with HH_OFW treatment code |
+      | 10008677195 | passed  | valid HH case with HH_OBNN treatment code |
+      | 10008677196 | passed  | valid HH case with HH_ONS treatment code |
+      | 10008677197 | passed  | valid HH case with HH_PBNN treatment code |
+      | 10008677206 | passed  | valid HH case with HH_PFE treatment code |
 
   Scenario: A receipted English household case update is not sent to field
     Given sample file "sample_field_eligibility_cases.csv" is loaded successfully
