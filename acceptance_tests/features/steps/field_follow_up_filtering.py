@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 
 from behave import step
 
-from acceptance_tests.utilities.pubsub_helper import get_exact_number_of_pubsub_messages, publish_to_pubsub
+from acceptance_tests.utilities.pubsub_helper import get_matching_pubsub_message_acking_others, publish_to_pubsub
 from acceptance_tests.utilities.test_case_helper import test_helper
 from config import Config
 
@@ -75,10 +75,19 @@ def publish_receipted_case_update(context, uprn):
 
 @step('no fieldwork action instruction is sent for the receipted case')
 def check_no_fieldwork_instruction_for_receipted_case(context):
+    case_id = str(context.emitted_cases[0]['caseId'])
+
+    def is_update_for_receipted_case(message):
+        if str(message.get('caseId')) != case_id:
+            return False, f"Case ID {message.get('caseId')} does not match {case_id}"
+        if message.get('actionInstruction') != 'UPDATE':
+            return False, f"Action instruction {message.get('actionInstruction')} is not UPDATE"
+        return True, None
+
     with test_helper.assertRaises(AssertionError):
-        get_exact_number_of_pubsub_messages(
+        get_matching_pubsub_message_acking_others(
             subscription=Config.PUBSUB_FIELDWORK_ACTION_INSTRUCTION_SUBSCRIPTION,
-            expected_msg_count=1,
+            message_matcher=is_update_for_receipted_case,
             timeout=3,
             test_start_time=context.test_start_utc_datetime,
         )
