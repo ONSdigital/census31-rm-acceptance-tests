@@ -20,7 +20,7 @@ def check_expected_cases(context):
 
     failures = []
     for row in context.table:
-        uprn, outcome, reason = row['case_id'], row['outcome'].lower(), row['reason']
+        uprn, outcome, reason = row['uprn'], row['outcome'].lower(), row['reason']
         case_id = case_ids_by_uprn.get(uprn)
         if case_id is None:
             failures.append(f"UPRN {uprn} ('{reason}') was not found in the emitted cases.")

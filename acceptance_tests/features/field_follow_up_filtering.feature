@@ -3,7 +3,7 @@ Feature: Field follow-up filtering - Cases excluded from fieldwork
   Scenario: Region-based filtering
     Given sample file "sample_field_eligibility_cases.csv" is loaded successfully
     When field follow-up messages are checked for the following cases:
-      | case_id     | outcome  | reason                                                     |
+      | uprn        | outcome  | reason                                                     |
       | 10008677204 | filtered | region N92000002 (NISRA) excluded from field follow-up     |
       | 10008677205 | filtered | region S92000003 (Scotland) excluded from field follow-up  |
       | 10008677209 | filtered | region N92000002 (NISRA) excluded from field follow-up     |
@@ -13,7 +13,7 @@ Feature: Field follow-up filtering - Cases excluded from fieldwork
   Scenario: Valid cases pass regardless of treatment code variety
     Given sample file "sample_field_eligibility_cases.csv" is loaded successfully
     When field follow-up messages are checked for the following cases:
-      | case_id     | outcome | reason                                    |
+      | uprn        | outcome | reason                                    |
       | 10008677190 | passed  | valid HH case with HH_PSCE treatment code |
       | 10008677191 | passed  | valid HH case with HH_PSLE treatment code |
       | 10008677192 | passed  | valid HH case with HH_PNCE treatment code |
