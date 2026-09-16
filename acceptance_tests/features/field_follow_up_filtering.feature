@@ -29,3 +29,10 @@ Feature: Field follow-up filtering - Cases excluded from fieldwork
     When a receipted CASE_UPDATE is published for UPRN "10008677206"
     Then a CASE_UPDATE message is emitted where "receiptReceived" is "True"
     And no fieldwork action instruction is sent for the receipted case
+
+  Scenario: Online-only treatment codes are excluded from fieldwork
+    Given sample file "sample_field_eligibility_cases.csv" is loaded successfully
+    When field follow-up messages are checked for the following cases:
+      | uprn        | outcome  | reason                                                     |
+      | 10008677198 | filtered | HH_ONE treatment code excluded from field follow-up       |
+      | 10008677199 | filtered | HH_ONW treatment code excluded from field follow-up       |
