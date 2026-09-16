@@ -66,7 +66,7 @@ def non_n_case_ids(emitted_cases: List[Mapping]) -> set[str]:
     return {
         case['caseId']
         for case in emitted_cases
-        if case.get('address') 
+        if case.get('address')
         and not is_ignored_region(case['address'].get('region'))
         and not is_online_only_treatment(case.get('treatmentCode'))
     }
