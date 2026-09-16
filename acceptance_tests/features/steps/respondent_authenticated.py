@@ -11,13 +11,12 @@ from config import Config
 @step('a RESPONDENT_AUTHENTICATED event is received')
 def send_respondent_authenticated(context):
     context.correlation_id = str(uuid.uuid4())
-    context.originating_user = "test@test.com"
-    message = _send_respondent_authenticated_msg(context.correlation_id, context.originating_user,
+    message = _send_respondent_authenticated_msg(context.correlation_id,
                                                  context.emitted_uacs[0]['questionnaireId'])
     context.sent_messages.append(message)
 
 
-def _send_respondent_authenticated_msg(correlation_id, originating_user, qid):
+def _send_respondent_authenticated_msg(correlation_id, qid):
     message = json.dumps(
         {
             "header": {
@@ -28,7 +27,6 @@ def _send_respondent_authenticated_msg(correlation_id, originating_user, qid):
                 "dateTime": f'{datetime.now(timezone.utc).replace(tzinfo=None).isoformat()}Z',
                 "messageId": str(uuid.uuid4()),
                 "correlationId": correlation_id,
-                "originatingUser": originating_user,
                 "messageType": "RESPONDENT_AUTHENTICATED",
             },
             "payload": {

@@ -4,16 +4,16 @@ from pathlib import Path
 
 
 class Config:
-    EVENT_SCHEMA_VERSION = "0.5.0"  # noqa: F841
+    EVENT_SCHEMA_VERSION = "1.0.0"  # noqa: F841
 
     RESOURCE_FILE_PATH = Path(os.getenv('RESOURCE_FILE_PATH') or Path(__file__).parent.joinpath('resources'))
 
     PUBSUB_PROJECT = os.getenv('PUBSUB_PROJECT', 'our-project')
 
-    PUBSUB_RECEIPT_TOPIC = os.getenv('PUBSUB_RECEIPT_TOPIC', 'event_receipt')
-    PUBSUB_REFUSAL_TOPIC = os.getenv('PUBSUB_REFUSAL_TOPIC', 'event_refusal')
+    PUBSUB_RECEIPT_TOPIC = os.getenv('PUBSUB_RECEIPT_TOPIC', 'event_response-received')
+    PUBSUB_REFUSAL_TOPIC = os.getenv('PUBSUB_REFUSAL_TOPIC', 'event_refusal-received')
     PUBSUB_INVALID_CASE_TOPIC = os.getenv('PUBSUB_INVALID_CASE_TOPIC',
-                                          'event_invalid-case')
+                                          'event_address-not-valid')
     PUBSUB_SURVEY_LAUNCHED_TOPIC = os.getenv('PUBSUB_SURVEY_LAUNCHED_TOPIC',  # noqa: F841
                                              'event_survey-launched')  # noqa: F841
     PUBSUB_DEACTIVATE_UAC_TOPIC = os.getenv('PUBSUB_DEACTIVATE_UAC_TOPIC', 'event_deactivate-uac')
