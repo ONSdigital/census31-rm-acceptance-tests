@@ -44,8 +44,18 @@ def is_n_region(region: Optional[str]) -> bool:
     return bool(region) and region.upper().startswith('N')
 
 
+def is_s_region(region: Optional[str]) -> bool:
+    return bool(region) and region.upper().startswith('S')
+
+
 def is_ignored_region(region: Optional[str]) -> bool:
-    return not region or is_n_region(region)
+    return not region or is_n_region(region) or is_s_region(region)
+
+
+def is_online_only_treatment(treatment_code: Optional[str]) -> bool:
+    """Check if treatment code is online-only (excluded from field follow-up)"""
+    online_only_codes = {'HH_ONE', 'HH_ONW'}
+    return bool(treatment_code) and treatment_code.upper() in online_only_codes
 
 
 def case_ids_with_address(emitted_cases: List[Mapping]) -> set[str]:
@@ -56,7 +66,9 @@ def non_n_case_ids(emitted_cases: List[Mapping]) -> set[str]:
     return {
         case['caseId']
         for case in emitted_cases
-        if case.get('address') and not is_ignored_region(case['address'].get('region'))
+        if case.get('address')
+        and not is_ignored_region(case['address'].get('region'))
+        and not is_online_only_treatment(case.get('treatmentCode'))
     }
 
 
