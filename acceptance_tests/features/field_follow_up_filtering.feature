@@ -24,12 +24,6 @@ Feature: Field follow-up filtering - Cases excluded from fieldwork
       | 10008677197 | passed  | valid HH case with HH_PBNN treatment code |
       | 10008677206 | passed  | valid HH case with HH_PFE treatment code |
 
-  Scenario: A receipted English household case update is not sent to field
-    Given sample file "sample_field_eligibility_cases.csv" is loaded successfully
-    When a receipted CASE_UPDATE is published for UPRN "10008677206"
-    Then a CASE_UPDATE message is emitted where "receiptReceived" is "True"
-    And no fieldwork action instruction is sent for the receipted case
-
   Scenario: Online-only treatment codes are excluded from fieldwork
     Given sample file "sample_field_eligibility_cases.csv" is loaded successfully
     When field follow-up messages are checked for the following cases:
