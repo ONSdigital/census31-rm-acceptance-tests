@@ -1,12 +1,6 @@
-import json
-import uuid
-from datetime import datetime, timezone
-
 from behave import step
 
-from acceptance_tests.utilities.pubsub_helper import get_matching_pubsub_message_acking_others, publish_to_pubsub
 from acceptance_tests.utilities.test_case_helper import test_helper
-from config import Config
 
 
 @step('field follow-up messages are checked for the following cases:')
