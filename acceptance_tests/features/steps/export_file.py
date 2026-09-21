@@ -21,6 +21,7 @@ def check_export_file(context):
     pack_code = context.pack_code
     emitted_uacs = context.emitted_uacs if hasattr(context, 'emitted_uacs') else None
     contact = context.contact if hasattr(context, 'contact') else None
+    context.export_supplier = Config.SUPPLIER_CENSUS_PRINT
 
     test_helper.assertFalse(('__uac__' in template or '__qid__' in template) and not emitted_uacs,
                             'Export file template expects UACs or QIDs but no corresponding emitted_uacs found in '

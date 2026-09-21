@@ -13,7 +13,7 @@ def create_export_file_action_rule(collex_id, classifiers, pack_code, descriptio
         'triggerDateTime': f'{datetime.now(timezone.utc).replace(tzinfo=None).isoformat()}Z',
         'classifiers': classifiers,
         'collectionExerciseId': collex_id,
-        'description' : description
+        'description': description
     }
 
     response = iap_requests.make_request(method='POST', url=ACTION_RULES_URL, json=body)
@@ -51,7 +51,6 @@ def set_eq_flush_action_rule(collex_id):
 
 
 def get_action_rules(collex_id):
-    getUrl = f'{ACTION_RULES_URL}?collectionExercise={collex_id}'
     clean_id = str(collex_id).strip('"')
     response = iap_requests.make_request(method='GET', url=ACTION_RULES_URL, params={'collectionExercise': clean_id})
     response.raise_for_status()

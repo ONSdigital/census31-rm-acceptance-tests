@@ -3,7 +3,7 @@ Feature: Fieldwork action instruction forwarding
   Scenario: CREATE action instruction messages are published for non-N regions new cases
     Given sample file "sample_input_non-nisra_census_spec.csv" is loaded successfully
     And an export file template has been created with template "P_IC_H1"
-    When an export file action rule has been created for packcode "P_IC_H1"
+    When an export file action rule has been created for packcode "P_IC_H1" with no classifier
     And UAC_UPDATE message is emitted with active set to true
     When SURVEY_LAUNCHED events are received for all emitted UACs
     Then UAC_UPDATE message is emitted with active set to true
@@ -15,7 +15,7 @@ Feature: Fieldwork action instruction forwarding
   Scenario: CREATE action instruction messages are not published for N region new cases
     Given sample file "sample_1_input_nisra_census_spec.csv" is loaded successfully
     And an export file template has been created with template "P_IC_H1"
-    When an export file action rule has been created for packcode "P_IC_H1"
+    When an export file action rule has been created for packcode "P_IC_H1" with no classifier
     And UAC_UPDATE message is emitted with active set to true
     When SURVEY_LAUNCHED events are received for all emitted UACs
     Then UAC_UPDATE message is emitted with active set to true

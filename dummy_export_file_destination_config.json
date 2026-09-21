@@ -6,5 +6,9 @@
   "internal_reprographics": {
     "exportDirectory": "internal_reprographics/print_services",
     "encryptionKeyFilename": "dummy-key-test-supplier-b-public.asc"
+  },
+  "census_print_supplier": {
+    "exportDirectory": "census_print_supplier/print_services",
+    "encryptionKeyFilename": "dummy-key-test-supplier-b-public.asc"
   }
 }

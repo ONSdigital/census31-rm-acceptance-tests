@@ -54,7 +54,7 @@ Feature: Export files can be created with the correct data
     Given sample file "<sample file>" is loaded successfully
     And an export file template has been created with template "<template>"
     And the action rule with ID "<action_rule_id>" exists for collection exercise "<collection_exercise_id>"
-    When an export file action rule has been created for packcode "<template>" with the classifier fom action rule "<action_rule_id>"
+    When an export file action rule has been created for packcode "<template>" with the classifier from action rule "<action_rule_id>"
     Then UAC_UPDATE messages are emitted with active set to true
     And an export file is created with correct rows
     And the events logged against the cases are ["NEW_CASE","EXPORT_FILE"]
