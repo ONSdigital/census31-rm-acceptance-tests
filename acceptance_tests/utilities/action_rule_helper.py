@@ -6,13 +6,14 @@ from config import Config
 ACTION_RULES_URL = f'{Config.SUPPORT_TOOL_API_URL}/actionRules'
 
 
-def create_export_file_action_rule(collex_id, classifiers, pack_code):
+def create_export_file_action_rule(collex_id, classifiers, pack_code, description):
     body = {
         'type': 'EXPORT_FILE',
         'packCode': pack_code,
         'triggerDateTime': f'{datetime.now(timezone.utc).replace(tzinfo=None).isoformat()}Z',
         'classifiers': classifiers,
-        'collectionExerciseId': collex_id
+        'collectionExerciseId': collex_id,
+        'description' : description
     }
 
     response = iap_requests.make_request(method='POST', url=ACTION_RULES_URL, json=body)
@@ -47,3 +48,11 @@ def set_eq_flush_action_rule(collex_id):
 
     response = iap_requests.make_request(method='POST', url=ACTION_RULES_URL, json=body)
     response.raise_for_status()
+
+
+def get_action_rules(collex_id):
+    getUrl = f'{ACTION_RULES_URL}?collectionExercise={collex_id}'
+    clean_id = str(collex_id).strip('"')
+    response = iap_requests.make_request(method='GET', url=ACTION_RULES_URL, params={'collectionExercise': clean_id})
+    response.raise_for_status()
+    return response
