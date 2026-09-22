@@ -87,6 +87,5 @@ class Config:
 
     SAMPLE_FILES_PATH = RESOURCE_FILE_PATH.joinpath('sample_files')
 
-    SUPPLIER_INTERNAL_REPROGRAPHICS = os.getenv('SUPPLIER_INTERNAL_REPROGRAPHICS', 'internal_reprographics')
     SUPPLIER_DEFAULT_TEST = os.getenv('SUPPLIER_DEFAULT_TEST', 'test_supplier')
     SUPPLIER_CENSUS_PRINT = os.getenv('SUPPLIER_CENSUS_PRINT', 'census_print_supplier')
