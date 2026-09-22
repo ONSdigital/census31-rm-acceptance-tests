@@ -1,5 +1,7 @@
+import atexit
 import json
 import logging
+import sys
 import time
 from datetime import datetime, timezone
 
@@ -30,6 +32,7 @@ TEMPLATE_FILES_PATH = Config.RESOURCE_FILE_PATH.joinpath('template_files')
 
 def before_all(context):
     context.config.setup_logging()
+    atexit.register(_log_finished_at)
     _setup_templates(context)
 
     purge_outbound_topics_with_retry()
@@ -129,3 +132,7 @@ def _setup_templates(context):
         context.sms_packcodes[template['templateName']] = {"pack_code": template['templateName'],
                                                            "notify_template_id": template['notifyTemplateId'],
                                                            "questionnaire_type": template['questionnaireType']}
+
+
+def _log_finished_at():
+    sys.stderr.write(f'Finished at: {datetime.now().astimezone().replace(microsecond=0).isoformat()}\n')
