@@ -45,9 +45,6 @@ Feature: Export files can be created with the correct data
       | sample_1_input_england_census_spec.csv  | P_IC_PCPR2B  |
       | sample_1_input_england_census_spec.csv  | P_IC_PCPR13  |
       | sample_1_input_england_census_spec.csv  | P_IC_PCPR23  |
-      | sample_1_input_england_census_spec.csv  | P_IC_PCPR13A |
-      | sample_1_input_england_census_spec.csv  | P_IC_PCPR23A |
-
 
 
   Scenario Outline: A case is loaded, action rule with classifiers triggered and export file created with differing templates with UACs

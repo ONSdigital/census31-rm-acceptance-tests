@@ -62,18 +62,6 @@
     "welshQuestionnaireType": null
   },
   {
-    "templateName": "P_IC_PCPR13A",
-    "template": ["__pack_code__", "__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE"],
-    "questionnaireType": null,
-    "welshQuestionnaireType": null
-  },
-  {
-    "templateName": "P_IC_PCPR23A",
-    "template": ["__pack_code__", "__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE"],
-    "questionnaireType": null,
-    "welshQuestionnaireType": null
-  },
-  {
     "templateName": "P_IC_ICL1",
     "template": ["__pack_code__", "__uac__","__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE"],
     "questionnaireType": "01",
