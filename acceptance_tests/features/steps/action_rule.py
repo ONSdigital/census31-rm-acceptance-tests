@@ -23,12 +23,12 @@ def create_export_file_action_rule_with_classifiers(context, packcode, action_ru
     context.correlation_id = create_export_file_action_rule(context.collex_id, classifier, packcode, description)
 
 
-@step('the action rule with ID {actionRuleId} exists for collection exercise {collectionExerciseId}')
-def check_action_rule_id_exists_for_collection_exercise_id(context, actionRuleId, collectionExerciseId):
+@step('the action rule with ID {action_rule_id} exists for collection exercise {collection_exercise_id}')
+def check_action_rule_id_exists_for_collection_exercise_id(context, action_rule_id, collection_exercise_id):
     if not hasattr(context, 'action_rules') or context.action_rules is None:
-        context.action_rules = get_action_rules(collectionExerciseId).json()
-    cleaned_action_rule_id = str(actionRuleId).strip('"')
-    cleaned_collex_id = str(collectionExerciseId).strip('"')
+        context.action_rules = get_action_rules(collection_exercise_id).json()
+    cleaned_action_rule_id = str(action_rule_id).strip('"')
+    cleaned_collex_id = str(collection_exercise_id).strip('"')
     matches = [record for record in context.action_rules
                if str(record.get("actionRuleId")).strip('"') == cleaned_action_rule_id
                and str(record.get("collectionExerciseId")).strip('"') == cleaned_collex_id]

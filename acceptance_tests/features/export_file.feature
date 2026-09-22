@@ -47,7 +47,7 @@ Feature: Export files can be created with the correct data
       | sample_1_input_england_census_spec.csv  | P_IC_PCPR23  |
 
 
-  Scenario Outline: A case is loaded, action rule with classifiers triggered and export file created with differing templates with UACs
+  Scenario Outline: Export files can be produced using the classifiers from the pre-seeded 2027 test action rules
     Given sample file "<sample file>" is loaded successfully
     And an export file template has been created with template "<template>"
     And the action rule with ID "<action_rule_id>" exists for collection exercise "<collection_exercise_id>"
