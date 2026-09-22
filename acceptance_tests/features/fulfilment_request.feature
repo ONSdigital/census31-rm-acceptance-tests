@@ -41,7 +41,6 @@ Feature: Print fulfilments can be requested for a case
       | sample_1_input_england_census_spec.csv | UACHHT4  |
 
   @reset_notify_stub
-  @debug
   Scenario Outline: A SMS fulfilment is requested for an Individual case
     Given sample file "<sample file>" is loaded successfully
     And fulfilments are authorised for sms template "<template>"
