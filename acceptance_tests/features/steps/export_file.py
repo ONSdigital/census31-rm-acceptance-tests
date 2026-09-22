@@ -14,6 +14,23 @@ from acceptance_tests.utilities.sample_field_helper import sample_field_mapper
 from acceptance_tests.utilities.test_case_helper import test_helper
 from config import Config
 
+HEADER_SANITISATION_MAP = {
+    '__uac__': 'UAC',
+    '__qid__': 'QID',
+    '__welsh_uac__': 'WALES_UAC',
+    '__welsh_qid__': 'WALES_QID',
+    '__caseref__': 'CASEREF',
+    '__pack_code__': 'PRODUCTPACK_CODE',
+    '__request__.title': 'TITLE',
+    '__request__.forename': 'FORENAME',
+    '__request__.surname': 'SURNAME',
+}
+
+
+def sanitize_headers(headers: List[str]) -> List[str]:
+    """Apply sanitisation map to headers, falling back to original value if not in map."""
+    return [HEADER_SANITISATION_MAP.get(header, header) for header in headers]
+
 
 @step("an export file is created with correct rows")
 def check_export_file(context):
@@ -113,7 +130,8 @@ def generate_expected_export_file_rows(
         for uac in expected_uacs
     }
 
-    export_file_rows = [format_expected_export_file_row(template)]  # expected header
+    sanitized_template = sanitize_headers(template)
+    export_file_rows = [format_expected_export_file_row(sanitized_template)]  # expected header
     for case in cases:
         export_row_components = []
         for field in template:
