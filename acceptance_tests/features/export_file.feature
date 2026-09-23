@@ -66,4 +66,4 @@ Feature: Export files can be created with the correct data
       | sample_input_H2_wales_census_spec.csv       | P_IC_H2     | b68edc21-16fe-4de3-b0cf-d242d4ad7b13  | 1b9e4b45-fd33-922f-d39e-914d5bdabe84  |
       | sample_input_ICL1_england_census_spec.csv   | P_IC_ICL1   | 2872997d-dc4e-4c8a-a539-671cbefe364b  | 1b9e4b45-fd33-922f-d39e-914d5bdabe84  |
       | sample_input_ICL2_wales_census_spec.csv     | P_IC_ICL2B  | 46f12594-79d9-40e5-a11f-36845a3b497b  | 1b9e4b45-fd33-922f-d39e-914d5bdabe84  |
-      | sample_input_ICL3_scotland_census_spec.csv  | P_IC_ICL3   | 9d0f01ff-2838-4e08-8b0d-7e0268e0ba42  | 1b9e4b45-fd33-922f-d39e-914d5bdabe84  |
+      | sample_input_ICL3_scotland_census_spec.csv  | P_IC_ICL3   | 9d0f01ff-2838-4e08-8b0d-7e0268e0ba42  | a6d57a19-2f53-3a10-f9f3-bc9eeb52dfb6  |
