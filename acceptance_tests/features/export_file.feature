@@ -3,7 +3,7 @@ Feature: Export files can be created with the correct data
   Scenario Outline: A case is loaded, action rule triggered and export file created with differing templates with UACs
     Given sample file "<sample file>" is loaded successfully
     And an export file template has been created with template "<template>"
-    When an export file action rule has been created for packcode "<template>"
+    When an export file action rule has been created for packcode "<template>" with no classifier
     Then UAC_UPDATE messages are emitted with active set to true
     And an export file is created with correct rows
     And the events logged against the cases are ["NEW_CASE","EXPORT_FILE"]
@@ -31,7 +31,7 @@ Feature: Export files can be created with the correct data
   Scenario Outline: A case is loaded, action rule triggered and export file created with a template with no UAC
     Given sample file "<sample file>" is loaded successfully
     And an export file template has been created with template "<template>"
-    When an export file action rule has been created for packcode "<template>"
+    When an export file action rule has been created for packcode "<template>" with no classifier
     Then an export file is created with correct rows
     And the events logged against the cases are ["NEW_CASE","EXPORT_FILE"]
 
@@ -45,5 +45,25 @@ Feature: Export files can be created with the correct data
       | sample_1_input_england_census_spec.csv  | P_IC_PCPR2B  |
       | sample_1_input_england_census_spec.csv  | P_IC_PCPR13  |
       | sample_1_input_england_census_spec.csv  | P_IC_PCPR23  |
-      | sample_1_input_england_census_spec.csv  | P_IC_PCPR13A |
-      | sample_1_input_england_census_spec.csv  | P_IC_PCPR23A |
+
+
+  Scenario Outline: Export files can be produced using the classifiers from the pre-seeded 2027 test action rules
+    Given sample file "<sample file>" is loaded successfully
+    And an export file template has been created with template "<template>"
+    And the action rule with ID "<action_rule_id>" exists for collection exercise "<collection_exercise_id>"
+    When an export file action rule has been created for packcode "<template>" with the classifier from action rule "<action_rule_id>"
+    Then UAC_UPDATE messages are emitted with active set to true
+    And an export file is created with correct rows
+    And the events logged against the cases are ["NEW_CASE","EXPORT_FILE"]
+
+    Examples:
+      | sample file                                 | template    | action_rule_id                        | collection_exercise_id                |
+      | sample_input_H1_england_census_spec.csv     | P_IC_H1     | 8aee5ac7-60d3-43c8-81be-e30bf6055ae8  | 1b9e4b45-fd33-922f-d39e-914d5bdabe84  |
+
+    @regression
+    Examples:
+      | sample file                                 | template    | action_rule_id                        | collection_exercise_id                |
+      | sample_input_H2_wales_census_spec.csv       | P_IC_H2     | b68edc21-16fe-4de3-b0cf-d242d4ad7b13  | 1b9e4b45-fd33-922f-d39e-914d5bdabe84  |
+      | sample_input_ICL1_england_census_spec.csv   | P_IC_ICL1   | 2872997d-dc4e-4c8a-a539-671cbefe364b  | 1b9e4b45-fd33-922f-d39e-914d5bdabe84  |
+      | sample_input_ICL2_wales_census_spec.csv     | P_IC_ICL2B  | 46f12594-79d9-40e5-a11f-36845a3b497b  | 1b9e4b45-fd33-922f-d39e-914d5bdabe84  |
+      | sample_input_ICL3_scotland_census_spec.csv  | P_IC_ICL3   | 9d0f01ff-2838-4e08-8b0d-7e0268e0ba42  | 1b9e4b45-fd33-922f-d39e-914d5bdabe84  |
