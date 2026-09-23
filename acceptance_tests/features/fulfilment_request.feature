@@ -1,117 +1,121 @@
 Feature: Print fulfilments can be requested for a case
 
-    Scenario Outline: A print fulfilment is requested for a case
-  Given sample file "<sample file>" is loaded successfully
-  And fulfilments are authorised for the export file template "<template>"
-  And a print fulfilment has been requested
-  And the events logged against the case are ["NEW_CASE", "PRINT_FULFILMENT"]
-  When export file fulfilments are triggered to be exported
-  Then UAC_UPDATE messages are emitted with active set to true
-  And an export file is created with correct rows
-  And the events logged against the case are ["NEW_CASE", "EXPORT_FILE", "PRINT_FULFILMENT"]
+  Scenario Outline: A print fulfilment is requested for a case
+    Given sample file "<sample file>" is loaded successfully
+    And fulfilments are authorised for the export file template "<template>"
+    And a print fulfilment has been requested
+    And the events logged against the case are ["NEW_CASE", "PRINT_FULFILMENT"]
+    When export file fulfilments are triggered to be exported
+    Then UAC_UPDATE messages are emitted with active set to true
+    And an export file is created with correct rows
+    And the events logged against the case are ["NEW_CASE", "EXPORT_FILE", "PRINT_FULFILMENT"]
 
-  Examples:
-    | sample file                             | template |
-    | sample_1_input_england_census_spec.csv  | P_OR_H1  |
-
-  @regression
     Examples:
-    | sample file                             | template   |
-    | sample_1_input_england_census_spec.csv  | P_OR_H2    |
+      | sample file                            | template |
+      | sample_1_input_england_census_spec.csv | P_OR_H1  |
+
+    @regression
+    Examples:
+      | sample file                            | template |
+      | sample_1_input_england_census_spec.csv | P_OR_H2  |
 
   @reset_notify_stub
   Scenario Outline: A SMS fulfilment is requested for a case
-  Given sample file "<sample file>" is loaded successfully
-  And fulfilments are authorised for sms template "<template>"
-  When a request has been made for a UAC by SMS from phone number "07123456780"
-  Then UAC_UPDATE messages are emitted with active set to true
-  And the events logged against the case are ["NEW_CASE","SMS_FULFILMENT"]
-  And notify api was called with the correct SMS template and values
+    Given sample file "<sample file>" is loaded successfully
+    And fulfilments are authorised for sms template "<template>"
+    When a request has been made for a UAC by SMS from phone number "07123456780"
+    Then UAC_UPDATE messages are emitted with active set to true
+    And the events logged against the case are ["NEW_CASE","SMS_FULFILMENT"]
+    And notify api was called with the correct SMS template and values
 
-  Examples:
-    | sample file                            | template |
-    | sample_1_input_england_census_spec.csv | UACHHT1  |
+    Examples:
+      | sample file                            | template |
+      | sample_1_input_england_census_spec.csv | UACHHT1  |
 
-  @regression
-  Examples:
-    | sample file                            | template |
-    | sample_1_input_england_census_spec.csv | UACHHT2  |
-    | sample_1_input_england_census_spec.csv | UACHHT2W |
-    | sample_1_input_england_census_spec.csv | UACHHT3  |
-    | sample_1_input_england_census_spec.csv | UACHHT4  |
+    @regression
+    Examples:
+      | sample file                            | template |
+      | sample_1_input_england_census_spec.csv | UACHHT2  |
+      | sample_1_input_england_census_spec.csv | UACHHT2W |
+      | sample_1_input_england_census_spec.csv | UACHHT3  |
+      | sample_1_input_england_census_spec.csv | UACHHT4  |
 
   @reset_notify_stub
   Scenario Outline: A SMS fulfilment is requested for an Individual case
-  Given sample file "<sample file>" is loaded successfully
-  And fulfilments are authorised for sms template "<template>"
-  When a request has been made for a UAC by SMS from phone number "07123456780"
-  Then a CASE_UPDATE message is emitted for the individual with case type HI
-  And UAC_UPDATE messages are emitted for child case with active set to true
-  And the events logged against the case are ["SMS_FULFILMENT"]
-  And notify api was called with the correct SMS template and values
+    Given sample file "<sample file>" is loaded successfully
+    And fulfilments are authorised for sms template "<template>"
+    When a request has been made for a UAC by SMS from phone number "07123456780"
+    Then a CASE_UPDATE message is emitted for the individual with case type HI
+    And UAC_UPDATE messages are emitted for child case with active set to true
+    And the events logged against the case are ["SMS_FULFILMENT"]
+    And notify api was called with the correct SMS template and values
 
-  Examples:
-    | sample file                            | template |
-    | sample_1_input_england_census_spec.csv | UACIT1   |
-  @regression
-  Examples:
-    | sample file                            | template |
-    | sample_1_input_england_census_spec.csv | UACIT2   |
-    | sample_1_input_england_census_spec.csv | UACIT2W  |
-    | sample_1_input_england_census_spec.csv | UACIT3   |
-    | sample_1_input_england_census_spec.csv | UACIT4   |
+    Examples:
+      | sample file                            | template |
+      | sample_1_input_england_census_spec.csv | UACIT1   |
+      | sample_1_input_england_census_spec.csv | UACITA1  |
+    @regression
+    Examples:
+      | sample file                            | template |
+      | sample_1_input_england_census_spec.csv | UACIT2   |
+      | sample_1_input_england_census_spec.csv | UACIT2W  |
+      | sample_1_input_england_census_spec.csv | UACIT3   |
+      | sample_1_input_england_census_spec.csv | UACIT4   |
+      | sample_1_input_england_census_spec.csv | UACITA2B |
+      | sample_1_input_england_census_spec.csv | UACITA3  |
+      | sample_1_input_england_census_spec.csv | UACITA4  |
 
 
   Scenario Outline: A print fulfilment is requested for an Individual case
-  Given sample file "<sample file>" is loaded successfully
-  And fulfilments are authorised for the export file template "<template>"
-  And a print fulfilment has been requested
-  And the events logged against the case are ["NEW_CASE", "PRINT_FULFILMENT"]
-  When export file fulfilments are triggered to be exported
-  Then a CASE_UPDATE message is emitted for the individual with case type HI
-  And UAC_UPDATE messages are emitted for child case with active set to true
-  And an export file is created with correct rows
-  And the events logged against the case are ["EXPORT_FILE", "PRINT_FULFILMENT"]
+    Given sample file "<sample file>" is loaded successfully
+    And fulfilments are authorised for the export file template "<template>"
+    And a print fulfilment has been requested
+    And the events logged against the case are ["NEW_CASE", "PRINT_FULFILMENT"]
+    When export file fulfilments are triggered to be exported
+    Then a CASE_UPDATE message is emitted for the individual with case type HI
+    And UAC_UPDATE messages are emitted for child case with active set to true
+    And an export file is created with correct rows
+    And the events logged against the case are ["EXPORT_FILE", "PRINT_FULFILMENT"]
 
-  Examples:
-    | sample file                             | template |
-    | sample_1_input_england_census_spec.csv  | P_OR_I1  |
+    Examples:
+      | sample file                            | template |
+      | sample_1_input_england_census_spec.csv | P_OR_I1  |
 
-  @regression
-  Examples:
-    | sample file                             | template   |
-    | sample_1_input_england_census_spec.csv  | P_OR_I2    |
-    | sample_1_input_england_census_spec.csv  | P_OR_I2W   |
-    | sample_1_input_england_census_spec.csv  | P_OR_IACR3 |
+    @regression
+    Examples:
+      | sample file                            | template   |
+      | sample_1_input_england_census_spec.csv | P_OR_I2    |
+      | sample_1_input_england_census_spec.csv | P_OR_I2W   |
+      | sample_1_input_england_census_spec.csv | P_OR_IACR3 |
 
   @reset_notify_stub
   Scenario Outline: A SMS fulfilment is requested for an Individual case with individual caseId given
-  Given sample file "<sample file>" is loaded successfully
-  And fulfilments are authorised for sms template "<template>"
-  When a request has been made for a UAC by SMS from phone number "07123456780" with individual case Id
-  Then a CASE_UPDATE message is emitted for the individual with given individual caseId
-  And UAC_UPDATE messages are emitted for child case with active set to true
-  And the events logged against the case are ["SMS_FULFILMENT"]
-  And notify api was called with the correct SMS template and values
+    Given sample file "<sample file>" is loaded successfully
+    And fulfilments are authorised for sms template "<template>"
+    When a request has been made for a UAC by SMS from phone number "07123456780" with individual case Id
+    Then a CASE_UPDATE message is emitted for the individual with given individual caseId
+    And UAC_UPDATE messages are emitted for child case with active set to true
+    And the events logged against the case are ["SMS_FULFILMENT"]
+    And notify api was called with the correct SMS template and values
 
-  Examples:
-    | sample file                            | template |
-    | sample_1_input_england_census_spec.csv | UACIT1   |
+    Examples:
+      | sample file                            | template |
+      | sample_1_input_england_census_spec.csv | UACIT1   |
 
 
   @reset_notify_stub
   Scenario Outline: A print fulfilment is requested for an Individual case with individual caseId given
-  Given sample file "<sample file>" is loaded successfully
-  And fulfilments are authorised for the export file template "<template>"
-  And a print fulfilment has been requested with individualCaseId
-  And the events logged against the case are ["NEW_CASE", "PRINT_FULFILMENT"]
-  When export file fulfilments are triggered to be exported
-  Then a CASE_UPDATE message is emitted for the individual with given individual caseId
-  And UAC_UPDATE messages are emitted for child case with active set to true
-  And an export file is created with correct rows
-  And the events logged against the case are ["EXPORT_FILE", "PRINT_FULFILMENT"]
+    Given sample file "<sample file>" is loaded successfully
+    And fulfilments are authorised for the export file template "<template>"
+    And a print fulfilment has been requested with individualCaseId
+    And the events logged against the case are ["NEW_CASE", "PRINT_FULFILMENT"]
+    When export file fulfilments are triggered to be exported
+    Then a CASE_UPDATE message is emitted for the individual with given individual caseId
+    And UAC_UPDATE messages are emitted for child case with active set to true
+    And an export file is created with correct rows
+    And the events logged against the case are ["EXPORT_FILE", "PRINT_FULFILMENT"]
 
-  Examples:
-    | sample file                             | template |
-    | sample_1_input_england_census_spec.csv  | P_OR_I1  |
+    Examples:
+      | sample file                            | template |
+      | sample_1_input_england_census_spec.csv | P_OR_I1  |
 
