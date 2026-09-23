@@ -69,18 +69,18 @@
     "templateName": "UACITA2B",
     "template": ["__uac__"],
       "notifyTemplateId": "6dab45d5-5b42-4f50-95ae-3a6ffea422d4",
-      "questionnaireType": "02"
+      "questionnaireType": "03"
   },
     {
     "templateName": "UACITA3",
     "template": ["__uac__"],
       "notifyTemplateId": "ffc6bd87-1d80-42b5-9aa3-0514753bef63",
-      "questionnaireType": "03"
+      "questionnaireType": "04"
   },
     {
     "templateName": "UACITA4",
     "template": ["__uac__"],
       "notifyTemplateId": "396ca3e8-016c-4ab9-86c6-61c8c4bb57cf",
-      "questionnaireType": "04"
+      "questionnaireType": "05"
   }
 ]
