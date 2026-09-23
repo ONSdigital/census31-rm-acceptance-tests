@@ -9,7 +9,6 @@ from behave import step
 from google.cloud import storage
 from tenacity import retry, retry_if_exception_type, stop_after_delay, wait_fixed
 
-from acceptance_tests.utilities import template_helper
 from acceptance_tests.utilities.sample_field_helper import sample_field_mapper
 from acceptance_tests.utilities.test_case_helper import test_helper
 from config import Config
@@ -21,6 +20,7 @@ def check_export_file(context):
     pack_code = context.pack_code
     emitted_uacs = context.emitted_uacs if hasattr(context, 'emitted_uacs') else None
     contact = context.contact if hasattr(context, 'contact') else None
+    context.export_supplier = Config.SUPPLIER_CENSUS_PRINT
 
     test_helper.assertFalse(('__uac__' in template or '__qid__' in template) and not emitted_uacs,
                             'Export file template expects UACs or QIDs but no corresponding emitted_uacs found in '
@@ -67,15 +67,6 @@ def create_export_file_template(context, template_name):
         'questionnaire_type']
     context.expected_welsh_questionnaire_type = context.export_file_packcodes[template_name][
         'welsh_questionnaire_type']
-
-
-@step('an export file template has been created for the internal reprographics supplier with template {template:array}')
-def create_export_file_template_internal_reprographics(context, template: List):
-    context.template = template
-    context.pack_code = template_helper.create_export_file_template(
-        template,
-        export_file_destination=Config.SUPPLIER_INTERNAL_REPROGRAPHICS)
-    context.export_supplier = Config.SUPPLIER_INTERNAL_REPROGRAPHICS
 
 
 def _get_context_export_supplier_or_default(context) -> str:
