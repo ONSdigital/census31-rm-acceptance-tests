@@ -24,7 +24,7 @@ run_tests_core:
 	PUBSUB_EMULATOR_HOST=localhost:8538 pipenv run behave acceptance_tests/features --tags="~@regression" --tags="~@cloud_only"
 
 build:
-	$(DOCKER) build -t europe-west2-docker.pkg.dev/c31-rm-ci-prod/rm-docker-snapshot/census31-rm-acceptance-tests .
+	$(DOCKER) build --platform linux/amd64 -t europe-west2-docker.pkg.dev/c31-rm-ci-prod/rm-docker-snapshot/census31-rm-acceptance-tests .
 
 megalint:  ## Run the mega-linter.
 	$(DOCKER) run --platform linux/amd64 --rm \

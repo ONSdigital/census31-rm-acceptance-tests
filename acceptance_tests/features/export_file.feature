@@ -72,9 +72,11 @@ Feature: Export files can be created with the correct data
     Given sample file "sample_1_input_england_census_spec.csv" is loaded successfully
     And fulfilments are authorised for the export file template "P_OR_H2"
     And a print fulfilment has been requested
+    And the events logged against the case are ["NEW_CASE", "PRINT_FULFILMENT"]
     When export file fulfilments are triggered to be exported
     Then UAC_UPDATE messages are emitted with active set to true
     And an export file is created with correct rows
+    And the events logged against the case are ["NEW_CASE", "EXPORT_FILE", "PRINT_FULFILMENT"]
     And the export file header row is sanitised according to:
       | template_key         | header_name |
       | __pack_code__        | PRODUCTPACK_CODE |
