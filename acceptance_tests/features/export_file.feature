@@ -58,6 +58,9 @@ Feature: Export files can be created with the correct data
     Examples:
       | sample file                                 | template    | action_rule_id                        | collection_exercise_id                |
       | sample_input_H1_england_census_spec.csv     | P_IC_H1     | 8aee5ac7-60d3-43c8-81be-e30bf6055ae8  | 1b9e4b45-fd33-922f-d39e-914d5bdabe84  |
+      | sample_input_IRL_england_census_spec.csv    | P_RL_1IRL1  | 9828ba30-b790-4aa6-8308-941e6bdf0616  | 1b9e4b45-fd33-922f-d39e-914d5bdabe84  |
+      | sample_input_IRL_england_census_spec.csv    | P_RL_2IRL1  | 99564451-e8af-4e92-9488-ac97d2aa3b4e  | 1b9e4b45-fd33-922f-d39e-914d5bdabe84  |
+
 
     @regression
     Examples:
@@ -66,6 +69,12 @@ Feature: Export files can be created with the correct data
       | sample_input_ICL1_england_census_spec.csv   | P_IC_ICL1   | 2872997d-dc4e-4c8a-a539-671cbefe364b  | 1b9e4b45-fd33-922f-d39e-914d5bdabe84  |
       | sample_input_ICL2_wales_census_spec.csv     | P_IC_ICL2B  | 46f12594-79d9-40e5-a11f-36845a3b497b  | 1b9e4b45-fd33-922f-d39e-914d5bdabe84  |
       | sample_input_ICL3_scotland_census_spec.csv  | P_IC_ICL3   | 9d0f01ff-2838-4e08-8b0d-7e0268e0ba42  | a6d57a19-2f53-3a10-f9f3-bc9eeb52dfb6  |
+      | sample_input_IRL_wales_census_spec.csv      | P_RL_1IRL2B | 069cc419-9308-4f38-b5ac-5a3444a03595  | 1b9e4b45-fd33-922f-d39e-914d5bdabe84  |
+      | sample_input_IRL_scotland_census_spec.csv   | P_RL_1IRL3  | de2a0bc5-daa7-4bfb-acb7-19b3d5b9a8a4  | a6d57a19-2f53-3a10-f9f3-bc9eeb52dfb6  |
+      | sample_input_IRL_wales_census_spec.csv      | P_RL_2IRL2B | 023a98a1-6217-4cad-b5ab-b1bf000dacc9  | 1b9e4b45-fd33-922f-d39e-914d5bdabe84  |
+      | sample_input_IRL_scotland_census_spec.csv   | P_RL_2IRL3  | 9c8415fd-fbad-4ad1-980d-2b6c8ae5f65a  | a6d57a19-2f53-3a10-f9f3-bc9eeb52dfb6  |
+
+
 
   @reset_pubsub_queues
   Scenario: Export file headers are sanitised to ISD-compliant names
