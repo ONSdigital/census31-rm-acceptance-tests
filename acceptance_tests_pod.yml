@@ -1,0 +1,137 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: acceptance-tests
+  labels:
+    app: acceptance-tests
+    pubsub: "true"
+    database: "true"
+spec:
+  serviceAccountName: acceptance-tests
+  securityContext:
+    fsGroup: 1000
+  containers:
+  - name: acceptance-tests
+    lifecycle:
+      postStart:
+        exec:
+          command:
+            - /bin/sh
+            - -c
+            - |
+              cp /home/acceptancetests/postgresql/* /home/acceptancetests/.postgresql
+              chmod 0600 /home/acceptancetests/.postgresql/postgresql.key
+              # the above is a workaround to get round the permissions as currently we cant mount it without doing this
+    image: europe-west2-docker.pkg.dev/c31-rm-ci-prod/rm-docker-snapshot/census31-rm-acceptance-tests:latest
+    tty: true
+    stdin: true
+    imagePullPolicy: Always
+    resources:
+      requests:
+        cpu: "500m"
+        memory: "512Mi"
+      limits:
+        cpu: "500m"
+        memory: "512Mi"
+    volumeMounts:
+    - name: case-cloud-sql-certs
+      mountPath: "/home/acceptancetests/postgresql"
+      readOnly: true
+    - name: export-file-destinations
+      mountPath: "/home/acceptancetests/destination_config"
+      readOnly: true
+    - name: our-private-decryption-key
+      mountPath: "/home/acceptancetests/pgp-keys"
+      readOnly: true
+    env:
+    - name: DB_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: db-credentials
+          key: username
+    - name: DB_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: db-credentials
+          key: password
+    - name: DB_HOST
+      valueFrom:
+        configMapKeyRef:
+          name: db-config
+          key: db-host
+    - name: DB_PORT
+      valueFrom:
+        configMapKeyRef:
+          name: db-config
+          key: db-port
+    - name: DB_NAME
+      valueFrom:
+        configMapKeyRef:
+          name: db-config
+          key: db-name
+    - name: DB_CASE_CERTIFICATES
+      value: " sslmode=verify-ca sslrootcert=/home/acceptancetests/.postgresql/root.crt sslcert=/home/acceptancetests/.postgresql/postgresql.crt sslkey=/home/acceptancetests/.postgresql/postgresql.key"
+    - name: PROJECT_NAME
+      valueFrom:
+        configMapKeyRef:
+          name: project-config
+          key: project-name
+    - name: PUBSUB_PROJECT
+      valueFrom:
+        configMapKeyRef:
+          name: project-config
+          key: project-name
+    - name: SUPPLIER_CONFIG_JSON_PATH
+      value: "/home/acceptancetests/destination_config/export-file-destination-config.json"
+    - name: SUPPORT_TOOL_BASE_URL
+      value: "http://support-tool:80"
+    - name: SUPPORT_TOOL_UI_URL
+      value: "http://support-tool"
+    - name: EXCEPTIONMANAGER_CONNECTION_HOST
+      value: "exception-manager"
+    - name: EXCEPTIONMANAGER_CONNECTION_PORT
+      value: "80"
+    - name: NOTIFY_STUB_HOST
+      value: "notify-stub"
+    - name: NOTIFY_STUB_PORT
+      value: "80"
+    - name: CASEAPI_SERVICE_HOST
+      value: "case-api"
+    - name: CASEAPI_SERVICE_PORT
+      value: "80"
+    - name: NOTIFY_SERVICE_HOST
+      value: "notify-service"
+    - name: NOTIFY_SERVICE_PORT
+      value: "80"
+    - name: FILE_UPLOAD_DESTINATION
+      valueFrom:
+        configMapKeyRef:
+          key: sent-export-file-bucket
+          name: project-config
+    - name: FILE_UPLOAD_MODE
+      value: "BUCKET"
+    - name: OUR_EXPORT_FILE_DECRYPTION_KEY
+      value: "/home/acceptancetests/pgp-keys/our_public_decryption_key.asc"
+  volumes:
+  - name: export-file-destinations
+    secret:
+      secretName: export-file-destinations
+      defaultMode: 0400
+      items:
+        - key: config
+          path: "export-file-destination-config.json"
+  - name: case-cloud-sql-certs
+    secret:
+      secretName: cloud-sql-certs
+      defaultMode: 0400
+      items:
+        - key: "root.crt"
+          path: "root.crt"
+        - key: "postgresql.crt"
+          path: "postgresql.crt"
+        - key: "postgresql.key"
+          path: "postgresql.key"
+  - name: our-private-decryption-key
+    secret:
+      secretName: our-private-decryption-key
+      defaultMode: 0400
