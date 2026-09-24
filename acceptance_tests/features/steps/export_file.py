@@ -45,8 +45,14 @@ def check_export_file(context):
            if "__welsh_uac__" in template else ())
     )
     if '__uac__' in template or '__welsh_uac__' in template:
+        # Read the ACTUAL header from the actual export file (already sanitised by service)
+        actual_header_line = actual_export_file_rows[0]
+        actual_headers = next(csv.reader([actual_header_line]))
+
+        # Generate expected data rows using the template for logic and actual headers for output
+        # This avoids duplicating the header sanitisation logic
         expected_export_file_rows = generate_expected_export_file_rows(
-            template, context.emitted_cases, emitted_uacs, uacs_from_actual_export_file,
+            template, actual_headers, context.emitted_cases, emitted_uacs, uacs_from_actual_export_file,
             contact, pack_code, context.expected_questionnaire_type,
             context.expected_welsh_questionnaire_type
         )
@@ -97,14 +103,21 @@ def _get_unhashed_uacs_from_actual_export_file(actual_export_file_rows, template
 
 
 def generate_expected_export_file_rows(
-        template: List, cases: List, uac_update_events: List, expected_uacs: Iterable[str],
+        template: List, actual_headers: List, cases: List, uac_update_events: List, expected_uacs: Iterable[str],
         contact: Dict, pack_code: str, questionnaire_type, welsh_questionnaire_type):
+    """
+    Generate expected export file rows.
+
+    Uses actual headers from the actual export file (which may be sanitised)
+    to avoid duplicating sanitisation logic. Uses template for field-to-data mapping.
+    """
     hashed_uac_to_uac = {
         hashlib.sha256(uac.encode('utf-8')).hexdigest(): uac
         for uac in expected_uacs
     }
 
-    export_file_rows = [format_expected_export_file_row(template)]  # expected header
+    # Use actual headers from the actual export file (no sanitisation duplication)
+    export_file_rows = [format_expected_export_file_row(actual_headers)]
     for case in cases:
         export_row_components = []
         for field in template:
@@ -236,3 +249,41 @@ def decrypt_message(message: str) -> str:
         message_text = our_key.decrypt(encrypted_text_message)
 
         return message_text.message
+
+
+@step("the export file header row is sanitised according to:")
+def verify_export_file_headers_sanitised_with_table(context):
+
+    supplier = _get_context_export_supplier_or_default(context)
+    actual_export_file_rows = get_export_file_rows(context.test_start_utc_datetime, context.pack_code,
+                                                   supplier=supplier)
+
+    if not actual_export_file_rows:
+        test_helper.fail("No export file rows returned")
+
+    # Read the ACTUAL headers from the ACTUAL export file (first line)
+    actual_header_line = actual_export_file_rows[0]
+    actual_headers = next(csv.reader([actual_header_line]))
+
+    # Parse the table into list of dicts
+    expected_mappings = [row for row in context.table]
+
+    # Verify count
+    test_helper.assertEqual(
+        len(expected_mappings), len(actual_headers),
+        f"Expected {len(expected_mappings)} headers but got {len(actual_headers)}. "
+        f"Expected: {[m['template_key'] for m in expected_mappings]}, "
+        f"Actual: {actual_headers}"
+    )
+
+    # Verify each mapping by position
+    for position, expected_mapping in enumerate(expected_mappings):
+        expected_template_key = expected_mapping['template_key']
+        expected_header_name = expected_mapping['header_name']
+        actual_header = actual_headers[position]
+
+        test_helper.assertEqual(
+            expected_header_name, actual_header,
+            f"Position {position}: Expected header '{expected_header_name}' "
+            f"(from template key '{expected_template_key}') but got '{actual_header}'"
+        )
