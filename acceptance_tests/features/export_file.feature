@@ -73,7 +73,7 @@ Feature: Export files can be created with the correct data
       | sample_input_IRL_scotland_census_spec.csv   | P_RL_1IRL3  | de2a0bc5-daa7-4bfb-acb7-19b3d5b9a8a4  | a6d57a19-2f53-3a10-f9f3-bc9eeb52dfb6  |
       | sample_input_IRL_wales_census_spec.csv      | P_RL_2IRL2B | 023a98a1-6217-4cad-b5ab-b1bf000dacc9  | 1b9e4b45-fd33-922f-d39e-914d5bdabe84  |
       | sample_input_IRL_scotland_census_spec.csv   | P_RL_2IRL3  | 9c8415fd-fbad-4ad1-980d-2b6c8ae5f65a  | a6d57a19-2f53-3a10-f9f3-bc9eeb52dfb6  |
-
+      | sample_input_CE_scotland_census_spec.csv    | P_IC_ICL3A  | d234fc20-17bd-40ee-b263-feef5cf89840  | a6d57a19-2f53-3a10-f9f3-bc9eeb52dfb6  |
 
 
   @reset_pubsub_queues
