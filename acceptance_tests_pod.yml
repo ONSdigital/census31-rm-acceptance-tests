@@ -22,7 +22,7 @@ spec:
               cp /home/acceptancetests/postgresql/* /home/acceptancetests/.postgresql
               chmod 0600 /home/acceptancetests/.postgresql/postgresql.key
               # the above is a workaround to get round the permissions as currently we cant mount it without doing this
-    image: europe-west2-docker.pkg.dev/c31-rm-ci-prod/rm-docker-snapshot/census31-rm-acceptance-tests:latest
+    image: europe-west2-docker.pkg.dev/c31-rm-ci-prod/rm-docker-snapshot/census31-rm-acceptance-tests:$MANIFEST_IMAGE_TAG
     tty: true
     stdin: true
     imagePullPolicy: Always
