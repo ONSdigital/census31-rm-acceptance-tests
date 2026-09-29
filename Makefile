@@ -1,6 +1,8 @@
 # Set the container runtime based on architecture, default to docker for amd64 and podman for arm64
 DOCKER ?= $(shell if [ "$$(uname -m)" = "arm64" ]; then echo podman; else echo docker; fi)
 
+.PHONY: install flake vulture lint test test_core regression-test run_tests run_tests_core build megalint megalint-fix clean_megalint lint_check
+
 install:
 	pipenv install --dev
 
@@ -13,9 +15,11 @@ vulture:
 lint: flake vulture
 
 
-test_core: lint run_tests_core
+test_core: test
 
-test: lint run_tests
+test: lint run_tests_core
+
+regression-test: lint run_tests
 
 run_tests:
 	PUBSUB_EMULATOR_HOST=localhost:8538 pipenv run behave acceptance_tests/features --tags="~@cloud_only"

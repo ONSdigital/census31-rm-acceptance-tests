@@ -53,10 +53,11 @@ Feature: Print fulfilments can be requested for a case
     Examples:
       | sample file                            | template |
       | sample_1_input_england_census_spec.csv | UACIT1   |
-      | sample_1_input_england_census_spec.csv | UACITA1  |
+
     @regression
     Examples:
       | sample file                            | template |
+      | sample_1_input_england_census_spec.csv | UACITA1  |
       | sample_1_input_england_census_spec.csv | UACIT2   |
       | sample_1_input_england_census_spec.csv | UACIT2W  |
       | sample_1_input_england_census_spec.csv | UACIT3   |

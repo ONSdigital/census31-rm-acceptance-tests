@@ -9,13 +9,13 @@ Feature: Export files can be created with the correct data
     And the events logged against the cases are ["NEW_CASE","EXPORT_FILE"]
 
     Examples:
-      | sample file                          | template |
+      | sample file                          | template   |
       | sample_input_england_census_spec.csv | P_IC_ICL1  |
-      | sample_input_england_census_spec.csv | P_IC_ICL2B |
 
     @regression
     Examples:
       | sample file                             | template    |
+      | sample_input_england_census_spec.csv    | P_IC_ICL2B  |
       | sample_input_england_census_spec.csv    | P_IC_H1     |
       | sample_input_england_census_spec.csv    | P_IC_H2     |
       | sample_1_input_england_census_spec.csv  | P_IC_ICL3   |
@@ -59,12 +59,12 @@ Feature: Export files can be created with the correct data
       | sample file                                 | template    | action_rule_id                        | collection_exercise_id                |
       | sample_input_H1_england_census_spec.csv     | P_IC_H1     | 8aee5ac7-60d3-43c8-81be-e30bf6055ae8  | 1b9e4b45-fd33-922f-d39e-914d5bdabe84  |
       | sample_input_IRL_england_census_spec.csv    | P_RL_1IRL1  | 9828ba30-b790-4aa6-8308-941e6bdf0616  | 1b9e4b45-fd33-922f-d39e-914d5bdabe84  |
-      | sample_input_IRL_england_census_spec.csv    | P_RL_2IRL1  | 99564451-e8af-4e92-9488-ac97d2aa3b4e  | 1b9e4b45-fd33-922f-d39e-914d5bdabe84  |
 
 
     @regression
     Examples:
       | sample file                                 | template    | action_rule_id                        | collection_exercise_id                |
+      | sample_input_IRL_england_census_spec.csv    | P_RL_2IRL1  | 99564451-e8af-4e92-9488-ac97d2aa3b4e  | 1b9e4b45-fd33-922f-d39e-914d5bdabe84  |
       | sample_input_H2_wales_census_spec.csv       | P_IC_H2     | b68edc21-16fe-4de3-b0cf-d242d4ad7b13  | 1b9e4b45-fd33-922f-d39e-914d5bdabe84  |
       | sample_input_ICL1_england_census_spec.csv   | P_IC_ICL1   | 2872997d-dc4e-4c8a-a539-671cbefe364b  | 1b9e4b45-fd33-922f-d39e-914d5bdabe84  |
       | sample_input_ICL2_wales_census_spec.csv     | P_IC_ICL2B  | 46f12594-79d9-40e5-a11f-36845a3b497b  | 1b9e4b45-fd33-922f-d39e-914d5bdabe84  |
