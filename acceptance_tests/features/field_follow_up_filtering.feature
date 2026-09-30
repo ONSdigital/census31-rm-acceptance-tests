@@ -30,3 +30,15 @@ Feature: Field follow-up filtering - Cases excluded from fieldwork
       | uprn        | outcome  | reason                                                     |
       | 10008677198 | filtered | HH_ONE treatment code excluded from field follow-up       |
       | 10008677199 | filtered | HH_ONW treatment code excluded from field follow-up       |
+
+  Scenario: Valid case receives CANCEL when refusal is reported
+    Given sample file "sample_1_input_england_census_spec.csv" is loaded successfully
+    When a refusal event is received
+    Then a CASE_UPDATE message is emitted where "refusalReceived" is "HARD_REFUSAL"
+    And the CANCEL fieldwork action instruction message is emitted for the case
+
+  Scenario: Excluded case does NOT receive CANCEL when refusal is reported
+    Given sample file "sample_input_CE_scotland_census_spec.csv" is loaded successfully
+    When a refusal event is received
+    Then a CASE_UPDATE message is emitted where "refusalReceived" is "HARD_REFUSAL"
+    And no CANCEL fieldwork action instruction message is emitted for excluded cases
