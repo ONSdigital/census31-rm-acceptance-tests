@@ -6,19 +6,16 @@ Feature: Check exception manager is called for every topic and handles them as e
     Then each bad msg is seen by exception manager with the message containing "tools.jackson.core.exc.StreamReadException"
     And each bad msg can be successfully quarantined
 
-  @regression
   Scenario: Bad survey launched message turns up in exception manager
     When a bad Survey Launched event is put on the topic
     Then a bad message appears in exception manager with exception message containing "qid '555555' not found!"
     And each bad msg can be successfully quarantined
 
-  @regression
   Scenario: Bad Receipt message turns up in exception manager
     When a bad Receipt event is put on the topic
     Then a bad message appears in exception manager with exception message containing "qid '555555' not found!"
     And each bad msg can be successfully quarantined
 
-  @regression
   Scenario: Bad refusal message turns up in exception manager
     When a bad refusal event is put on the topic
     Then a bad message appears in exception manager with exception message containing "Case with ID '1c1e495d-8f49-4d4c-8318-6174454eb605' not found"

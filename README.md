@@ -7,18 +7,27 @@ The Python Behave BDD tests for Census RM
 1. Clone [census-rm-docker-dev](https://github.com/ONSdigital/census-rm-docker-dev) and run `make up` to start the required
    services
 
-2. Run all the RM tests:
+2. Install the test dependencies with `make install`, then run the default local suite:
     ```shell
     make test
     ```
+   This runs lint and all locally runnable scenarios except those tagged `@regression` or `@cloud_only`.
+   The default selection retains each distinct happy and exception-handling path (including refusal and malformed
+   messages); only repeated template and seeded-rule variations are deferred to regression.
 
-### Core Tests
+### Full local regression suite
 
-To run just the core tests, those not marked @regression Run:
+To run all locally runnable scenarios, **including** `@regression` examples and scenarios:
 
 ```shell
-make run_tests_core
+make regression-test
 ```
+
+This runs lint and excludes only `@cloud_only`. Existing `make test_core` is an alias for `make test`;
+`make run_tests_core` and `make run_tests` run the respective selections without lint.
+Place `@regression` on individual scenarios or `Examples` blocks, not on an entire feature or outline
+when a representative example must stay in the default suite. Keep the only test for any business or error path
+in `make test`, and run `make regression-test` periodically and before releases.
 
 ## Run tests against a GCP project
 
@@ -62,8 +71,8 @@ Then run the tests with the run GKE script.
 
 ## Tests Configuration
 
-Default behave config is provided in [.behaverc](/.behaverc). To run with custom configuration you can edit this file or
-override settings with command line args. See the [Using Behave](https://behave.readthedocs.io/en/stable/behave.html)
+Default behave config is provided in [.behaverc](./.behaverc). To run with custom configuration you can edit this file or
+override settings with command line args. See the [Using Behave](https://behave.readthedocs.io/en/latest/behave/)
 page for details.
 
 ### Running in the IDE
@@ -84,28 +93,28 @@ The tests can be run by calling the behave command line tool through pipenv (aft
 with `pipenv install --dev`) like so:
 
 ```shell
-PUBSUB_EMULATOR_HOST=localhost:8538 pipenv run behave acceptance_tests/features
+PUBSUB_EMULATOR_HOST=localhost:8538 pipenv run behave acceptance_tests/features --tags="~@regression" --tags="~@cloud_only"
 ```
 
 You could alternatively activate the pipenv shell with `pipenv shell` in this project then call the `behave` tool
 directly.
 
-This can be uses to run individual feature files from the command line:
+This can be used to run individual feature files from the command line:
 
 ```shell
-PUBSUB_EMULATOR_HOST=localhost:8538 pipenv run behave acceptance_tests/features/social.feature
+PUBSUB_EMULATOR_HOST=localhost:8538 pipenv run behave acceptance_tests/features/load_sample.feature
 ```
 
-Or to run with a custom combination of tags like so:
+To run the full local suite directly (equivalent to `make regression-test` without lint):
 
 ```shell
-PUBSUB_EMULATOR_HOST=localhost:8538 pipenv run behave acceptance_tests/features --tags "~@regression" 
+PUBSUB_EMULATOR_HOST=localhost:8538 pipenv run behave acceptance_tests/features --tags="~@cloud_only"
 ```
 
-**NOTE** that tags combined in a single arg like  `--tags @foo,@bar` are combined with a logical `OR` whereas tags
-provided in multiple args like `--tags @foo --tags @bar` are combined with an `AND`, and multiple negative tags
-like `~@foo` can only be combined with `AND` in multiple, separate tags args.
-See [Behave Tag Expressions](https://behave.readthedocs.io/en/stable/behave.html#tag-expression).
+**NOTE:** Use separate `--tags` arguments to combine exclusions with `AND`; putting two tags in a single
+comma-separated argument combines them with `OR` instead. A direct Behave invocation without these filters
+does not use the Makefile defaults and may select cloud-only scenarios.
+See [Behave Tag Expressions](https://behave.readthedocs.io/en/stable/tag_expressions/).
 
 ### PubSub Pull Timeout
 
