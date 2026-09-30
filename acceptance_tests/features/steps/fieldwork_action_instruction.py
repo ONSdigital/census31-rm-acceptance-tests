@@ -56,7 +56,7 @@ def check_create_action_instruction_fields(context):
         expected_address_type = expected_address['addressType']
         expected_address_level = expected_address['addressLevel']
 
-        test_helper.assertEqual(action_instruction['surveyName'], 'Census')
+        test_helper.assertEqual(action_instruction['surveyName'], 'CENSUS')
         test_helper.assertEqual(action_instruction['caseRef'], expected_case['caseRef'])
         test_helper.assertEqual(action_instruction['addressType'], expected_address_type)
 
