@@ -1,0 +1,59 @@
+platform: linux
+
+image_resource:
+  type: registry-image
+  source:
+    repository: gcr.io/google.com/cloudsdktool/cloud-sdk
+
+params:
+  # Required
+  SERVICE_ACCOUNT_JSON: # GCP service account key JSON
+  GCP_PROJECT_NAME:     # Target project which hosts the K8s cluster
+  KUBERNETES_CLUSTER:   # Target K8s cluster ID
+  ENV:                  # Environment suffix for the project, assuming the project follows our ssdc-rm-<ENV> convention
+
+  # Optional
+  IMAGE_TAG:   # Optional, specific acceptance tests image tag. If not set, will default to using the given commit ref from the "acceptance-tests-repo"
+  BEHAVE_TAGS: # Optional, list of behave tags passed into the behave feature run
+
+inputs:
+- name: acceptance-tests-repo
+
+run:
+  path: bash
+  args:
+    - -exc
+    - |
+      cat >~/gcloud-service-key.json <<EOL
+      $SERVICE_ACCOUNT_JSON
+      EOL
+      export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+      # Use gcloud service account to configure kubectl
+      gcloud auth activate-service-account --key-file ~/gcloud-service-key.json
+      gcloud container clusters get-credentials ${KUBERNETES_CLUSTER} --zone europe-west2 --project ${GCP_PROJECT_NAME}
+
+      if [ -z "$IMAGE_TAG" ]; then
+        # If no explicit tag is set then use the commit ref
+        IMAGE_TAG=$(cat acceptance-tests-repo/.git/ref)
+      fi
+      
+      # Substitute the image tag into the template manifest yaml
+      COMPLETE_MANIFEST="${IMAGE_TAG}_acceptance_tests_pod.yml"
+      sed -e "s/\$MANIFEST_IMAGE_TAG/$IMAGE_TAG/" -e "s/\$ENV/$ENV/" acceptance-tests-repo/acceptance_tests_pod.yml > $COMPLETE_MANIFEST
+
+      # Pre-clean up any left over acceptance test pod
+      kubectl delete pod acceptance-tests --wait || true
+
+      # Create an acceptance tests pod using the manifest with image tag substituted in
+      kubectl apply -f $COMPLETE_MANIFEST
+      
+      # Give the pod time to start
+      kubectl wait --for=condition=Ready pod/acceptance-tests --timeout=200s
+
+      # Exec into the pod to run the tests while tailing their logs
+      # The sleep is to give kubectl time to attach properly, otherwise the first few log lines are lost
+      kubectl exec -it acceptance-tests -- /bin/bash -c \
+      "sleep 2; behave acceptance_tests/features --logging-level WARN ${BEHAVE_TAGS} "
+  
+      # Clean up the pod once we're finished
+      kubectl delete pod acceptance-tests || true
