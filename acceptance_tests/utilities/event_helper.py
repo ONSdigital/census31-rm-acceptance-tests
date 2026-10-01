@@ -40,6 +40,28 @@ def get_fieldwork_action_instructions_for_case_ids(case_ids: set[str], test_star
     return messages
 
 
+def assert_no_fieldwork_action_instructions(instruction_type: str, since_utc: datetime, timeout: int = 3):
+    """
+    Assert that no fieldwork action instructions of given type were emitted.
+    Uses short timeout (default 3s) to fail fast for filtered cases.
+    """
+    try:
+        messages = get_exact_number_of_pubsub_messages(
+            Config.PUBSUB_FIELDWORK_ACTION_INSTRUCTION_SUBSCRIPTION,
+            expected_msg_count=1,
+            timeout=timeout,
+            test_start_time=since_utc
+        )
+    except AssertionError:
+        return  # nothing arrived within the timeout, which is what we want
+
+    unexpected = [m for m in messages if m['actionInstruction'] == instruction_type]
+    test_helper.assertFalse(
+        unexpected,
+        f"Expected no {instruction_type} fieldwork action instructions, got {len(unexpected)}: {unexpected}"
+    )
+
+
 def is_n_region(region: Optional[str]) -> bool:
     return bool(region) and region.upper().startswith('N')
 
