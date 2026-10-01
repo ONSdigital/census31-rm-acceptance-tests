@@ -116,7 +116,7 @@ def check_cancel_action_instruction_message_not_emitted(context):
 def check_no_cancel_for_excluded_cases(context):
     from acceptance_tests.utilities.pubsub_helper import get_exact_number_of_pubsub_messages
     from config import Config
-    
+
     with test_helper.assertRaises(AssertionError):
         get_exact_number_of_pubsub_messages(
             Config.PUBSUB_FIELDWORK_ACTION_INSTRUCTION_SUBSCRIPTION,

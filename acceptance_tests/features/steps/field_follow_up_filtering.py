@@ -11,7 +11,7 @@ from acceptance_tests.utilities.test_case_helper import test_helper
 def check_expected_cases(context):
     # Get all non-N region cases for CREATE message retrieval
     expected_case_ids = non_n_case_ids(context.emitted_cases)
-    
+
     # Retrieve ACTUAL fieldwork action instructions from system
     context.emitted_fieldwork_action_instructions = getattr(context, 'emitted_fieldwork_action_instructions', None)
     if context.emitted_fieldwork_action_instructions is None:
@@ -19,7 +19,7 @@ def check_expected_cases(context):
             expected_case_ids,
             context.test_start_utc_datetime
         )
-    
+
     # Verify which cases actually received CREATE messages
     case_ids_with_create = {
         str(message['caseId']) for message in context.emitted_fieldwork_action_instructions
