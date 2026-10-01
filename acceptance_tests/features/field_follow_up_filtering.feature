@@ -35,10 +35,15 @@ Feature: Field follow-up filtering - Cases excluded from fieldwork
     Given sample file "sample_1_input_england_census_spec.csv" is loaded successfully
     When a refusal event is received
     Then a CASE_UPDATE message is emitted where "refusalReceived" is "HARD_REFUSAL"
-    And the CANCEL fieldwork action instruction message is emitted for the case
+    And CANCEL fieldwork action instruction messages are validated for the following cases:
+      | uprn        | outcome | reason                                    |
+      | 10008677190 | passed  | valid HH case eligible for CANCEL         |
 
   Scenario: Excluded case does NOT receive CANCEL when refusal is reported
     Given sample file "sample_input_CE_scotland_census_spec.csv" is loaded successfully
     When a refusal event is received
     Then a CASE_UPDATE message is emitted where "refusalReceived" is "HARD_REFUSAL"
-    And no CANCEL fieldwork action instruction message is emitted for excluded cases
+    And CANCEL fieldwork action instruction messages are validated for the following cases:
+      | uprn        | outcome  | reason                                           |
+      | 10008677190 | filtered | CE case Flat 51 in Scotland excluded from CANCEL |
+      | 10008677190 | filtered | CE case Flat 52 in Scotland excluded from CANCEL |
