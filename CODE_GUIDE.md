@@ -131,7 +131,7 @@ def example(bar: List):
 When this step receives an array parameter ["spam", "eggs"]
 ```
 
-### SMS/Print/Email Templates
+### SMS/Print Templates
 
 The templates used for action rules and fulfilments are set up in the `before_all` environment step prior to whatever
 test(s) are running so that they can be used repeatedly.
