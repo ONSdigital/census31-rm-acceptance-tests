@@ -104,3 +104,22 @@ def check_cancel_action_instruction_message_emitted(context):
     for action_instruction in emitted_cancel_messages:
         test_helper.assertEqual(action_instruction['actionInstruction'], 'CANCEL')
         test_helper.assertEqual(action_instruction['caseId'], context.emitted_cases[0]['caseId'])
+
+
+@step('the CANCEL fieldwork action instruction message is NOT emitted for the case')
+def check_cancel_action_instruction_message_not_emitted(context):
+    with test_helper.assertRaises(AssertionError):
+        get_fieldwork_action_instructions(1, context.test_start_utc_datetime)
+
+
+@step('no CANCEL fieldwork action instruction message is emitted for excluded cases')
+def check_no_cancel_for_excluded_cases(context):
+    from acceptance_tests.utilities.pubsub_helper import get_exact_number_of_pubsub_messages
+    from config import Config
+
+    with test_helper.assertRaises(AssertionError):
+        get_exact_number_of_pubsub_messages(
+            Config.PUBSUB_FIELDWORK_ACTION_INSTRUCTION_SUBSCRIPTION,
+            expected_msg_count=1,
+            timeout=3,
+            test_start_time=context.test_start_utc_datetime)
