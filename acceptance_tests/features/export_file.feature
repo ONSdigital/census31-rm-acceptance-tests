@@ -75,6 +75,21 @@ Feature: Export files can be created with the correct data
       | sample_input_IRL_scotland_census_spec.csv   | P_RL_2IRL3  | 9c8415fd-fbad-4ad1-980d-2b6c8ae5f65a  | a6d57a19-2f53-3a10-f9f3-bc9eeb52dfb6  |
       | sample_input_CE_scotland_census_spec.csv    | P_IC_ICL3A  | d234fc20-17bd-40ee-b263-feef5cf89840  | a6d57a19-2f53-3a10-f9f3-bc9eeb52dfb6  |
 
+  Scenario Outline: Export files can be produced using the classifiers from the pre-seeded 2027 no-UAC test action rules
+    Given sample file "<sample file>" is loaded successfully
+    And an export file template has been created with template "<template>"
+    And the action rule with ID "<action_rule_id>" exists for collection exercise "<collection_exercise_id>"
+    When an export file action rule has been created for packcode "<template>" with the classifier from action rule "<action_rule_id>"
+    Then an export file is created with correct rows
+    And the events logged against the cases are ["NEW_CASE","EXPORT_FILE"]
+
+    Examples:
+      | sample file                                  | template     | action_rule_id                        | collection_exercise_id                |
+      | sample_input_PCPR1_england_census_spec.csv   | P_IC_PCPR1   | 952d635b-f8d9-4c7e-85b9-7a5311e317df  | 1b9e4b45-fd33-922f-d39e-914d5bdabe84  |
+      | sample_input_PCPR2B_wales_census_spec.csv    | P_IC_PCPR2B  | 78e404ec-13bc-48bb-ba5d-fd7cb2b9d475  | 1b9e4b45-fd33-922f-d39e-914d5bdabe84  |
+      | sample_input_PCPR13_scotland_census_spec.csv | P_IC_PCPR13  | 1fda90c6-089a-47a0-90d4-952699816806  | a6d57a19-2f53-3a10-f9f3-bc9eeb52dfb6  |
+      | sample_input_PCPR23_scotland_census_spec.csv | P_IC_PCPR23  | c18760f6-3f9c-4ffd-95d2-22d00962d6b7  | a6d57a19-2f53-3a10-f9f3-bc9eeb52dfb6  |
+
 
   @reset_pubsub_queues
   Scenario: Export file headers are sanitised to ISD-compliant names
