@@ -57,6 +57,17 @@ def check_export_file(context):
             context.expected_welsh_questionnaire_type
         )
         check_export_file_matches_expected(actual_export_file_rows, expected_export_file_rows)
+    else:
+        # For no-UAC templates (postcards), validate row contents match expected
+        actual_header_line = actual_export_file_rows[0]
+        actual_headers = next(csv.reader([actual_header_line]))
+
+        expected_export_file_rows = generate_expected_export_file_rows(
+            template, actual_headers, context.emitted_cases, None, (),
+            contact, pack_code, context.expected_questionnaire_type,
+            context.expected_welsh_questionnaire_type
+        )
+        check_export_file_matches_expected(actual_export_file_rows, expected_export_file_rows)
 
 
 @step('an export file template has been created with template "{template_name}"')
