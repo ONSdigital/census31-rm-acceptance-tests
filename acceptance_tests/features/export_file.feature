@@ -87,8 +87,8 @@ Feature: Export files can be created with the correct data
       | sample file                                  | template     | action_rule_id                        | collection_exercise_id                |
       | sample_input_PCPR1_england_census_spec.csv   | P_IC_PCPR1   | 952d635b-f8d9-4c7e-85b9-7a5311e317df  | 1b9e4b45-fd33-922f-d39e-914d5bdabe84  |
       | sample_input_PCPR2B_wales_census_spec.csv    | P_IC_PCPR2B  | 78e404ec-13bc-48bb-ba5d-fd7cb2b9d475  | 1b9e4b45-fd33-922f-d39e-914d5bdabe84  |
-      | sample_input_PCPR13_scotland_census_spec.csv | P_IC_PCPR13  | 1fda90c6-089a-47a0-90d4-952699816806  | a6d57a19-2f53-3a10-f9f3-bc9eeb52dfb6  |
-      | sample_input_PCPR23_scotland_census_spec.csv | P_IC_PCPR23  | c18760f6-3f9c-4ffd-95d2-22d00962d6b7  | a6d57a19-2f53-3a10-f9f3-bc9eeb52dfb6  |
+      | sample_input_PCPR_scotland_census_spec.csv   | P_IC_PCPR13  | 1fda90c6-089a-47a0-90d4-952699816806  | a6d57a19-2f53-3a10-f9f3-bc9eeb52dfb6  |
+      | sample_input_PCPR_scotland_census_spec.csv   | P_IC_PCPR23  | c18760f6-3f9c-4ffd-95d2-22d00962d6b7  | a6d57a19-2f53-3a10-f9f3-bc9eeb52dfb6  |
 
 
   @reset_pubsub_queues
