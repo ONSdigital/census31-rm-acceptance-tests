@@ -14,6 +14,56 @@ from acceptance_tests.utilities.test_case_helper import test_helper
 from config import Config
 
 
+@step('the classifier is expected to export treatment codes "{exported_codes}" and filter "{filtered_codes}"')
+def setup_treatment_code_expectations(context, exported_codes, filtered_codes):
+    """Store expected exported and filtered treatment codes from scenario"""
+    context.exported_treatment_codes = [code.strip() for code in exported_codes.split(',')]
+    context.filtered_treatment_codes = [code.strip() for code in filtered_codes.split(',')]
+
+
+@step('only cases with expected treatment codes are exported')
+def validate_treatment_codes_in_export(context):
+    """Validate that only cases matching exported treatment codes appear in the export,
+    and cases with filtered codes are correctly excluded"""
+    if not hasattr(context, 'exported_treatment_codes'):
+        return  # Skip if treatment codes not set (for UAC templates)
+
+    # Separate cases into those that should be exported vs filtered
+    exported_cases = [case for case in context.emitted_cases
+                      if case.get('treatmentCode') in context.exported_treatment_codes]
+    filtered_cases = [case for case in context.emitted_cases
+                      if case.get('treatmentCode') in context.filtered_treatment_codes]
+
+    # Get the actual export file content
+    supplier = _get_context_export_supplier_or_default(context)
+    actual_export_file_rows = get_export_file_rows(context.test_start_utc_datetime, context.pack_code,
+                                                   supplier=supplier)
+
+    # Extract caseRefs from actual export file (skip header row)
+    actual_export_caserefs = set()
+    for row in actual_export_file_rows[1:]:  # Skip header
+        row_data = next(csv.reader([row]))
+        if row_data:  # Ensure non-empty row
+            # Assuming caseRef is in a predictable column (typically column 1)
+            caseref = row_data[1] if len(row_data) > 1 else None
+            if caseref:
+                actual_export_caserefs.add(caseref)
+
+    # Assert exported cases are in the export
+    for case in exported_cases:
+        caseref = case.get('caseRef')
+        test_helper.assertIn(caseref, actual_export_caserefs,
+                             f"Case {caseref} with treatment code {case.get('treatmentCode')} "
+                             f"should be exported but was not found in export file")
+
+    # Assert filtered cases are NOT in the export
+    for case in filtered_cases:
+        caseref = case.get('caseRef')
+        test_helper.assertNotIn(caseref, actual_export_caserefs,
+                                f"Case {caseref} with treatment code {case.get('treatmentCode')} "
+                                f"should have been filtered out but was found in export file")
+
+
 @step("an export file is created with correct rows")
 def check_export_file(context):
     template = context.template
