@@ -81,6 +81,11 @@ spec:
         configMapKeyRef:
           name: project-config
           key: project-name
+    - name: PUBSUB_EQ_RECEIPT_PROJECT
+      valueFrom:
+        configMapKeyRef:
+          name: eq-receipt
+          key: eq-project
     - name: SUPPLIER_CONFIG_JSON_PATH
       value: "/home/acceptancetests/destination_config/export-file-destination-config.json"
     - name: SUPPORT_TOOL_BASE_URL

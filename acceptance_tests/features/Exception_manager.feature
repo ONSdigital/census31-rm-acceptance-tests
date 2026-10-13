@@ -16,6 +16,11 @@ Feature: Check exception manager is called for every topic and handles them as e
     Then a bad message appears in exception manager with exception message containing "qid '555555' not found!"
     And each bad msg can be successfully quarantined
 
+  Scenario: An eQ receipt with an unknown questionnaire ID is quarantined
+    When an eQ receipt with an unknown questionnaire ID is published
+    Then a bad message appears in exception manager with exception message containing "qid '555555' not found!"
+    And each bad msg can be successfully quarantined
+
   Scenario: Bad refusal message turns up in exception manager
     When a bad refusal event is put on the topic
     Then a bad message appears in exception manager with exception message containing "Case with ID '1c1e495d-8f49-4d4c-8318-6174454eb605' not found"
