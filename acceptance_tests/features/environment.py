@@ -124,6 +124,9 @@ def _setup_templates(context):
             "welsh_questionnaire_type": template.get('welshQuestionnaireType')
         }
 
+    manifest_metadata_path = TEMPLATE_FILES_PATH.joinpath('manifest_pack_code_metadata.json')
+    context.manifest_pack_code_metadata = json.loads(manifest_metadata_path.read_text())
+
     sms_templates_path = TEMPLATE_FILES_PATH.joinpath("sms_templates.json")
     sms_templates = json.loads(sms_templates_path.read_text())
     context.sms_templates = {template['templateName']: template for template in sms_templates}
