@@ -85,36 +85,36 @@
     "questionnaireType": "24",
     "welshQuestionnaireType": null
   },{
-    "templateName": "P_RL_1IRL1",
+    "templateName": "P_RL_1RL1",
     "template": ["__pack_code__", "__uac__","__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE"],
     "questionnaireType": "01",
     "welshQuestionnaireType": null
   },{
-    "templateName": "P_RL_1IRL2B",
+    "templateName": "P_RL_1RL2B",
     "template": ["__pack_code__", "__uac__","__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE"],
     "questionnaireType": "02",
     "welshQuestionnaireType": null
   },
   {
-    "templateName": "P_RL_1IRL3",
+    "templateName": "P_RL_1RL3",
     "template": ["__pack_code__", "__uac__","__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE"],
     "questionnaireType": "04",
     "welshQuestionnaireType": null
   },
   {
-    "templateName": "P_RL_2IRL1",
+    "templateName": "P_RL_2RL1",
     "template": ["__pack_code__", "__uac__","__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE"],
     "questionnaireType": "01",
     "welshQuestionnaireType": null
   },
   {
-    "templateName": "P_RL_2IRL2B",
+    "templateName": "P_RL_2RL2B",
     "template": ["__pack_code__", "__uac__","__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE"],
     "questionnaireType": "02",
     "welshQuestionnaireType": null
   },
   {
-    "templateName": "P_RL_2IRL3",
+    "templateName": "P_RL_2RL3",
     "template": ["__pack_code__", "__uac__","__caseref__", "ADDRESS_LINE1", "ADDRESS_LINE2", "ADDRESS_LINE3", "TOWN_NAME", "POSTCODE"],
     "questionnaireType": "04",
     "welshQuestionnaireType": null
