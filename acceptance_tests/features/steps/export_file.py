@@ -232,8 +232,8 @@ def get_datetime_from_export_file_name(export_file_name: str, prefix: str, suffi
     return datetime.strptime(raw_datetime, '%Y-%m-%dT%H-%M-%S').replace(tzinfo=timezone.utc)
 
 
-def get_export_file_contents_local(after_datetime: datetime, pack_code: str, export_file_destination: str, export_file_directory: str,
-                                   suffix: str) -> Optional[str]:
+def get_export_file_contents_local(after_datetime: datetime, pack_code: str, export_file_destination: str,
+                                   export_file_directory: str, suffix: str) -> Optional[str]:
     destination_path = Path(export_file_destination).joinpath(export_file_directory)
     prefix = f'{pack_code}_'
     export_files = destination_path.glob(f'{prefix}*{suffix}')
@@ -255,8 +255,8 @@ def get_export_file_contents_local(after_datetime: datetime, pack_code: str, exp
     return export_files_after_datetime[0].read_text()
 
 
-def get_export_file_contents_bucket(after_datetime: datetime, pack_code: str, export_file_destination: str, export_file_directory: str,
-                                    suffix: str) -> Optional[str]:
+def get_export_file_contents_bucket(after_datetime: datetime, pack_code: str, export_file_destination: str,
+                                    export_file_directory: str, suffix: str) -> Optional[str]:
     storage_client = storage.Client()
     storage_bucket = storage_client.get_bucket(export_file_destination)
 
@@ -281,11 +281,16 @@ def get_export_file_contents_bucket(after_datetime: datetime, pack_code: str, ex
     return export_file_bytes.decode()
 
 
-def get_export_file_contents(after_datetime: datetime, pack_code: str, export_file_destination: str, export_file_directory: str,
-                             suffix='.csv.gpg') -> Optional[str]:
+def get_export_file_contents(after_datetime: datetime, pack_code: str, export_file_destination: str,
+                             export_file_directory: str, suffix='.csv.gpg') -> Optional[str]:
     if Config.FILE_UPLOAD_MODE == 'LOCAL':
-        return get_export_file_contents_local(after_datetime, pack_code, str(Path(Config.FILE_UPLOAD_DESTINATION).joinpath(export_file_destination)), export_file_directory, suffix)
-    return get_export_file_contents_bucket(after_datetime, pack_code, export_file_destination, export_file_directory,  suffix)
+        return get_export_file_contents_local(
+            after_datetime, pack_code,
+            str(Path(Config.FILE_UPLOAD_DESTINATION).joinpath(export_file_destination)),
+            export_file_directory, suffix)
+    return get_export_file_contents_bucket(after_datetime,
+                                           pack_code, export_file_destination,
+                                           export_file_directory,  suffix)
 
 
 def decrypt_export_file_contents(export_file_contents: str) -> List[str]:
