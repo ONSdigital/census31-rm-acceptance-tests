@@ -1,5 +1,6 @@
 import csv
 import hashlib
+import json
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional
@@ -12,6 +13,22 @@ from tenacity import retry, retry_if_exception_type, stop_after_delay, wait_fixe
 from acceptance_tests.utilities.sample_field_helper import sample_field_mapper
 from acceptance_tests.utilities.test_case_helper import test_helper
 from config import Config
+
+MANIFEST_SCHEMA_VERSION = 1
+EXPECTED_MANIFEST_PACK_CODE_COUNT = 24
+EXPORT_FILE_SUFFIX = '.csv.gpg'
+MANIFEST_FILE_SUFFIX = f'{EXPORT_FILE_SUFFIX}.manifest'
+DEFAULT_MANIFEST_METADATA = {'dataset': '', 'description': ''}
+# These pack codes exist in manifest metadata but are not represented by export file templates.
+MANIFEST_ONLY_PACK_CODES = {'P_RL_1RL3CE', 'P_RL_2RL3CE'}
+
+# Selected pack codes with explicit metadata assertions for additional coverage.
+MANIFEST_ASSERTED_PACK_CODE_METADATA = {
+    'P_IC_ICL1': {'dataset': 'CS10-CS5.1', 'description': 'Initial Invitation Contact Letter - England'},
+    'P_IC_ICL2B': {'dataset': 'CS10-CS5.1', 'description': 'Initial Invitation Contact Letter - Wales (Bi-lingual)'},
+    'P_IC_ICL3': {'dataset': 'CS10-CS5.1', 'description': 'Household Initial Invitation Contact Letter - Scotland'},
+    'P_IC_ICL3A': {'dataset': 'CS10-CS5.1', 'description': 'CE Initial Invitation Contact Letter - Scotland'}
+}
 
 
 @step('the classifier is expected to export treatment codes "{exported_codes}" and filter "{filtered_codes}"')
@@ -119,6 +136,8 @@ def check_export_file(context):
         )
         check_export_file_matches_expected(actual_export_file_rows, expected_export_file_rows)
 
+    check_manifest_file(context, supplier, actual_export_file_rows)
+
 
 @step('an export file template has been created with template "{template_name}"')
 def create_export_file_template(context, template_name):
@@ -128,6 +147,29 @@ def create_export_file_template(context, template_name):
         'questionnaire_type']
     context.expected_welsh_questionnaire_type = context.export_file_packcodes[template_name][
         'welsh_questionnaire_type']
+
+
+@step('manifest metadata mappings cover all configured 2027 pack codes')
+def check_manifest_metadata_pack_code_coverage(context):
+    template_pack_codes = set(context.export_file_packcodes.keys())
+    expected_pack_codes = template_pack_codes.union(MANIFEST_ONLY_PACK_CODES)
+    actual_pack_codes = set(context.manifest_pack_code_metadata.keys())
+
+    test_helper.assertEqual(EXPECTED_MANIFEST_PACK_CODE_COUNT, len(expected_pack_codes),
+                            'Unexpected number of configured 2027 manifest pack codes')
+
+    missing_pack_codes = sorted(expected_pack_codes - actual_pack_codes)
+    unexpected_pack_codes = sorted(actual_pack_codes - expected_pack_codes)
+
+    test_helper.assertEqual([], missing_pack_codes,
+                            f'Manifest metadata missing expected pack codes: {missing_pack_codes}')
+    test_helper.assertEqual([], unexpected_pack_codes,
+                            f'Manifest metadata contains unexpected pack codes: {unexpected_pack_codes}')
+
+    for pack_code, expected_manifest_metadata in MANIFEST_ASSERTED_PACK_CODE_METADATA.items():
+        actual_manifest_metadata = context.manifest_pack_code_metadata.get(pack_code)
+        test_helper.assertEqual(expected_manifest_metadata, actual_manifest_metadata,
+                                f'Unexpected manifest metadata for pack code {pack_code}')
 
 
 def _get_context_export_supplier_or_default(context) -> str:
@@ -224,22 +266,65 @@ def check_export_file_matches_expected(actual_export_file, expected_export_file)
     test_helper.assertEqual(actual_export_file, expected_export_file, 'Export file contents did not match expected')
 
 
+def check_manifest_file(context, supplier, actual_export_file_rows):
+    manifest_json = get_manifest_json(context.test_start_utc_datetime, context.pack_code, supplier=supplier)
+    expected_manifest_metadata = _get_expected_manifest_metadata(context, context.pack_code)
+    actual_export_file_name = get_export_file_name(context.test_start_utc_datetime,
+                                                   context.pack_code,
+                                                   supplier=supplier,
+                                                   suffix=EXPORT_FILE_SUFFIX)
+    actual_manifest_file_name = get_manifest_file_name(context.test_start_utc_datetime,
+                                                       context.pack_code,
+                                                       supplier=supplier)
+    expected_manifest_file_name = f'{actual_export_file_name}.manifest'
+
+    test_helper.assertEqual(MANIFEST_SCHEMA_VERSION, manifest_json['schemaVersion'],
+                            'Unexpected manifest schemaVersion')
+    test_helper.assertEqual(expected_manifest_metadata['dataset'], manifest_json['dataset'],
+                            'Unexpected manifest dataset value')
+    test_helper.assertEqual(expected_manifest_metadata['description'], manifest_json['description'],
+                            'Unexpected manifest description value')
+    test_helper.assertEqual('ONS_RM', manifest_json['sourceName'], 'Unexpected manifest sourceName')
+    test_helper.assertNotIn('packCode', manifest_json, 'Manifest should not contain packCode')
+    test_helper.assertNotIn('destination', manifest_json, 'Manifest should not contain destination')
+
+    test_helper.assertEqual(actual_export_file_name, manifest_json['files'][0]['name'],
+                            'Manifest file entry name should match export filename')
+    test_helper.assertEqual(expected_manifest_file_name, actual_manifest_file_name,
+                            'Manifest filename should append .manifest to the full export filename')
+    test_helper.assertTrue(actual_manifest_file_name.endswith(MANIFEST_FILE_SUFFIX),
+                           f'Manifest filename should end with {MANIFEST_FILE_SUFFIX}')
+    test_helper.assertEqual('./', manifest_json['files'][0]['relativePath'],
+                            'Unexpected manifest files relativePath')
+
+    actual_row_count_excluding_header = len(actual_export_file_rows) - 1
+    test_helper.assertEqual(actual_row_count_excluding_header, manifest_json['files'][0]['rows'],
+                            'Manifest files rows count does not match exported rows')
+
+
+def _get_expected_manifest_metadata(context, pack_code) -> Dict:
+    return context.manifest_pack_code_metadata.get(pack_code, DEFAULT_MANIFEST_METADATA)
+
+
 def get_datetime_from_export_file_name(export_file_name: str, prefix: str, suffix: str) -> datetime:
     raw_datetime = export_file_name[len(prefix):-len(suffix)]  # Strip off the prefix and suffix
     return datetime.strptime(raw_datetime, '%Y-%m-%dT%H-%M-%S').replace(tzinfo=timezone.utc)
 
 
-def get_export_file_contents_local(after_datetime: datetime, pack_code: str, export_file_destination: str,
-                                   suffix: str) -> Optional[str]:
+def get_export_files_local(after_datetime: datetime, pack_code: str, export_file_destination: str, suffix: str):
     destination_path = Path(Config.FILE_UPLOAD_DESTINATION).joinpath(export_file_destination)
     prefix = f'{pack_code}_'
     export_files = destination_path.glob(f'{prefix}*{suffix}')
 
-    # Export files are named in the format {pack_code}_{datetime}.{suffix}
-    export_files_after_datetime = tuple(
+    return tuple(
         export_file for export_file in export_files
         if get_datetime_from_export_file_name(export_file.name, prefix, suffix) >= after_datetime
     )
+
+
+def get_export_file_contents_local(after_datetime: datetime, pack_code: str, export_file_destination: str,
+                                   suffix: str) -> Optional[str]:
+    export_files_after_datetime = get_export_files_local(after_datetime, pack_code, export_file_destination, suffix)
 
     if len(export_files_after_datetime) == 0:
         return
@@ -252,18 +337,36 @@ def get_export_file_contents_local(after_datetime: datetime, pack_code: str, exp
     return export_files_after_datetime[0].read_text()
 
 
-def get_export_file_contents_bucket(after_datetime: datetime, pack_code: str, export_file_destination: str,
-                                    suffix: str) -> Optional[str]:
+def get_export_file_name_local(after_datetime: datetime, pack_code: str, export_file_destination: str,
+                               suffix: str) -> Optional[str]:
+    export_files_after_datetime = get_export_files_local(after_datetime, pack_code, export_file_destination, suffix)
+
+    if len(export_files_after_datetime) == 0:
+        return
+
+    assert len(export_files_after_datetime) == 1, (f'Found more than one export file'
+                                                   f' with expected pack code {pack_code},'
+                                                   f' found files: {export_files_after_datetime}'
+                                                   f' in destination: {Config.FILE_UPLOAD_DESTINATION}')
+
+    return export_files_after_datetime[0].name
+
+
+def get_export_files_bucket(after_datetime: datetime, pack_code: str, export_file_destination: str, suffix: str):
     storage_client = storage.Client()
     storage_bucket = storage_client.get_bucket(Config.FILE_UPLOAD_DESTINATION)
 
-    # Export files are named in the format {export_file_destination}/{pack_code}_{datetime}.{suffix}
     destination_and_pack_code_prefix = f'{export_file_destination}/{pack_code}_'
-    export_files_after_datetime = tuple(
+    return tuple(
         blob for blob in storage_bucket.list_blobs(prefix=destination_and_pack_code_prefix)
         if blob.name.endswith(suffix)
         and get_datetime_from_export_file_name(blob.name, destination_and_pack_code_prefix, suffix) >= after_datetime
     )
+
+
+def get_export_file_contents_bucket(after_datetime: datetime, pack_code: str, export_file_destination: str,
+                                    suffix: str) -> Optional[str]:
+    export_files_after_datetime = get_export_files_bucket(after_datetime, pack_code, export_file_destination, suffix)
 
     if len(export_files_after_datetime) == 0:
         return
@@ -278,11 +381,47 @@ def get_export_file_contents_bucket(after_datetime: datetime, pack_code: str, ex
     return export_file_bytes.decode()
 
 
+def get_export_file_name_bucket(after_datetime: datetime, pack_code: str, export_file_destination: str,
+                                suffix: str) -> Optional[str]:
+    export_files_after_datetime = get_export_files_bucket(after_datetime, pack_code, export_file_destination, suffix)
+
+    if len(export_files_after_datetime) == 0:
+        return
+
+    assert len(export_files_after_datetime) == 1, (f'Found more than one export file'
+                                                   f' with expected pack code {pack_code},'
+                                                   f' found files: {export_files_after_datetime}'
+                                                   f' in destination: {Config.FILE_UPLOAD_DESTINATION}')
+
+    return export_files_after_datetime[0].name.split('/')[-1]
+
+
 def get_export_file_contents(after_datetime: datetime, pack_code: str, export_file_destination: str,
-                             suffix='.csv.gpg') -> Optional[str]:
+                             suffix=EXPORT_FILE_SUFFIX) -> Optional[str]:
     if Config.FILE_UPLOAD_MODE == 'LOCAL':
         return get_export_file_contents_local(after_datetime, pack_code, export_file_destination, suffix)
     return get_export_file_contents_bucket(after_datetime, pack_code, export_file_destination, suffix)
+
+
+@retry(retry=retry_if_exception_type(FileNotFoundError), wait=wait_fixed(1), stop=stop_after_delay(120))
+def get_export_file_name(after_datetime: datetime, pack_code: str,
+                         supplier=Config.SUPPLIER_DEFAULT_TEST, suffix=EXPORT_FILE_SUFFIX) -> str:
+    export_file_destination = Config.EXPORT_FILE_DESTINATIONS_CONFIG[supplier].get('exportDirectory')
+
+    if Config.FILE_UPLOAD_MODE == 'LOCAL':
+        export_file_name = get_export_file_name_local(after_datetime, pack_code, export_file_destination, suffix)
+    else:
+        export_file_name = get_export_file_name_bucket(after_datetime, pack_code, export_file_destination, suffix)
+
+    if not export_file_name:
+        raise FileNotFoundError
+
+    return export_file_name
+
+
+def get_manifest_file_name(after_datetime: datetime, pack_code: str,
+                           supplier=Config.SUPPLIER_DEFAULT_TEST) -> str:
+    return get_export_file_name(after_datetime, pack_code, supplier=supplier, suffix=MANIFEST_FILE_SUFFIX)
 
 
 def decrypt_export_file_contents(export_file_contents: str) -> List[str]:
@@ -301,6 +440,20 @@ def get_export_file_rows(after_datetime: datetime, pack_code: str, supplier=Conf
     decrypted_export_file_rows = decrypt_export_file_contents(encrypted_export_file_contents)
 
     return decrypted_export_file_rows
+
+
+@retry(retry=retry_if_exception_type(FileNotFoundError), wait=wait_fixed(1), stop=stop_after_delay(120))
+def get_manifest_json(after_datetime: datetime, pack_code: str, supplier=Config.SUPPLIER_DEFAULT_TEST) -> Dict:
+    export_file_destination = Config.EXPORT_FILE_DESTINATIONS_CONFIG[supplier].get('exportDirectory')
+    manifest_file_contents = get_export_file_contents(after_datetime,
+                                                      pack_code,
+                                                      export_file_destination,
+                                                      suffix=MANIFEST_FILE_SUFFIX)
+
+    if not manifest_file_contents:
+        raise FileNotFoundError
+
+    return json.loads(manifest_file_contents)
 
 
 def decrypt_message(message: str) -> str:

@@ -1,0 +1,99 @@
+{
+  "P_IC_H1": {
+    "description": "Household H1 Questionnaire",
+    "dataset": "CS10-CS8.1"
+  },
+  "P_IC_H2": {
+    "description": "Household H2 Questionnaire",
+    "dataset": "CS10-CS8.1"
+  },
+  "P_OR_H1": {
+    "description": "England - on request Household Questionnaire",
+    "dataset": "CS10-CS8.2"
+  },
+  "P_OR_H2": {
+    "description": "Wales - on request Household Questionnaire (in Welsh and English)",
+    "dataset": "CS10-CS8.2"
+  },
+  "P_OR_I1": {
+    "description": "England - Individual I1 Questionnaire",
+    "dataset": "CS10-CS8.2"
+  },
+  "P_OR_I2": {
+    "description": "Wales - Individual I2 Questionnaire",
+    "dataset": "CS10-CS8.2"
+  },
+  "P_OR_I2W": {
+    "description": "Cymru - Individual I2W Questionnaire (in Welsh)",
+    "dataset": "CS10-CS8.2"
+  },
+  "P_IC_PCPR1": {
+    "description": "Initial Contact Postcard - England",
+    "dataset": "CS10-CS5.1"
+  },
+  "P_IC_PCPR2B": {
+    "description": "Initial Contact Postcard - Wales (Bi-lingual)",
+    "dataset": "CS10-CS5.1"
+  },
+  "P_IC_PCPR13": {
+    "description": "Household Initial Contact Postcard 1 - Scotland",
+    "dataset": "CS10-CS5.1"
+  },
+  "P_IC_PCPR23": {
+    "description": "Household Initial Contact Postcard 2 - Scotland",
+    "dataset": "CS10-CS5.1"
+  },
+  "P_IC_ICL1": {
+    "description": "Initial Invitation Contact Letter - England",
+    "dataset": "CS10-CS5.1"
+  },
+  "P_IC_ICL2B": {
+    "description": "Initial Invitation Contact Letter - Wales (Bi-lingual)",
+    "dataset": "CS10-CS5.1"
+  },
+  "P_IC_ICL3": {
+    "description": "Household Initial Invitation Contact Letter - Scotland",
+    "dataset": "CS10-CS5.1"
+  },
+  "P_IC_ICL3A": {
+    "description": "CE Initial Invitation Contact Letter - Scotland",
+    "dataset": "CS10-CS5.1"
+  },
+  "P_RL_1RL1": {
+    "description": "Reminder Letter 1 - England",
+    "dataset": "CS10-CS5.2"
+  },
+  "P_RL_1RL2B": {
+    "description": "Reminder Letter 1 - Wales (Bi-lingual)",
+    "dataset": "CS10-CS5.2"
+  },
+  "P_RL_1RL3": {
+    "description": "Reminder Letter 1 - Scotland",
+    "dataset": "CS10-CS5.2"
+  },
+  "P_RL_2RL1": {
+    "description": "Reminder Letter 2 - England",
+    "dataset": "CS10-CS5.2"
+  },
+  "P_RL_2RL2B": {
+    "description": "Reminder Letter 2 - Wales (Bi-lingual)",
+    "dataset": "CS10-CS5.2"
+  },
+  "P_RL_2RL3": {
+    "description": "Reminder Letter 2 (final) - Scotland",
+    "dataset": "CS10-CS5.2"
+  },
+  "P_OR_IACR3": {
+    "description": "Individual UAC by letter for Scotland",
+    "dataset": "CS10-CS5.3"
+  },
+  "P_RL_1RL3CE": {
+    "description": "CE Reminder 1 - Scotland",
+    "dataset": "CS10-CS5.2"
+  },
+  "P_RL_2RL3CE": {
+    "description": "CE Reminder 2 - Scotland",
+    "dataset": "CS10-CS5.2"
+  }
+}
+
