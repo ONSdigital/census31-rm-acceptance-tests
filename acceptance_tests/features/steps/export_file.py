@@ -64,7 +64,7 @@ def validate_treatment_codes_in_export(context):
                                 f"should have been filtered out but was found in export file")
 
 
-@step("an export file is created with correct rows")
+@step('an export file is created with correct rows')
 def check_export_file(context):
     template = context.template
     pack_code = context.pack_code
@@ -84,6 +84,10 @@ def check_export_file(context):
                             welsh_error_message)
 
     supplier = _get_context_export_supplier_or_default(context)
+
+    test_helper.assertEqual(Config.EXPORT_FILE_DESTINATIONS_CONFIG[context.export_supplier].get('destinationBucket'),
+                            Config.EXPORT_FILE_DESTINATIONS_CONFIG[supplier].get('destinationBucket'),
+                            'Export file destination did not match expected')
 
     actual_export_file_rows = get_export_file_rows(context.test_start_utc_datetime, context.pack_code,
                                                    supplier=supplier)
@@ -230,8 +234,8 @@ def get_datetime_from_export_file_name(export_file_name: str, prefix: str, suffi
 
 
 def get_export_file_contents_local(after_datetime: datetime, pack_code: str, export_file_destination: str,
-                                   suffix: str) -> Optional[str]:
-    destination_path = Path(Config.FILE_UPLOAD_DESTINATION).joinpath(export_file_destination)
+                                   export_file_directory: str, suffix: str) -> Optional[str]:
+    destination_path = Path(export_file_destination).joinpath(export_file_directory)
     prefix = f'{pack_code}_'
     export_files = destination_path.glob(f'{prefix}*{suffix}')
 
@@ -253,12 +257,12 @@ def get_export_file_contents_local(after_datetime: datetime, pack_code: str, exp
 
 
 def get_export_file_contents_bucket(after_datetime: datetime, pack_code: str, export_file_destination: str,
-                                    suffix: str) -> Optional[str]:
+                                    export_file_directory: str, suffix: str) -> Optional[str]:
     storage_client = storage.Client()
-    storage_bucket = storage_client.get_bucket(Config.FILE_UPLOAD_DESTINATION)
+    storage_bucket = storage_client.get_bucket(export_file_destination)
 
-    # Export files are named in the format {export_file_destination}/{pack_code}_{datetime}.{suffix}
-    destination_and_pack_code_prefix = f'{export_file_destination}/{pack_code}_'
+    # Export files are named in the format {export_file_directory}/{pack_code}_{datetime}.{suffix}
+    destination_and_pack_code_prefix = f'{export_file_directory}/{pack_code}_'
     export_files_after_datetime = tuple(
         blob for blob in storage_bucket.list_blobs(prefix=destination_and_pack_code_prefix)
         if blob.name.endswith(suffix)
@@ -271,7 +275,7 @@ def get_export_file_contents_bucket(after_datetime: datetime, pack_code: str, ex
     assert len(export_files_after_datetime) == 1, (f'Found more than one export file'
                                                    f' with expected pack code {pack_code},'
                                                    f' found files: {export_files_after_datetime}'
-                                                   f' in destination: {Config.FILE_UPLOAD_DESTINATION}')
+                                                   f' in destination: {export_file_destination}')
 
     matching_export_file_blob = export_files_after_datetime[0]
     export_file_bytes = matching_export_file_blob.download_as_bytes()
@@ -279,10 +283,15 @@ def get_export_file_contents_bucket(after_datetime: datetime, pack_code: str, ex
 
 
 def get_export_file_contents(after_datetime: datetime, pack_code: str, export_file_destination: str,
-                             suffix='.csv.gpg') -> Optional[str]:
+                             export_file_directory: str, suffix='.csv.gpg') -> Optional[str]:
     if Config.FILE_UPLOAD_MODE == 'LOCAL':
-        return get_export_file_contents_local(after_datetime, pack_code, export_file_destination, suffix)
-    return get_export_file_contents_bucket(after_datetime, pack_code, export_file_destination, suffix)
+        return get_export_file_contents_local(
+            after_datetime, pack_code,
+            str(Path(Config.FILE_UPLOAD_DESTINATION).joinpath(export_file_destination)),
+            export_file_directory, suffix)
+    return get_export_file_contents_bucket(after_datetime,
+                                           pack_code, export_file_destination,
+                                           export_file_directory,  suffix)
 
 
 def decrypt_export_file_contents(export_file_contents: str) -> List[str]:
@@ -292,9 +301,10 @@ def decrypt_export_file_contents(export_file_contents: str) -> List[str]:
 
 @retry(retry=retry_if_exception_type(FileNotFoundError), wait=wait_fixed(1), stop=stop_after_delay(120))
 def get_export_file_rows(after_datetime: datetime, pack_code: str, supplier=Config.SUPPLIER_DEFAULT_TEST) -> List[str]:
-    export_file_destination = Config.EXPORT_FILE_DESTINATIONS_CONFIG[supplier].get('exportDirectory')
+    export_file_destination = Config.EXPORT_FILE_DESTINATIONS_CONFIG[supplier].get('destinationBucket')
+    export_file_directory = Config.EXPORT_FILE_DESTINATIONS_CONFIG[supplier].get('exportDirectory')
     encrypted_export_file_contents = get_export_file_contents(after_datetime, pack_code,
-                                                              export_file_destination)
+                                                              export_file_destination, export_file_directory)
     if not encrypted_export_file_contents:
         raise FileNotFoundError
 
