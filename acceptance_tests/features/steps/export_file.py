@@ -85,7 +85,8 @@ def check_export_file(context):
 
     supplier = _get_context_export_supplier_or_default(context)
 
-    test_helper.assertEqual(Config.EXPORT_FILE_DESTINATIONS_CONFIG[context.export_supplier].get('destinationBucket'), Config.EXPORT_FILE_DESTINATIONS_CONFIG[supplier].get('destinationBucket'),
+    test_helper.assertEqual(Config.EXPORT_FILE_DESTINATIONS_CONFIG[context.export_supplier].get('destinationBucket'),
+                            Config.EXPORT_FILE_DESTINATIONS_CONFIG[supplier].get('destinationBucket'),
                             'Export file destination did not match expected')
 
     actual_export_file_rows = get_export_file_rows(context.test_start_utc_datetime, context.pack_code,
