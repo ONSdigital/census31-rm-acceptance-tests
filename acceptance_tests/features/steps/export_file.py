@@ -22,7 +22,7 @@ MANIFEST_ONLY_PACK_CODE_METADATA = {
     'P_IC_ICL1': {'dataset': 'CS10-CS5.1', 'description': 'Initial Invitation Contact Letter - England'},
     'P_IC_ICL2B': {'dataset': 'CS10-CS5.1', 'description': 'Initial Invitation Contact Letter - Wales (Bi-lingual)'},
     'P_IC_ICL3': {'dataset': 'CS10-CS5.1', 'description': 'Household Initial Invitation Contact Letter - Scotland'},
-    'P_IC_ICL3A': {'dataset': 'CS10-CS5.1', 'description': 'CE Initial Invitation Contact Letter - Scotland'},
+    'P_IC_ICL3A': {'dataset': 'CS10-CS5.1', 'description': 'CE Initial Invitation Contact Letter - Scotland'}
 }
 
 
