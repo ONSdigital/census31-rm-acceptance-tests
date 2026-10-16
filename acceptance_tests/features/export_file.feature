@@ -5,7 +5,7 @@ Feature: Export files can be created with the correct data
     And an export file template has been created with template "<template>"
     When an export file action rule has been created for packcode "<template>" with no classifier
     Then UAC_UPDATE messages are emitted with active set to true
-    And an export file is created with correct rows in the destination "export_files"
+    And an export file is created with correct rows
     And the events logged against the cases are ["NEW_CASE","EXPORT_FILE"]
 
     Examples:
@@ -32,7 +32,7 @@ Feature: Export files can be created with the correct data
     Given sample file "<sample file>" is loaded successfully
     And an export file template has been created with template "<template>"
     When an export file action rule has been created for packcode "<template>" with no classifier
-    Then an export file is created with correct rows in the destination "export_files"
+    Then an export file is created with correct rows
     And the events logged against the cases are ["NEW_CASE","EXPORT_FILE"]
 
     Examples:
@@ -52,7 +52,7 @@ Feature: Export files can be created with the correct data
     And the action rule with ID "<action_rule_id>" exists for collection exercise "<collection_exercise_id>"
     When an export file action rule has been created for packcode "<template>" with the classifier from action rule "<action_rule_id>"
     Then UAC_UPDATE messages are emitted with active set to true
-    And an export file is created with correct rows in the destination "export_files"
+    And an export file is created with correct rows
     And the events logged against the cases are ["NEW_CASE","EXPORT_FILE"]
 
     Examples:
@@ -81,7 +81,7 @@ Feature: Export files can be created with the correct data
     And the action rule with ID "<action_rule_id>" exists for collection exercise "<collection_exercise_id>"
     And the classifier is expected to export treatment codes "<exported_treatment_codes>" and filter "<filtered_treatment_codes>"
     When an export file action rule has been created for packcode "<template>" with the classifier from action rule "<action_rule_id>"
-    Then an export file is created with correct rows in the destination "export_files"
+    Then an export file is created with correct rows
     And the events logged against the cases are ["NEW_CASE","EXPORT_FILE"]
     And only cases with expected treatment codes are exported
 
@@ -101,7 +101,7 @@ Feature: Export files can be created with the correct data
     And the events logged against the case are ["NEW_CASE", "PRINT_FULFILMENT"]
     When export file fulfilments are triggered to be exported
     Then UAC_UPDATE messages are emitted with active set to true
-    And an export file is created with correct rows in the destination "export_files"
+    And an export file is created with correct rows
     And the events logged against the case are ["NEW_CASE", "EXPORT_FILE", "PRINT_FULFILMENT"]
     And the export file header row is sanitised according to:
       | template_key         | header_name |

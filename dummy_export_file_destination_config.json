@@ -1,12 +1,12 @@
 {
   "test_supplier": {
-    "exportDirectory": "test_supplier/print_services",
+    "exportDirectory": "print_services",
     "encryptionKeyFilename": "dummy-key-test-supplier-a-public.asc",
-    "exportDestination": "export_files"
+    "destinationBucket": "test_supplier"
   },
   "census_print_supplier": {
-    "exportDirectory": "census_print_supplier/print_services",
+    "exportDirectory": "print_services",
     "encryptionKeyFilename": "dummy-key-test-supplier-b-public.asc",
-    "exportDestination": "export_files"
+    "destinationBucket": "census_print_supplier"
   }
 }

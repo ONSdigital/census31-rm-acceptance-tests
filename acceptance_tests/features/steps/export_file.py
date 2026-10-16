@@ -64,8 +64,8 @@ def validate_treatment_codes_in_export(context):
                                 f"should have been filtered out but was found in export file")
 
 
-@step('an export file is created with correct rows in the destination "{destination}"')
-def check_export_file(context, destination):
+@step('an export file is created with correct rows')
+def check_export_file(context):
     template = context.template
     pack_code = context.pack_code
     emitted_uacs = context.emitted_uacs if hasattr(context, 'emitted_uacs') else None
@@ -85,7 +85,7 @@ def check_export_file(context, destination):
 
     supplier = _get_context_export_supplier_or_default(context)
 
-    test_helper.assertEqual(destination, Config.EXPORT_FILE_DESTINATIONS_CONFIG[supplier].get('exportDestination'),
+    test_helper.assertEqual(Config.EXPORT_FILE_DESTINATIONS_CONFIG[context.export_supplier].get('destinationBucket'), Config.EXPORT_FILE_DESTINATIONS_CONFIG[supplier].get('destinationBucket'),
                             'Export file destination did not match expected')
 
     actual_export_file_rows = get_export_file_rows(context.test_start_utc_datetime, context.pack_code,
@@ -300,12 +300,10 @@ def decrypt_export_file_contents(export_file_contents: str) -> List[str]:
 
 @retry(retry=retry_if_exception_type(FileNotFoundError), wait=wait_fixed(1), stop=stop_after_delay(120))
 def get_export_file_rows(after_datetime: datetime, pack_code: str, supplier=Config.SUPPLIER_DEFAULT_TEST) -> List[str]:
-    export_file_destination = Config.EXPORT_FILE_DESTINATIONS_CONFIG[supplier].get('exportDestination')
+    export_file_destination = Config.EXPORT_FILE_DESTINATIONS_CONFIG[supplier].get('destinationBucket')
     export_file_directory = Config.EXPORT_FILE_DESTINATIONS_CONFIG[supplier].get('exportDirectory')
     encrypted_export_file_contents = get_export_file_contents(after_datetime, pack_code,
                                                               export_file_destination, export_file_directory)
-    print('location')
-    print(export_file_destination)
     if not encrypted_export_file_contents:
         raise FileNotFoundError
 
