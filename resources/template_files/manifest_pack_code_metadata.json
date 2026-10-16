@@ -7,10 +7,6 @@
     "description": "Household H2 Questionnaire",
     "dataset": "CS10-CS8.1"
   },
-  "P_IC_H4": {
-    "description": "Northern Ireland - Household Questionnaire H4",
-    "dataset": "N/A"
-  },
   "P_OR_H1": {
     "description": "England - on request Household Questionnaire",
     "dataset": "CS10-CS8.2"
@@ -47,10 +43,6 @@
     "description": "Household Initial Contact Postcard 2 - Scotland",
     "dataset": "CS10-CS5.1"
   },
-  "P_IC_PCPR4": {
-    "description": "Initial Contact Postcard - Northern Ireland",
-    "dataset": "NISRA"
-  },
   "P_IC_ICL1": {
     "description": "Initial Invitation Contact Letter - England",
     "dataset": "CS10-CS5.1"
@@ -67,14 +59,6 @@
     "description": "CE Initial Invitation Contact Letter - Scotland",
     "dataset": "CS10-CS5.1"
   },
-  "P_IC_ICL4A": {
-    "description": "Initial Invitation Contact Letter - Northern Ireland: Schema A",
-    "dataset": "NISRA"
-  },
-  "P_IC_ICL4B": {
-    "description": "Initial Invitation Contact Letter - Northern Ireland: Schema B",
-    "dataset": "NISRA"
-  },
   "P_RL_1RL1": {
     "description": "Reminder Letter 1 - England",
     "dataset": "CS10-CS5.2"
@@ -86,14 +70,6 @@
   "P_RL_1RL3": {
     "description": "Reminder Letter 1 - Scotland",
     "dataset": "CS10-CS5.2"
-  },
-  "P_RL_1RL4A": {
-    "description": "Reminder Letter 1 - Northern Ireland (A type)",
-    "dataset": "NISRA"
-  },
-  "P_RL_1RL4B": {
-    "description": "Reminder Letter 1 - Northern Ireland (B type)",
-    "dataset": "NISRA"
   },
   "P_RL_2RL1": {
     "description": "Reminder Letter 2 - England",
@@ -116,7 +92,7 @@
     "dataset": "CS10-CS5.2"
   },
   "P_RL_2RL3CE": {
-    "description": "CE Reminder 1 - Scotland",
+    "description": "CE Reminder 2 - Scotland",
     "dataset": "CS10-CS5.2"
   }
 }
