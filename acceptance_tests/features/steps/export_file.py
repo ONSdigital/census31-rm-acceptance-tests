@@ -15,10 +15,15 @@ from acceptance_tests.utilities.test_case_helper import test_helper
 from config import Config
 
 MANIFEST_SCHEMA_VERSION = 1
+EXPECTED_MANIFEST_PACK_CODE_COUNT = 24
 EXPORT_FILE_SUFFIX = '.csv.gpg'
 MANIFEST_FILE_SUFFIX = f'{EXPORT_FILE_SUFFIX}.manifest'
 DEFAULT_MANIFEST_METADATA = {'dataset': '', 'description': ''}
-MANIFEST_ONLY_PACK_CODE_METADATA = {
+# These pack codes exist in manifest metadata but are not represented by export file templates.
+MANIFEST_ONLY_PACK_CODES = {'P_RL_1RL3CE', 'P_RL_2RL3CE'}
+
+# Selected pack codes with explicit metadata assertions for additional coverage.
+MANIFEST_ASSERTED_PACK_CODE_METADATA = {
     'P_IC_ICL1': {'dataset': 'CS10-CS5.1', 'description': 'Initial Invitation Contact Letter - England'},
     'P_IC_ICL2B': {'dataset': 'CS10-CS5.1', 'description': 'Initial Invitation Contact Letter - Wales (Bi-lingual)'},
     'P_IC_ICL3': {'dataset': 'CS10-CS5.1', 'description': 'Household Initial Invitation Contact Letter - Scotland'},
@@ -147,8 +152,11 @@ def create_export_file_template(context, template_name):
 @step('manifest metadata mappings cover all configured 2027 pack codes')
 def check_manifest_metadata_pack_code_coverage(context):
     template_pack_codes = set(context.export_file_packcodes.keys())
-    expected_pack_codes = template_pack_codes.union(MANIFEST_ONLY_PACK_CODE_METADATA.keys())
+    expected_pack_codes = template_pack_codes.union(MANIFEST_ONLY_PACK_CODES)
     actual_pack_codes = set(context.manifest_pack_code_metadata.keys())
+
+    test_helper.assertEqual(EXPECTED_MANIFEST_PACK_CODE_COUNT, len(expected_pack_codes),
+                            'Unexpected number of configured 2027 manifest pack codes')
 
     missing_pack_codes = sorted(expected_pack_codes - actual_pack_codes)
     unexpected_pack_codes = sorted(actual_pack_codes - expected_pack_codes)
@@ -158,7 +166,7 @@ def check_manifest_metadata_pack_code_coverage(context):
     test_helper.assertEqual([], unexpected_pack_codes,
                             f'Manifest metadata contains unexpected pack codes: {unexpected_pack_codes}')
 
-    for pack_code, expected_manifest_metadata in MANIFEST_ONLY_PACK_CODE_METADATA.items():
+    for pack_code, expected_manifest_metadata in MANIFEST_ASSERTED_PACK_CODE_METADATA.items():
         actual_manifest_metadata = context.manifest_pack_code_metadata.get(pack_code)
         test_helper.assertEqual(expected_manifest_metadata, actual_manifest_metadata,
                                 f'Unexpected manifest metadata for pack code {pack_code}')
