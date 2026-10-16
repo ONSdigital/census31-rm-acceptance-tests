@@ -69,6 +69,9 @@ def check_create_action_instruction_fields(context):
             else:
                 test_helper.assertNotIn('estabUprn', action_instruction)
         else:
+            test_helper.assertIn('fieldCoordinatorId', action_instruction)
+            test_helper.assertEqual(action_instruction['fieldCoordinatorId'], expected_case['fieldCoordinatorId'])
+            test_helper.assertNotIn('fieldOfficerId', action_instruction)
             test_helper.assertNotIn('addressLevel', action_instruction)
             test_helper.assertNotIn('uprn', action_instruction)
             test_helper.assertNotIn('estabUprn', action_instruction)
